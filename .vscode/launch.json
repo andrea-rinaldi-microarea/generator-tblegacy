@@ -10,8 +10,7 @@
         "program": "C:\\Users\\${env:USERNAME}\\AppData\\Roaming\\npm\\node_modules\\yo\\lib\\cli.js",
         "cwd": "C:\\working\\standard\\applications",
         "args": [
-            "tblegacy",
-            "my app"
+            "tblegacy"
         ],
         "console": "integratedTerminal"
     }]
