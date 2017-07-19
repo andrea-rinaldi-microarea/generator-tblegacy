@@ -1,0 +1,19 @@
+{
+  "name": "generator-tblegacy",
+  "version": "0.1.0",
+  "description": "yeoman generator for a TB legacy app",
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "andrea-rinaldi-microarea",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "lodash": "^4.17.4",
+    "yeoman-generator": "^1.1.1",
+    "yeoman-option-or-prompt": "^2.0.0"
+  }
+}
