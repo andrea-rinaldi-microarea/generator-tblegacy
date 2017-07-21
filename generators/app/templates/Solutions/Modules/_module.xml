@@ -4,5 +4,6 @@
     <ShortName name="<%= activationChars %>" />
   </ShortNames>
   <Application container="Applications" name="<%= appName %>">
+    <Module name="<%= defaultModule %>" />
   </Application>
 </SalesModule>

@@ -129,43 +129,63 @@ module.exports = class extends Generator {
         var parentPath = this.destinationRoot();
         this.destinationRoot(parentPath + '\\' + this.properties.appName);
 
+        // App config
         this.fs.copyTpl(
-            this.templatePath('_application.config'),
-            this.destinationPath('application.config'),
+            this.templatePath('Application.config'),
+            this.destinationPath('Application.config'),
             this.properties
         );
 
+        // Solution and module (activation)
         this.fs.copyTpl(
-            this.templatePath('Solutions\\_Solution.xml'),
-            this.destinationPath('Solutions\\Solution.xml'),
+            this.templatePath('Solutions\\_solution.xml'),
+            this.destinationPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
             this.properties
         );
-
         this.fs.copyTpl(
             this.templatePath('Solutions\\Modules\\_module.xml'),
             this.destinationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
             this.properties
         );
 
+        // Default module
         this.fs.copyTpl(
-            this.templatePath('_module\\_module.config'),
+            this.templatePath('_module\\Module.config'),
             this.destinationPath(this.properties.defaultModule + '\\Module.config'),
             this.properties
         );
-        this.fs.copy(
-            this.templatePath('_module\\DatabaseScript\\**'),
-            this.destinationPath(this.properties.defaultModule + '\\DatabaseScript'), { globOptions: { dot: true } }
-        );
+
+        // Default module -- database script
         this.fs.copyTpl(
-            this.templatePath('_module\\_databaseScript\\_createInfo.xml'),
+            this.templatePath('_module\\DatabaseScript\\Create\\CreateInfo.xml'),
             this.destinationPath(this.properties.defaultModule + '\\DatabaseScript\\Create\\CreateInfo.xml'),
             this.properties
         );
         this.fs.copyTpl(
-            this.templatePath('_module\\_databaseScript\\_upgradeInfo.xml'),
+            this.templatePath('_module\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
             this.destinationPath(this.properties.defaultModule + '\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
             this.properties
         );
+
+        // Default module -- menu and files (images)
+        this.fs.copyTpl(
+            this.templatePath('_module\\Menu\\_module.menu'),
+            this.destinationPath(this.properties.defaultModule + '\\Menu\\' + this.properties.defaultModule + '.menu'),
+            this.properties
+        );
+        this.fs.copy(
+            this.templatePath('_module\\Files\\Images\\_module.png'),
+            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png'),
+            this.properties
+        );
+
+        // ModuleObjects files
+        this.fs.copyTpl(
+            this.templatePath('_module\\ModuleObjects\\'),
+            this.destinationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
+            this.properties
+        );
+
     }
 
     end() {}

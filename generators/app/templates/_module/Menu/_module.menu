@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<AppMenu>
+  <Application name="<%= appName %>" image_namespace="Image.<%= appName %>.<%= defaultModule %>.Images.<%= defaultModule %>.png">
+    <Title localizable="true"><%= appDescription %></Title>
+    <Group name="<%= appName %>.<%= defaultModule %>">
+      <Title localizable="true"><%= defaultModuleDescription %></Title>
+      <Menu name="myMenu">
+        <Title localizable="true">My Menu</Title>
+      </Menu>
+    </Group>
+  </Application>
+</AppMenu>

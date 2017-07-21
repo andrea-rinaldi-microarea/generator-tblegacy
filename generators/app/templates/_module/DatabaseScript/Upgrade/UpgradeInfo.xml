@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UpgradeInfo>
 	<ModuleInfo name="<%= defaultModule %>" />
-	<DBRel numrel="400">
-		<Level1>
-		</Level1>
-	</DBRel>
 </UpgradeInfo>
