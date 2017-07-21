@@ -2,6 +2,8 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const _ = require('lodash');
 const nodeFs = require('fs');
+const uuid = require('uuid/v1');
+
 var optionOrPrompt = require('yeoman-option-or-prompt');
 
 module.exports = class extends Generator {
@@ -99,10 +101,6 @@ module.exports = class extends Generator {
             message: 'Application version',
             default: '1.0.0.0'
         }, {
-            name: 'dbSignature',
-            message: 'Database signature (for TB_DBMark)',
-            default: (answers) => { return _.toUpper(answers.appName); }
-        }, {
             name: 'defaultModule',
             message: 'Name of the first module',
             default: 'main',
@@ -111,6 +109,11 @@ module.exports = class extends Generator {
             name: 'defaultModuleDescription',
             message: 'Description of the module',
             default: (answers) => { return answers.defaultModule + ' module'; }
+        }, {
+            name: 'defaultLibrary',
+            message: 'Name of the first library',
+            default: (answers) => { return answers.defaultModule + 'Lib'; },
+            validate: (input, answers) => { return this.validElemName("Library", input); }
         }, {
             name: 'activationChars',
             message: 'Your 4-chars activation seed',
@@ -133,6 +136,21 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
             this.templatePath('Application.config'),
             this.destinationPath('Application.config'),
+            this.properties
+        );
+
+        // VS Solution
+        this.properties.solutionGUID = uuid();
+        this.properties.projectGUID = uuid();
+
+        this.fs.copyTpl(
+            this.templatePath('_app.sln'),
+            this.destinationPath(this.properties.appName + '.sln'),
+            this.properties
+        );
+        this.fs.copyTpl(
+            this.templatePath('_app.props'),
+            this.destinationPath(this.properties.appName + '.props'),
             this.properties
         );
 
@@ -179,13 +197,31 @@ module.exports = class extends Generator {
             this.properties
         );
 
-        // ModuleObjects files
+        // Default module -- ModuleObjects files
         this.fs.copyTpl(
             this.templatePath('_module\\ModuleObjects\\'),
             this.destinationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
             this.properties
         );
 
+        // Default library
+        this.fs.copyTpl(
+            this.templatePath('_module\\_lib\\'),
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\'),
+            this.properties
+        );
+        this.fs.move(
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_lib.vcxproj'),
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + '.vcxproj')
+        );
+        this.fs.move(
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_lib.cpp'),
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + '.cpp')
+        );
+        this.fs.move(
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_interface.cpp'),
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + 'Interface.cpp')
+        );
     }
 
     end() {}
