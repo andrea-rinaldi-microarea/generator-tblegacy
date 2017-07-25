@@ -1,6 +1,7 @@
 ﻿//=============================================================================
 // Module name  : <%= defaultLibrary %>Interface.cpp
 //=============================================================================
+<% var sanitizedDefaltLibrary = defaultLibrary.replace(/-/g, ''); -%>
 
 #include "stdafx.h" 
 
@@ -9,7 +10,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define _AddOn_Interface_Of <%= defaultLibrary.toLowerCase() %>
+#define _AddOn_Interface_Of <%= sanitizedDefaltLibrary.toLowerCase() %>
 
 /////////////////////////////////////////////////////////////////////////////
 //					Add-On Interface Definition
