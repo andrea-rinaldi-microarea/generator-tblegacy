@@ -101,6 +101,11 @@ module.exports = class extends Generator {
             message: 'Application version',
             default: '1.0.0.0'
         }, {
+            type: 'confirm',
+            name: 'standalone',
+            message: 'Is your application standalone?',
+            default: false
+        }, {
             name: 'defaultModule',
             message: 'Name of the first module',
             default: 'main',
@@ -210,6 +215,18 @@ module.exports = class extends Generator {
             this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\'),
             this.properties
         );
+        if (this.properties.standalone) {
+            var stdafxFile = '_stdafx-NoERP.h';
+            var noStdafxfile = '_stdafx-ERP.h';
+        } else {
+            var stdafxFile = '_stdafx-ERP.h';
+            var noStdafxfile = '_stdafx-NoERP.h';
+        }
+        this.fs.move(
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + stdafxFile),
+            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + 'stdafx.h')
+        );
+        this.fs.delete(this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + noStdafxfile));
         this.fs.move(
             this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_lib.vcxproj'),
             this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + '.vcxproj')
