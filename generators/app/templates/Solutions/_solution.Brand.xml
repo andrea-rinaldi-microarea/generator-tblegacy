@@ -1,0 +1,17 @@
+﻿<Brands>
+	<Brand>
+		<Applications>
+			<Application name="<%= appName %>">
+			<MenuTitle><%= appDescription %></MenuTitle>
+			</Application>
+		</Applications>
+		<BrandedKeys>
+			<BrandedKey source="Company" branded="<%= organization %>" />
+			<BrandedKey source="CompanyLogo" branded="Image.<%= appName %>.<%= defaultModule %>.CompanyLogo.png" />
+			<BrandedKey source="MenuManagerSplash" branded="Image.<%= appName %>.<%= defaultModule %>.SplashMenuManager.jpg" />
+			<BrandedKey source="ProductTitle" branded="<%= appDescription %>" />
+		</BrandedKeys>
+	</Brand>
+</Brands>
+	
+

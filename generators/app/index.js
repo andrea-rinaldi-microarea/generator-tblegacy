@@ -166,6 +166,11 @@ module.exports = class extends Generator {
             this.properties
         );
         this.fs.copyTpl(
+            this.templatePath('Solutions\\_solution.Brand.xml'),
+            this.destinationPath('Solutions\\' + this.properties.appName + '.Solution.Brand.xml'),
+            this.properties
+        );
+        this.fs.copyTpl(
             this.templatePath('Solutions\\Modules\\_module.xml'),
             this.destinationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
             this.properties
@@ -197,9 +202,12 @@ module.exports = class extends Generator {
             this.properties
         );
         this.fs.copy(
-            this.templatePath('_module\\Files\\Images\\_module.png'),
-            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png'),
-            this.properties
+            this.templatePath('_module\\Files\\Images\\'),
+            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\')
+        );
+        this.fs.move(
+            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\_module.png'),
+            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png')
         );
 
         // Default module -- ModuleObjects files
