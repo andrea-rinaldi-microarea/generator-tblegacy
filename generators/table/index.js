@@ -3,6 +3,7 @@ var optionOrPrompt = require('yeoman-option-or-prompt');
 const chalk = require('chalk');
 const _ = require('lodash');
 const nodeFs = require('fs');
+const utils = require('../text-utils');
 
 module.exports = class extends Generator {
 
@@ -44,52 +45,38 @@ module.exports = class extends Generator {
             return true;
         }
 
-        this.insertInSource = function(source, textToInsert, justBefore) {
-            var ip = source.indexOf(justBefore);
-            return  source.substring(0, ip) + 
-                    textToInsert +
-                    source.substring(ip);
-        }
-
         this.addToCreateInfo = function(contents) {
             var lastStep = contents.toString().split('</Level1>')[0].lastIndexOf('numstep="');
             var numStep = (lastStep != -1) ? contents.toString().split('</Level1>')[0].substring(lastStep).split('"')[1] : "0";
             this.properties['numStep'] = _.parseInt(numStep) + 1;
 
-            var source = contents.toString();
-            source = this.insertInSource(
-                source,
-                '<Step numstep="'+ this.properties.numStep +'" script="' + this.properties.tableName + '.sql" />\n',
-                '</Level1>'
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '<Step numstep="'+ this.properties.numStep +'" script="' + this.properties.tableName + '.sql" />\n',
+                    justBefore: '</Level1>'
+                }]
             );
-            return source;
         }
     
         this.addToInterface = function(contents) {
-            var source = contents.toString();
-            source = this.insertInSource(
-                source,
-                '#include "' + this.properties.tableClassName +'.h"\n',
-                '\n#ifdef _DEBUG'
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '#include "' + this.properties.tableClassName +'.h"',
+                    justBefore: '\n#ifdef _DEBUG'
+                },{
+                    textToInsert: 'REGISTER_TABLE		(' + this.properties.tableClassName + ')\n',
+                    justBefore: 'END_REGISTER_TABLES'
+                }]
             );
-            source = this.insertInSource(
-                source,
-                'REGISTER_TABLE		(' + this.properties.tableClassName + ')\n',
-                'END_REGISTER_TABLES'
-            );
-
-            return source;
         }
 
         this.addToProj = function(contents) {
-            var source = contents.toString();
-            source = this.insertInSource(
-                source,
-                '<ClCompile Include="' + this.properties.tableClassName + '.cpp" />\n',
-                '<ClCompile Include='
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '<ClCompile Include="' + this.properties.tableClassName + '.cpp" />\n',
+                    justBefore: '<ClCompile Include='
+                }]
             );
-
-            return source;
         }
 
     }
