@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const nodeFs = require('fs');
 const utils = require('../text-utils');
+const check = require('../check-utils');
 
 module.exports = class extends Generator {
 
@@ -13,37 +14,6 @@ module.exports = class extends Generator {
         this.argument('tableName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
-
-        this.validTableName = function(name) {
-            if (!name) {
-                return "Empty name not allowed";
-            }
-
-            if (nodeFs.existsSync(this.destinationRoot() + '\\DatabaseScript\\Create\\All\\' + name + '.sql' )) {
-                return "Table " + name + " already exists, please choose another name.";
-            }
-
-            var fNamePattern = /^[a-z0-9_-\s]+$/gi;
-            if (!fNamePattern.test(name)) {
-                return "Invalid characters in table name, must be a valid file name.";
-            }
-
-            if (_.includes(name, ' ')) {
-                return "Table name must not contain spaces.";
-            }
-
-            return true;
-        }
-
-        this.validLibrary = function(name) {
-            if (!name) {
-                return "Empty name not allowed";
-            }
-            if (!nodeFs.existsSync(this.destinationRoot() + '\\' + name)) {
-                return "Library " + name + " does not exist.";
-            }
-            return true;
-        }
 
         this.addToCreateInfo = function(contents) {
             var lastStep = contents.toString().split('</Level1>')[0].lastIndexOf('numstep="');
@@ -115,12 +85,12 @@ module.exports = class extends Generator {
             name: 'tableName',
             message: 'What is your table name ?',
             default: this.options.tableName,
-            validate: (input, answers) => { return this.validTableName(input); }
+            validate: (input, answers) => { return check.validNewFSName("Table", this.destinationRoot() + "\\DatabaseScript\\Create\\All", input, ".sql" ); }
         },{
             name: 'library',
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Dbl',
-            validate: (input, answers) => { return this.validLibrary(input); }
+            validate: (input, answers) => { return check.validExistingFSName(this, "Library", input); }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {

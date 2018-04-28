@@ -50,7 +50,7 @@ module.exports = class extends Generator {
             name: 'libraryName',
             message: 'What is your library name ?',
             default: this.options.libraryName,
-            validate: (input, answers) => { return check.validNewFolder(this, 'library', input); }
+            validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); }
         }, {
             type: 'confirm',
             name: 'standalone',

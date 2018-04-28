@@ -3,6 +3,8 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const nodeFs = require('fs');
 const uuid = require('uuid/v1');
+const check = require('../check-utils');
+
 
 var optionOrPrompt = require('yeoman-option-or-prompt');
 
@@ -14,27 +16,6 @@ module.exports = class extends Generator {
         this.argument('appName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
-
-        this.validElemName = function(type, name) {
-            if (!name) {
-                return "Empty name not allowed";
-            }
-
-            if (nodeFs.existsSync(this.destinationRoot() + '\\' + name)) {
-                return type + " " + name + " already exists, please choose another name.";
-            }
-
-            var fNamePattern = /^[a-z0-9_-\s]+$/gi;
-            if (!fNamePattern.test(name)) {
-                return "Invalid characters in " + type + " name, must be a valid folder name.";
-            }
-
-            if (_.includes(name, ' ')) {
-                return type + " name must not contain spaces.";
-            }
-
-            return true;
-        }
 
         this.noEmpty = function(element) {
             if (!element) {
@@ -64,7 +45,7 @@ module.exports = class extends Generator {
         this.checkAppName = function(appName) {
             if (!appName) return;
 
-            var result = this.validElemName("Application", appName);
+            var result = check.validNewFSName("Application", this.destinationRoot(),  appName);
             if (result != true) {
                 this.env.error(result);
             }
@@ -91,7 +72,7 @@ module.exports = class extends Generator {
             name: 'appName',
             message: 'What is your app\'s name ?',
             default: this.options.appName,
-            validate: (input, answers) => { return this.validElemName("Application", input); }
+            validate: (input, answers) => { return check.validNewFSName("Application", this.destinationRoot(),  input); }
         }, {
             name: 'appDescription',
             message: 'Give your app a description',
@@ -109,7 +90,7 @@ module.exports = class extends Generator {
             name: 'defaultModule',
             message: 'Name of the first module',
             default: 'main',
-            validate: (input, answers) => { return this.validElemName("Module", input); }
+            validate: (input, answers) => { return check.validNewFSName("Module", this.destinationRoot(),  input); }
         }, {
             name: 'defaultModuleDescription',
             message: 'Description of the module',
@@ -118,7 +99,7 @@ module.exports = class extends Generator {
             name: 'defaultLibrary',
             message: 'Name of the first library',
             default: (answers) => { return answers.defaultModule + 'Lib'; },
-            validate: (input, answers) => { return this.validElemName("Library", input); }
+            validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); }
         }, {
             name: 'activationChars',
             message: 'Your 4-chars activation seed',
