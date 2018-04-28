@@ -79,6 +79,18 @@ module.exports = class extends Generator {
             );
         }
 
+        this.addToDatabaseObjects = function(contents) {
+            var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.library + '.' + this.properties.tableName;
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '<Table namespace="' + namespace + '" mastertable="true">\n' +
+                                  '<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                                  '</Table>\n', 
+                    justBefore: '</Tables>'
+                }]
+            );
+        }
+
     }
 
     initializing() {
@@ -113,6 +125,9 @@ module.exports = class extends Generator {
 
         return this.optionOrPrompt(prompts).then(properties => {
             this.properties = properties;
+            this.properties['appName'] = this.options.appName;
+            this.properties['moduleName'] = this.options.moduleName;
+    
             this.properties["tableBaseName"] = (this.properties.tableName[2] == '_') ? 
                                                     this.properties.tableName.substring(3) : 
                                                     this.properties.tableName;
@@ -155,6 +170,13 @@ module.exports = class extends Generator {
             this.destinationPath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
             this.destinationPath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
             { process: (contents) => { return this.addToProj(contents); } }
+        );
+
+        //module objects
+        this.fs.copy(
+            this.destinationPath('ModuleObjects\\DatabaseObjects.xml'),
+            this.destinationPath('ModuleObjects\\DatabaseObjects.xml'),
+            { process: (contents) => { return this.addToDatabaseObjects(contents); } }
         );
 
     }    
