@@ -11,7 +11,18 @@ module.exports = class extends Generator {
         this.argument('tableName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
-        
+
+        this.addToCreateInfo = function(contents) {
+            var halves = contents.toString().split('</Level1>');
+            var lastStep = halves[0].lastIndexOf('numstep="');
+            var numStep = (lastStep != -1) ? halves[0].substring(lastStep).split('"')[1] : "0";
+            numStep = _.parseInt(numStep) + 1;
+            return halves[0] +
+                '<Step numstep="'+ numStep +'" script="' + this.properties.tableName + '.sql" />' + 
+                '\n</Level1>' + 
+                halves[1];
+        }
+    
     }
 
     initializing() {
@@ -51,6 +62,12 @@ module.exports = class extends Generator {
             this.templatePath('_table.sql'),
             this.destinationPath('DatabaseScript\\Create\\All\\' + this.properties.tableName + '.sql'),
             this.properties
+        );
+
+        this.fs.copy(
+            this.destinationPath('DatabaseScript\\Create\\CreateInfo.xml'),
+            this.destinationPath('DatabaseScript\\Create\\CreateInfo.xml'),
+            { process: (contents) => { return this.addToCreateInfo(contents); } }
         );
     }    
 }

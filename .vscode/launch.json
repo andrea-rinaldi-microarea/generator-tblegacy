@@ -11,7 +11,8 @@
             "program": "C:\\Users\\${env:USERNAME}\\AppData\\Roaming\\npm\\node_modules\\yo\\lib\\cli.js",
             "cwd": "C:\\Users\\${env:USERNAME}\\Documents\\Working\\Standard\\Applications\\sandbox\\core",
             "args": [
-                "tblegacy:table"
+                "tblegacy:table",
+                "--force"
             ],
             "console": "integratedTerminal"
         },
@@ -22,7 +23,8 @@
         "program": "C:\\Users\\${env:USERNAME}\\AppData\\Roaming\\npm\\node_modules\\yo\\lib\\cli.js",
         "cwd": "C:\\Users\\${env:USERNAME}\\Documents\\Working\\Standard\\Applications",
         "args": [
-            "tblegacy"
+            "tblegacy",
+            "--force"
         ],
         "console": "integratedTerminal"
     }]
