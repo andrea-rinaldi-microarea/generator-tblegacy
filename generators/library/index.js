@@ -4,6 +4,7 @@ const check = require('../check-utils');
 const utils = require('../text-utils');
 const _ = require('lodash');
 const uuid = require('uuid/v1');
+const path = require('path');
 
 var optionOrPrompt = require('yeoman-option-or-prompt');
 
@@ -19,38 +20,45 @@ module.exports = class extends Generator {
         this.addToSolution = function(contents) {
             return utils.insertInSource(
                 contents.toString(), [{
-                    textToInsert: 'Project("' + this.properties.projectGUID + '") = "' + this.properties.libraryName + '", "' + this.properties.moduleName +'\\' + this.properties.libraryName + '\\' + this.properties.libraryName +'.vcxproj", "' + this.properties.projectGUID + '"\n' +
+                    textToInsert: 'Project("{' + this.properties.projectGUID + '}") = "' + this.properties.libraryName + '", "' + this.properties.moduleName +'\\' + this.properties.libraryName + '\\' + this.properties.libraryName +'.vcxproj", "{' + this.properties.projectGUID + '}"\n' +
                     'EndProject\n',
                     justBefore: 'Global'
                 }]
             );
         }
 
+        this.modulePath = function(name) {
+            return this.contextRoot + this.options.moduleSubfolder + (name ? ('\\' + name) : '');
+        }
+
     }
 
     initializing() {
-        var currFolder = this.contextRoot;
-        var folders = _.split(currFolder,'\\');
-        if (folders.length < 3) {
-            this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
+        if (!this.options.asSubgenerator) {
+            var appRoot = path.dirname(path.dirname(this.contextRoot));
+            if (!_.toLower(appRoot).endsWith('\\standard\\applications')) {
+                this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
+            }
+
+            this.options.moduleName = path.basename(this.contextRoot);
+            this.options.appName = path.basename(path.dirname(this.contextRoot));
+            this.options.moduleSubfolder = '';
+            this.options.appPath = appRoot + '\\' + this.options.appName;
+        } else {
+            this.options.moduleSubfolder =  '\\' + this.options.appName + '\\' + this.options.moduleName;
         }
-        var appPath = currFolder.substring(0, currFolder.length - folders[folders.length - 1].length - folders[folders.length - 2].length - 2);
-        if (!_.toLower(appPath).endsWith('\\standard\\applications')) {
-            this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
-        }
-        this.destinationRoot(this.contextRoot);
-        this.options['appName'] = folders[folders.length - 2];
-        this.options['moduleName'] = folders[folders.length - 1];
     }
 
     prompting() {
-        this.log('Welcome to the ' + chalk.red('TBLegacy Library') + ' generator!');
-        this.log('You are about to add a library to the ' + chalk.bold(this.options.moduleName) + ' module of the ' + chalk.bold(this.options.appName) + ' application.' )
+        if (!this.options.asSubgenerator) {
+            this.log('Welcome to the ' + chalk.red('TBLegacy Library') + ' generator!');
+            this.log('You are about to add a library to the ' + chalk.bold(this.options.moduleName) + ' module of the ' + chalk.bold(this.options.appName) + ' application.' )
+        }
         const prompts = [ {
             name: 'libraryName',
             message: 'What is your library name ?',
             default: this.options.libraryName,
-            validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); }
+            validate: (input, answers) => { return check.validNewFSName("Library", this.modulePath(), input); }
         }, {
             type: 'confirm',
             name: 'standalone',
@@ -63,15 +71,15 @@ module.exports = class extends Generator {
             this.properties['appName'] = this.options.appName;
             this.properties['moduleName'] = this.options.moduleName;
             this.properties['projectGUID'] = uuid();
-
+            this.properties.moduleSubfolder = this.options.moduleSubfolder;
+            this.properties.appPath = this.options.appPath;
         });
     }
 
     writing() {
-        this.destinationRoot(this.contextRoot);
         this.fs.copyTpl(
             this.templatePath('_lib\\'),
-            this.destinationPath(this.properties.libraryName),
+            this.modulePath(this.properties.libraryName),
             this.properties
         );
         if (this.properties.standalone) {
@@ -82,27 +90,26 @@ module.exports = class extends Generator {
             var noStdafxfile = '_stdafx-NoERP.h';
         }
         this.fs.move(
-            this.destinationPath(this.properties.libraryName + '\\' + stdafxFile),
-            this.destinationPath(this.properties.libraryName + '\\' + 'stdafx.h')
+            this.modulePath(this.properties.libraryName + '\\' + stdafxFile),
+            this.modulePath(this.properties.libraryName + '\\' + 'stdafx.h')
         );
-        this.fs.delete(this.destinationPath(this.properties.libraryName + '\\' + noStdafxfile));
+        this.fs.delete(this.modulePath(this.properties.libraryName + '\\' + noStdafxfile));
         this.fs.move(
-            this.destinationPath(this.properties.libraryName + '\\' + '_lib.vcxproj'),
-            this.destinationPath(this.properties.libraryName + '\\' + this.properties.libraryName + '.vcxproj')
-        );
-        this.fs.move(
-            this.destinationPath(this.properties.libraryName + '\\' + '_lib.cpp'),
-            this.destinationPath(this.properties.libraryName + '\\' + this.properties.libraryName + '.cpp')
+            this.modulePath(this.properties.libraryName + '\\' + '_lib.vcxproj'),
+            this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + '.vcxproj')
         );
         this.fs.move(
-            this.destinationPath(this.properties.libraryName + '\\' + '_interface.cpp'),
-            this.destinationPath(this.properties.libraryName + '\\' + this.properties.libraryName + 'Interface.cpp')
+            this.modulePath(this.properties.libraryName + '\\' + '_lib.cpp'),
+            this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + '.cpp')
+        );
+        this.fs.move(
+            this.modulePath(this.properties.libraryName + '\\' + '_interface.cpp'),
+            this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + 'Interface.cpp')
         );
 
-        //solution
         this.fs.copy(
-            this.destinationPath('..\\' + this.properties.appName + '.sln'),
-            this.destinationPath('..\\' + this.properties.appName + '.sln'),
+            this.properties.appPath + '\\' + this.properties.appName + '.sln',
+            this.properties.appPath + '\\' + this.properties.appName + '.sln',
             { process: (contents) => { return this.addToSolution(contents); } }
         );
         

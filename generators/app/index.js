@@ -8,6 +8,7 @@ const check = require('../check-utils');
 
 var optionOrPrompt = require('yeoman-option-or-prompt');
 
+
 module.exports = class extends Generator {
 
     constructor(args, opts) {
@@ -50,11 +51,14 @@ module.exports = class extends Generator {
                 this.env.error(result);
             }
         }
+
+        this.applicationPath = function(name) {
+            return this.contextRoot + '\\' + this.properties.appName + (name ? ('\\' + name) : '');
+        }
     }
 
     initializing() {
-        var currFolder = this.destinationRoot();
-        if (!_.toLower(currFolder).endsWith('\\standard\\applications')) {
+        if (!_.toLower(this.contextRoot).endsWith('\\standard\\applications')) {
             this.env.error("Current folder must be the standard TaskBuilder Application folder (<your instance>\\Standard\\Applications).");
         }
 
@@ -114,14 +118,24 @@ module.exports = class extends Generator {
         });
     }
 
-    writing() {
-        var parentPath = this.destinationRoot();
-        this.destinationRoot(parentPath + '\\' + this.properties.appName);
+    default() {
+        this.composeWith(
+            require.resolve('../library'), {
+                appName: this.properties.appName,
+                moduleName: this.properties.defaultModule,
+                libraryName: this.properties.defaultLibrary,
+                appPath: this.applicationPath(),
+                standalone: this.properties.standalone,
+                asSubgenerator: true
+            });
+    }
 
+    writing() {
+        var appPath = this.applicationPath();
         // App config
         this.fs.copyTpl(
             this.templatePath('Application.config'),
-            this.destinationPath('Application.config'),
+            this.applicationPath('Application.config'),
             this.properties
         );
 
@@ -131,102 +145,71 @@ module.exports = class extends Generator {
 
         this.fs.copyTpl(
             this.templatePath('_app.sln'),
-            this.destinationPath(this.properties.appName + '.sln'),
+            this.applicationPath(this.properties.appName + '.sln'),
             this.properties
         );
         this.fs.copyTpl(
             this.templatePath('_app.props'),
-            this.destinationPath(this.properties.appName + '.props'),
+            this.applicationPath(this.properties.appName + '.props'),
             this.properties
         );
 
         // Solution and module (activation)
         this.fs.copyTpl(
             this.templatePath('Solutions\\_solution.xml'),
-            this.destinationPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
+            this.applicationPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
             this.properties
         );
         this.fs.copyTpl(
             this.templatePath('Solutions\\_solution.Brand.xml'),
-            this.destinationPath('Solutions\\' + this.properties.appName + '.Solution.Brand.xml'),
+            this.applicationPath('Solutions\\' + this.properties.appName + '.Solution.Brand.xml'),
             this.properties
         );
         this.fs.copyTpl(
             this.templatePath('Solutions\\Modules\\_module.xml'),
-            this.destinationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
+            this.applicationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
             this.properties
         );
 
         // Default module
         this.fs.copyTpl(
             this.templatePath('_module\\Module.config'),
-            this.destinationPath(this.properties.defaultModule + '\\Module.config'),
+            this.applicationPath(this.properties.defaultModule + '\\Module.config'),
             this.properties
         );
 
         // Default module -- database script
         this.fs.copyTpl(
             this.templatePath('_module\\DatabaseScript\\Create\\CreateInfo.xml'),
-            this.destinationPath(this.properties.defaultModule + '\\DatabaseScript\\Create\\CreateInfo.xml'),
+            this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Create\\CreateInfo.xml'),
             this.properties
         );
         this.fs.copyTpl(
             this.templatePath('_module\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            this.destinationPath(this.properties.defaultModule + '\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
+            this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
             this.properties
         );
 
         // Default module -- menu and files (images)
         this.fs.copyTpl(
             this.templatePath('_module\\Menu\\_module.menu'),
-            this.destinationPath(this.properties.defaultModule + '\\Menu\\' + this.properties.defaultModule + '.menu'),
+            this.applicationPath(this.properties.defaultModule + '\\Menu\\' + this.properties.defaultModule + '.menu'),
             this.properties
         );
         this.fs.copy(
             this.templatePath('_module\\Files\\Images\\'),
-            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\')
+            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\')
         );
         this.fs.move(
-            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\_module.png'),
-            this.destinationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png')
+            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\_module.png'),
+            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png')
         );
 
         // Default module -- ModuleObjects files
         this.fs.copyTpl(
             this.templatePath('_module\\ModuleObjects\\'),
-            this.destinationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
+            this.applicationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
             this.properties
-        );
-
-        // Default library
-        this.fs.copyTpl(
-            this.templatePath('_module\\_lib\\'),
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\'),
-            this.properties
-        );
-        if (this.properties.standalone) {
-            var stdafxFile = '_stdafx-NoERP.h';
-            var noStdafxfile = '_stdafx-ERP.h';
-        } else {
-            var stdafxFile = '_stdafx-ERP.h';
-            var noStdafxfile = '_stdafx-NoERP.h';
-        }
-        this.fs.move(
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + stdafxFile),
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + 'stdafx.h')
-        );
-        this.fs.delete(this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + noStdafxfile));
-        this.fs.move(
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_lib.vcxproj'),
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + '.vcxproj')
-        );
-        this.fs.move(
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_lib.cpp'),
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + '.cpp')
-        );
-        this.fs.move(
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + '_interface.cpp'),
-            this.destinationPath(this.properties.defaultModule + '\\' + this.properties.defaultLibrary + '\\' + this.properties.defaultLibrary + 'Interface.cpp')
         );
     }
 
