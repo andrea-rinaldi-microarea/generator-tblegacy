@@ -45,6 +45,9 @@ module.exports = class extends Generator {
                 contents.toString(), [{
                     textToInsert: '<ClCompile Include="' + this.properties.tableClassName + '.cpp" />\n',
                     justBefore: '<ClCompile Include='
+                },{
+                    textToInsert: '<ClInclude Include="' + this.properties.tableClassName + '.h" />\n',
+                    justBefore: '<ClInclude Include='
                 }]
             );
         }
