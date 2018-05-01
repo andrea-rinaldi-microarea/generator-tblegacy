@@ -19,11 +19,5 @@ Global
 		ReleaseDebugInfo|Win32 = ReleaseDebugInfo|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{<%= projectGUID %>}.Debug|x86.ActiveCfg = Debug|Win32
-		{<%= projectGUID %>}.Debug|x86.Build.0 = Debug|Win32
-		{<%= projectGUID %>}.Release|x86.ActiveCfg = Release|Win32
-		{<%= projectGUID %>}.Release|x86.Build.0 = Release|Win32
-		{<%= projectGUID %>}.ReleaseDebugInfo|x86.ActiveCfg = ReleaseDebugInfo|Win32
-		{<%= projectGUID %>}.ReleaseDebugInfo|x86.Build.0 = ReleaseDebugInfo|Win32
 	EndGlobalSection
 EndGlobal

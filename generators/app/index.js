@@ -140,9 +140,6 @@ module.exports = class extends Generator {
         );
 
         // VS Solution
-        this.properties.solutionGUID = uuid();
-        this.properties.projectGUID = uuid();
-
         this.fs.copyTpl(
             this.templatePath('_app.sln'),
             this.applicationPath(this.properties.appName + '.sln'),
