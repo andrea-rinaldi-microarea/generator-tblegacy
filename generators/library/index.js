@@ -27,6 +27,15 @@ module.exports = class extends Generator {
             );
         }
 
+        this.addToModuleConfig = function(contents) {
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '<Library name="' + this.properties.libraryName + '" sourcefolder="' + this.properties.libraryName + '" deploymentpolicy="full" />\n',
+                    justBefore: '</Components>'
+                }]
+            );
+        }
+
         this.modulePath = function(name) {
             return this.contextRoot + this.options.moduleSubfolder + (name ? ('\\' + name) : '');
         }
@@ -107,6 +116,12 @@ module.exports = class extends Generator {
             this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + 'Interface.cpp')
         );
 
+        this.fs.copy(
+            this.modulePath('Module.config'),
+            this.modulePath('Module.config'),
+            { process: (contents) => { return this.addToModuleConfig(contents); } }
+        );
+        
         this.fs.copy(
             this.properties.appPath + '\\' + this.properties.appName + '.sln',
             this.properties.appPath + '\\' + this.properties.appName + '.sln',
