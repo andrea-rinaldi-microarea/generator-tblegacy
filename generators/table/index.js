@@ -54,7 +54,7 @@ module.exports = class extends Generator {
         }
 
         this.addToDatabaseObjects = function(contents) {
-            var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.library + '.' + this.properties.tableName;
+            var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
             return utils.insertInSource(
                 contents.toString(), [{
                     textToInsert: '<Table namespace="' + namespace + '" mastertable="true">\n' +
@@ -69,6 +69,10 @@ module.exports = class extends Generator {
             return this.contextRoot + (name ? ('\\' + name) : '');
         }
 
+        this.libraryPath = function(name) {
+            return this.modulePath(this.properties.libraryName) + (name ? ('\\' + name) : '');
+        }
+
     }
 
     initializing() {
@@ -78,16 +82,6 @@ module.exports = class extends Generator {
         }
         this.options.moduleName = path.basename(this.contextRoot);
         this.options.appName = path.basename(path.dirname(this.contextRoot));
-
-        // var currFolder = this.contextRoot;
-        // var folders = _.split(currFolder,'\\');
-        // if (folders.length < 3) {
-        //     this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
-        // }
-        // var appPath = currFolder.substring(0, currFolder.length - folders[folders.length - 1].length - folders[folders.length - 2].length - 2);
-        // this.destinationRoot(this.contextRoot);
-        // this.options['appName'] = folders[folders.length - 2];
-        // this.options['moduleName'] = folders[folders.length - 1];
     }
 
     prompting() {
@@ -99,7 +93,7 @@ module.exports = class extends Generator {
             default: this.options.tableName,
             validate: (input, answers) => { return check.validNewFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All", input, ".sql" ); }
         },{
-            name: 'library',
+            name: 'libraryName',
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Dbl',
             validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
@@ -134,22 +128,22 @@ module.exports = class extends Generator {
         // Source code
         this.fs.copyTpl(
             this.templatePath('_table.h'),
-            this.modulePath(this.properties.library + '\\' + this.properties.tableClassName + '.h'),
+            this.libraryPath(this.properties.tableClassName + '.h'),
             this.properties
         );
         this.fs.copyTpl(
             this.templatePath('_table.cpp'),
-            this.modulePath(this.properties.library + '\\' + this.properties.tableClassName + '.cpp'),
+            this.libraryPath(this.properties.tableClassName + '.cpp'),
             this.properties
         );
         this.fs.copy(
-            this.modulePath(this.properties.library + '\\' + this.properties.library + 'Interface.cpp'),
-            this.modulePath(this.properties.library + '\\' + this.properties.library + 'Interface.cpp'),
+            this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
+            this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
             { process: (contents) => { return this.addToInterface(contents); } }
         );
         this.fs.copy(
-            this.modulePath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
-            this.modulePath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
+            this.libraryPath(this.properties.libraryName + '.vcxproj'),
+            this.libraryPath(this.properties.libraryName + '.vcxproj'),
             { process: (contents) => { return this.addToProj(contents); } }
         );
 

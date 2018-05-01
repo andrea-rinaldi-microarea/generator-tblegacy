@@ -44,6 +44,9 @@ module.exports = class extends Generator {
             return this.appPath(this.properties.moduleName) + (name ? ('\\' + name) : '');
         }
 
+        this.libraryPath = function(name) {
+            return this.modulePath(this.properties.libraryName) + (name ? ('\\' + name) : '');
+        }
     }
 
     initializing() {
@@ -99,21 +102,21 @@ module.exports = class extends Generator {
             var noStdafxfile = '_stdafx-NoERP.h';
         }
         this.fs.move(
-            this.modulePath(this.properties.libraryName + '\\' + stdafxFile),
-            this.modulePath(this.properties.libraryName + '\\' + 'stdafx.h')
+            this.libraryPath(stdafxFile),
+            this.libraryPath('stdafx.h')
         );
-        this.fs.delete(this.modulePath(this.properties.libraryName + '\\' + noStdafxfile));
+        this.fs.delete(this.libraryPath(noStdafxfile));
         this.fs.move(
-            this.modulePath(this.properties.libraryName + '\\' + '_lib.vcxproj'),
-            this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + '.vcxproj')
-        );
-        this.fs.move(
-            this.modulePath(this.properties.libraryName + '\\' + '_lib.cpp'),
-            this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + '.cpp')
+            this.libraryPath('_lib.vcxproj'),
+            this.libraryPath(this.properties.libraryName + '.vcxproj')
         );
         this.fs.move(
-            this.modulePath(this.properties.libraryName + '\\' + '_interface.cpp'),
-            this.modulePath(this.properties.libraryName + '\\' + this.properties.libraryName + 'Interface.cpp')
+            this.libraryPath('_lib.cpp'),
+            this.libraryPath(this.properties.libraryName + '.cpp')
+        );
+        this.fs.move(
+            this.libraryPath('_interface.cpp'),
+            this.libraryPath(this.properties.libraryName + 'Interface.cpp')
         );
 
         this.fs.copy(
