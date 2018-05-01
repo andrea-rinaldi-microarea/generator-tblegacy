@@ -76,7 +76,7 @@ module.exports = class extends Generator {
             name: 'appName',
             message: 'What is your app\'s name ?',
             default: this.options.appName,
-            validate: (input, answers) => { return check.validNewFSName("Application", this.destinationRoot(),  input); }
+            validate: (input, answers) => { return check.validNewFSName("Application", this.contextRoot,  input); }
         }, {
             name: 'appDescription',
             message: 'Give your app a description',
@@ -124,14 +124,13 @@ module.exports = class extends Generator {
                 appName: this.properties.appName,
                 moduleName: this.properties.defaultModule,
                 libraryName: this.properties.defaultLibrary,
-                appPath: this.applicationPath(),
+                appFolder: this.applicationPath(),
                 standalone: this.properties.standalone,
                 asSubgenerator: true
             });
     }
 
     writing() {
-        var appPath = this.applicationPath();
         // App config
         this.fs.copyTpl(
             this.templatePath('Application.config'),

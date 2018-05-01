@@ -36,8 +36,12 @@ module.exports = class extends Generator {
             );
         }
 
+        this.appPath = function(name) {
+            return this.properties.appFolder + (name ? ('\\' + name) : '');
+        }
+
         this.modulePath = function(name) {
-            return this.contextRoot + this.options.moduleSubfolder + (name ? ('\\' + name) : '');
+            return this.appPath(this.properties.moduleName) + (name ? ('\\' + name) : '');
         }
 
     }
@@ -51,10 +55,7 @@ module.exports = class extends Generator {
 
             this.options.moduleName = path.basename(this.contextRoot);
             this.options.appName = path.basename(path.dirname(this.contextRoot));
-            this.options.moduleSubfolder = '';
-            this.options.appPath = appRoot + '\\' + this.options.appName;
-        } else {
-            this.options.moduleSubfolder =  '\\' + this.options.appName + '\\' + this.options.moduleName;
+            this.options.appFolder = appRoot + '\\' + this.options.appName;
         }
     }
 
@@ -67,7 +68,7 @@ module.exports = class extends Generator {
             name: 'libraryName',
             message: 'What is your library name ?',
             default: this.options.libraryName,
-            validate: (input, answers) => { return check.validNewFSName("Library", this.modulePath(), input); }
+            validate: (input, answers) => { return check.validNewFSName("Library", this.options.appFolder + '\\' + this.options.moduleName, input); }
         }, {
             type: 'confirm',
             name: 'standalone',
@@ -77,11 +78,10 @@ module.exports = class extends Generator {
 
         return this.optionOrPrompt(prompts).then(properties => {
             this.properties = properties;
-            this.properties['appName'] = this.options.appName;
-            this.properties['moduleName'] = this.options.moduleName;
-            this.properties['projectGUID'] = uuid();
-            this.properties.moduleSubfolder = this.options.moduleSubfolder;
-            this.properties.appPath = this.options.appPath;
+            this.properties.appName = this.options.appName;
+            this.properties.moduleName = this.options.moduleName;
+            this.properties.appFolder = this.options.appFolder;
+            this.properties.projectGUID = uuid();
         });
     }
 
@@ -123,8 +123,8 @@ module.exports = class extends Generator {
         );
         
         this.fs.copy(
-            this.properties.appPath + '\\' + this.properties.appName + '.sln',
-            this.properties.appPath + '\\' + this.properties.appName + '.sln',
+            this.appPath(this.properties.appName + '.sln'),
+            this.appPath(this.properties.appName + '.sln'),
             { process: (contents) => { return this.addToSolution(contents); } }
         );
         

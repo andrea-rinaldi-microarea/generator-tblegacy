@@ -5,6 +5,7 @@ const _ = require('lodash');
 const nodeFs = require('fs');
 const utils = require('../text-utils');
 const check = require('../check-utils');
+const path = require('path');
 
 module.exports = class extends Generator {
 
@@ -64,21 +65,29 @@ module.exports = class extends Generator {
             );
         }
 
+        this.modulePath = function(name) {
+            return this.contextRoot + (name ? ('\\' + name) : '');
+        }
+
     }
 
     initializing() {
-        var currFolder = this.contextRoot;
-        var folders = _.split(currFolder,'\\');
-        if (folders.length < 3) {
+        var appRoot = path.dirname(path.dirname(this.contextRoot));
+        if (!_.toLower(appRoot).endsWith('\\standard\\applications')) {
             this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
         }
-        var appPath = currFolder.substring(0, currFolder.length - folders[folders.length - 1].length - folders[folders.length - 2].length - 2);
-        if (!_.toLower(appPath).endsWith('\\standard\\applications')) {
-            this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
-        }
-        this.destinationRoot(this.contextRoot);
-        this.options['appName'] = folders[folders.length - 2];
-        this.options['moduleName'] = folders[folders.length - 1];
+        this.options.moduleName = path.basename(this.contextRoot);
+        this.options.appName = path.basename(path.dirname(this.contextRoot));
+
+        // var currFolder = this.contextRoot;
+        // var folders = _.split(currFolder,'\\');
+        // if (folders.length < 3) {
+        //     this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
+        // }
+        // var appPath = currFolder.substring(0, currFolder.length - folders[folders.length - 1].length - folders[folders.length - 2].length - 2);
+        // this.destinationRoot(this.contextRoot);
+        // this.options['appName'] = folders[folders.length - 2];
+        // this.options['moduleName'] = folders[folders.length - 1];
     }
 
     prompting() {
@@ -88,67 +97,66 @@ module.exports = class extends Generator {
             name: 'tableName',
             message: 'What is your table name ?',
             default: this.options.tableName,
-            validate: (input, answers) => { return check.validNewFSName("Table", this.destinationRoot() + "\\DatabaseScript\\Create\\All", input, ".sql" ); }
+            validate: (input, answers) => { return check.validNewFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All", input, ".sql" ); }
         },{
             name: 'library',
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Dbl',
-            validate: (input, answers) => { return check.validExistingFSName(this, "Library", input); }
+            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
             this.properties = properties;
-            this.properties['appName'] = this.options.appName;
-            this.properties['moduleName'] = this.options.moduleName;
+            this.properties.appName = this.options.appName;
+            this.properties.moduleName = this.options.moduleName;
     
-            this.properties["tableBaseName"] = (this.properties.tableName[2] == '_') ? 
-                                                    this.properties.tableName.substring(3) : 
-                                                    this.properties.tableName;
+            this.properties.tableBaseName = (this.properties.tableName[2] == '_') ? 
+                                            this.properties.tableName.substring(3) : 
+                                            this.properties.tableName;
 
-            this.properties["tableClassName"] = 'T' + this.properties.tableBaseName;
+            this.properties.tableClassName = 'T' + this.properties.tableBaseName;
         });
     }    
 
     writing() {
-        this.destinationRoot(this.contextRoot);
         // SQL scripts
         this.fs.copyTpl(
             this.templatePath('_table.sql'),
-            this.destinationPath('DatabaseScript\\Create\\All\\' + this.properties.tableName + '.sql'),
+            this.modulePath('DatabaseScript\\Create\\All\\' + this.properties.tableName + '.sql'),
             this.properties
         );
         this.fs.copy(
-            this.destinationPath('DatabaseScript\\Create\\CreateInfo.xml'),
-            this.destinationPath('DatabaseScript\\Create\\CreateInfo.xml'),
+            this.modulePath('DatabaseScript\\Create\\CreateInfo.xml'),
+            this.modulePath('DatabaseScript\\Create\\CreateInfo.xml'),
             { process: (contents) => { return this.addToCreateInfo(contents); } }
         );
 
         // Source code
         this.fs.copyTpl(
             this.templatePath('_table.h'),
-            this.destinationPath(this.properties.library + '\\' + this.properties.tableClassName + '.h'),
+            this.modulePath(this.properties.library + '\\' + this.properties.tableClassName + '.h'),
             this.properties
         );
         this.fs.copyTpl(
             this.templatePath('_table.cpp'),
-            this.destinationPath(this.properties.library + '\\' + this.properties.tableClassName + '.cpp'),
+            this.modulePath(this.properties.library + '\\' + this.properties.tableClassName + '.cpp'),
             this.properties
         );
         this.fs.copy(
-            this.destinationPath(this.properties.library + '\\' + this.properties.library + 'Interface.cpp'),
-            this.destinationPath(this.properties.library + '\\' + this.properties.library + 'Interface.cpp'),
+            this.modulePath(this.properties.library + '\\' + this.properties.library + 'Interface.cpp'),
+            this.modulePath(this.properties.library + '\\' + this.properties.library + 'Interface.cpp'),
             { process: (contents) => { return this.addToInterface(contents); } }
         );
         this.fs.copy(
-            this.destinationPath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
-            this.destinationPath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
+            this.modulePath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
+            this.modulePath(this.properties.library + '\\' + this.properties.library + '.vcxproj'),
             { process: (contents) => { return this.addToProj(contents); } }
         );
 
         //module objects
         this.fs.copy(
-            this.destinationPath('ModuleObjects\\DatabaseObjects.xml'),
-            this.destinationPath('ModuleObjects\\DatabaseObjects.xml'),
+            this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
+            this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
             { process: (contents) => { return this.addToDatabaseObjects(contents); } }
         );
 
