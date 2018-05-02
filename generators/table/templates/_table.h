@@ -9,7 +9,7 @@ class TB_EXPORT <%= tableClassName %> : public SqlRecord
 
 public:
 	DataStr		f_Code;
-	DataInt		f_Description;
+	DataStr		f_Description;
 	
 public:
 	<%= tableClassName %>(BOOL bCallInit = TRUE);
