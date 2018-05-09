@@ -24,11 +24,11 @@ module.exports = {
         return true;
     },
 
-    validExistingFSName(type, root, name) {
+    validExistingFSName(type, root, name, ext) {
         if (!name) {
             return "Empty name not allowed";
         }
-        if (!nodeFs.existsSync(root + '\\' + name)) {
+        if (!nodeFs.existsSync(root + '\\' + name + (ext ? ext : ''))) {
             return _.capitalize(type) + " " + name + " does not exist.";
         }
         return true;
