@@ -1,4 +1,5 @@
 {
+  "main": "generators/app/index.js",
   "name": "generator-tblegacy",
   "version": "0.1.0",
   "description": "yeoman generator for a TB legacy app",
