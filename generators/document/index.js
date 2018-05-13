@@ -78,7 +78,7 @@ module.exports = class extends Generator {
         },{
             name: 'documentTitle',
             message: 'Set the main form title',
-            default: (answers) => { return answers.documentName + ' document' }
+            default: (answers) => { return (this.options.documentName || answers.documentName) + ' document' }
         },{
             name: 'libraryName',
             message: 'Which is the hosting library ?',
