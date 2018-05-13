@@ -1,17 +1,17 @@
 ﻿{
-  "id": "IDD_CUSTOMERSPECIFICATION_VIEW",
-  "name": "CustomerSpecification",
+  "id": "IDD_<%= documentName.toUpperCase() %>_VIEW",
+  "name": "<%= documentName %>",
   "type": 1,
   "child": true,
   "items": [
     {
-      "id": "IDC_TG_CUSTOMERSPECIFICATION",
-      "name": "CustomerSpecification",
+      "id": "IDC_TG_<%= documentName.toUpperCase() %>",
+      "name": "<%= documentName %>",
       "type": 72/*TileGroup*/,
       "layoutType": 4/*VBOX*/,
       "items": [
         {
-          "href": "IDD_TD_CUSTOMERSPECIFICATION_MAIN"
+          "href": "IDD_TD_<%= documentName.toUpperCase() %>_MAIN"
         }
       ]
     }

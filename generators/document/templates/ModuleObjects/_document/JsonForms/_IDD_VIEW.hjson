@@ -1,4 +1,4 @@
 ﻿#pragma once
 #include	<TbNameSolver\TBResourcesMap.h>
-#define	IDD_CUSTOMERSPECIFICATION_VIEW			GET_IDD(IDD_CUSTOMERSPECIFICATION_VIEW, D.ERP.CustomersSuppliers.CustomerSpecification)
-#define	IDC_TG_CUSTOMERSPECIFICATION			GET_IDC(IDC_TG_CUSTOMERSPECIFICATION)
+#define	IDD_<%= documentName.toUpperCase() %>_VIEW			GET_IDD(IDD_<%= documentName.toUpperCase() %>_VIEW, D.<%= appName %>.<%= moduleName %>.<%= documentName %>)
+#define	IDC_TG_<%= documentName.toUpperCase() %>			GET_IDC(IDC_TG_<%= documentName.toUpperCase() %>)

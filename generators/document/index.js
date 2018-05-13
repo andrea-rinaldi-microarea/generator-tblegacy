@@ -32,8 +32,8 @@ module.exports = class extends Generator {
             return utils.insertInSource(
                 contents.toString(), [{
                     textToInsert: '#include "D' + this.properties.documentName +'.h"\n' +
-                                  '#include "UI' + this.properties.documentName +'.hjson"',
-                    justBefore: '\n#ifdef _DEBUG'
+                                  '#include "UI' + this.properties.documentName +'.hjson"\n',
+                    justBefore: '#ifdef _DEBUG'
                 },{
                     textToInsert: '\tBEGIN_DOCUMENT (_NS_DOC("' + this.properties.documentName + '"), TPL_NO_PROTECTION)\n' + 
                                         '\t\tREGISTER_MASTER_JSON_TEMPLATE(szDefaultViewMode,	D' + this.properties.documentName + ',	IDD_' + _.toUpper(this.properties.documentName) + ')\n' +
@@ -56,6 +56,20 @@ module.exports = class extends Generator {
             );
         }
 
+        this.addDocumentObjects = function(contents, source) {
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '\t<Document namespace="'+ this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName + '" localize="' + this.properties.documentTitle + '" classhierarchy="D' + this.properties.documentName + '">\n' +
+                                  '\t\t<InterfaceClass>ADM' + this.properties.documentName + 'Obj</InterfaceClass>\n' +
+                                  '\t\t<ViewModes>\n' +
+                                  '\t\t\t<Mode name="Default" />\n' +
+                                  '\t\t\t<Mode name="BackGround" />\n' +
+                                  '\t\t</ViewModes>\n' +
+                                  '\t</Document>\n',
+                    justBefore: '</Documents>'
+                }]
+            );
+        }
     }
 
     initializing() {
@@ -194,6 +208,12 @@ module.exports = class extends Generator {
         this.fs.move(
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.tbjson'),
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_VIEW.tbjson')
+        );
+
+        this.fs.copy(
+            this.modulePath('ModuleObjects\\DocumentObjects.xml'),
+            this.modulePath('ModuleObjects\\DocumentObjects.xml'),
+            { process: (contents) => { return this.addDocumentObjects(contents); } }
         );
 
     }

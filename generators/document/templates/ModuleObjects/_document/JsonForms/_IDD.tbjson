@@ -1,10 +1,10 @@
 ﻿{
     "href": "M.Framework.TbGes.TbGes.IDD_MASTER_FRAME",
-    "id": "IDD_CUSTOMERSPECIFICATION",
-    "name": "CustomersSpecification",
+    "id": "IDD_<%= documentName.toUpperCase() %>",
+    "name": "<%= documentName %>",
     "items": [
         {
-            "href": "IDD_CUSTOMERSPECIFICATION_VIEW"
+            "href": "IDD_<%= documentName.toUpperCase() %>_VIEW"
         }
     ]
 }

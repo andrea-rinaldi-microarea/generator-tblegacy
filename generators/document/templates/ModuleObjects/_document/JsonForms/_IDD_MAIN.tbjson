@@ -1,7 +1,7 @@
 ﻿{
-  "id": "IDD_TD_CUSTOMERSPECIFICATION_MAIN",
+  "id": "IDD_TD_<%= documentName.toUpperCase() %>_MAIN",
   "type": 71,
-  "text": "Customer Classification Specification",
+  "text": "<%= documentTitle %>",
   "name": "MainData",
   "size": 2,
   "x": 0,
@@ -9,13 +9,13 @@
   "width": 654,
   "height": 73,
   "child": true,
-  "context": "uicustomerspecification",
+  "context": "ui<%= documentName %>",
   "items": [
     {
-      "id": "IDC_CUSTOMERSPECIFICATIONCODE",
+      "id": "IDC_<%= documentName.toUpperCase() %>CODE",
       "controlClass": "StringEdit",
       "binding": {
-        "datasource": "CustomerSpecification.CustomerSpecification"
+        "datasource": "<%= documentName %>.<%= documentName %>"
       },
       "type": 13,
       "width": 48,
@@ -25,10 +25,10 @@
       "anchor": "COL1"
     },
     {
-      "id": "IDC_CUSTOMERSPECIFICATION_DESCRI",
+      "id": "IDC_<%= documentName.toUpperCase() %>_DESCRI",
       "controlClass": "StringEdit",
       "binding": {
-        "datasource": "CustomerSpecification.Description"
+        "datasource": "<%= documentName %>.Description"
       },
       "type": 13,
       "width": 154,

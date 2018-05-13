@@ -1,5 +1,5 @@
 ﻿#pragma once
 #include	<TbNameSolver\TBResourcesMap.h>
-#define	IDD_TD_CUSTOMERSPECIFICATION_MAIN			GET_IDD(IDD_TD_CUSTOMERSPECIFICATION_MAIN, D.ERP.CustomersSuppliers.CustomerSpecification)
-#define	IDC_CUSTOMERSPECIFICATION_DESCRI			GET_IDC(IDC_CUSTOMERSPECIFICATION_DESCRI)
-#define	IDC_CUSTOMERSPECIFICATIONCODE			GET_IDC(IDC_CUSTOMERSPECIFICATIONCODE)
+#define	IDD_TD_<%= documentName.toUpperCase() %>_MAIN			GET_IDD(IDD_TD_<%= documentName.toUpperCase() %>_MAIN, D.<%= appName %>.<%= moduleName %>.<%= documentName %>)
+#define	IDC_<%= documentName.toUpperCase() %>_DESCRI			GET_IDC(IDC_<%= documentName.toUpperCase() %>_DESCRI)
+#define	IDC_<%= documentName.toUpperCase() %>CODE			GET_IDC(IDC_<%= documentName.toUpperCase() %>CODE)
