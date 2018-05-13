@@ -1,0 +1,10 @@
+﻿{
+    "href": "M.Framework.TbGes.TbGes.IDD_MASTER_FRAME",
+    "id": "IDD_CUSTOMERSPECIFICATION",
+    "name": "CustomersSpecification",
+    "items": [
+        {
+            "href": "IDD_CUSTOMERSPECIFICATION_VIEW"
+        }
+    ]
+}

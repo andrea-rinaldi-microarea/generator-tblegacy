@@ -1,0 +1,3 @@
+﻿#pragma once
+#include	<TbNameSolver\TBResourcesMap.h>
+#define	IDD_CUSTOMERSPECIFICATION			GET_IDD(IDD_CUSTOMERSPECIFICATION, D.ERP.CustomersSuppliers.CustomerSpecification)

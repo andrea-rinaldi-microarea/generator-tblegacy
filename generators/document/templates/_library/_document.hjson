@@ -1,0 +1,5 @@
+﻿#pragma once
+#include	<TbNameSolver\TBResourcesMap.h>
+#include	<<%= moduleName %>\ModuleObjects\<%= documentName %>\JsonForms\IDD_<%= documentName.toUpperCase() %>.hjson>
+#include	<<%= moduleName %>\ModuleObjects\<%= documentName %>\JsonForms\IDD_<%= documentName.toUpperCase() %>_VIEW.hjson>
+#include	<<%= moduleName %>\ModuleObjects\<%= documentName %>\JsonForms\IDD_TD_<%= documentName.toUpperCase() %>_MAIN.hjson>

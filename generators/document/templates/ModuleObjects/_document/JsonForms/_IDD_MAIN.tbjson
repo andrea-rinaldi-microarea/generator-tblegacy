@@ -1,0 +1,44 @@
+﻿{
+  "id": "IDD_TD_CUSTOMERSPECIFICATION_MAIN",
+  "type": 71,
+  "text": "Customer Classification Specification",
+  "name": "MainData",
+  "size": 2,
+  "x": 0,
+  "y": 0,
+  "width": 654,
+  "height": 73,
+  "child": true,
+  "context": "uicustomerspecification",
+  "items": [
+    {
+      "id": "IDC_CUSTOMERSPECIFICATIONCODE",
+      "controlClass": "StringEdit",
+      "binding": {
+        "datasource": "CustomerSpecification.CustomerSpecification"
+      },
+      "type": 13,
+      "width": 48,
+      "height": 12,
+      "autoHScroll": true,
+      "controlCaption": "Code",
+      "anchor": "COL1"
+    },
+    {
+      "id": "IDC_CUSTOMERSPECIFICATION_DESCRI",
+      "controlClass": "StringEdit",
+      "binding": {
+        "datasource": "CustomerSpecification.Description"
+      },
+      "type": 13,
+      "width": 154,
+      "height": 36,
+      "autoVScroll": true,
+      "wantReturn": true,
+      "multiline": true,
+      "controlCaption": "Description",
+      "anchor": "COL1"
+    }
+  ],
+  "hasStaticArea": true
+}

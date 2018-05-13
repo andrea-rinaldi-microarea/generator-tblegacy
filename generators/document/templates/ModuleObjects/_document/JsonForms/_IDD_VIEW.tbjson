@@ -1,0 +1,19 @@
+﻿{
+  "id": "IDD_CUSTOMERSPECIFICATION_VIEW",
+  "name": "CustomerSpecification",
+  "type": 1,
+  "child": true,
+  "items": [
+    {
+      "id": "IDC_TG_CUSTOMERSPECIFICATION",
+      "name": "CustomerSpecification",
+      "type": 72/*TileGroup*/,
+      "layoutType": 4/*VBOX*/,
+      "items": [
+        {
+          "href": "IDD_TD_CUSTOMERSPECIFICATION_MAIN"
+        }
+      ]
+    }
+  ]
+}
