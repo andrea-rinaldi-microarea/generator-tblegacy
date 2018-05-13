@@ -95,6 +95,11 @@ module.exports = class extends Generator {
             default: (answers) => { return 'T' + answers.documentName },
             validate: (input, answers) => { return check.validExistingFSName("Table", this.contextRoot+ "\\" + answers.dblName , input, ".h"); }
         },{
+            name: 'tablePhisicalName',
+            message: 'What is the master table phisical name?',
+            default: (answers) => { return answers.tableName },
+            validate: (input, answers) => { return check.validExistingFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All" , input, ".sql"); }
+        },{
             name: 'componentsName',
             message: 'Which library will contain the ADM definition ?',
             default: this.options.moduleName + 'Components',
@@ -156,5 +161,40 @@ module.exports = class extends Generator {
             this.libraryPath(this.properties.libraryName + '.vcxproj'),
             { process: (contents) => { return this.addToProj(contents, 'D' + this.properties.documentName); } }
         );
-}
+
+        // Module Objects
+        this.fs.copyTpl(
+            this.templatePath('ModuleObjects\\_document\\'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName),
+            this.properties
+        );
+
+        this.fs.move(
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD.hjson'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '.hjson')
+        );
+        this.fs.move(
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD.tbjson'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '.tbjson')
+        );
+
+        this.fs.move(
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_MAIN.hjson'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_MAIN.hjson')
+        );
+        this.fs.move(
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_MAIN.tbjson'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_MAIN.tbjson')
+        );
+        
+        this.fs.move(
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.hjson'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_VIEW.hjson')
+        );
+        this.fs.move(
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.tbjson'),
+            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_VIEW.tbjson')
+        );
+
+    }
 }

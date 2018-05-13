@@ -3,6 +3,6 @@
   <Version>1</Version>
   <MaxDocuments>10</MaxDocuments>
   <MaxDimension>100</MaxDimension>
-  <DataUrl>CustomerSpecification.xml</DataUrl>
-  <EnvelopeClass extension="" localizable="true">CustomersSuppliers</EnvelopeClass>
+  <DataUrl><%= documentName %>.xml</DataUrl>
+  <EnvelopeClass extension="" localizable="true"><%= documentName %></EnvelopeClass>
 </Document>

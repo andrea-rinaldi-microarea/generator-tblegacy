@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DBTs xmlns:sl="urn:TBStringLoader">
-  <Master namespace="ERP.CustomersSuppliers.Documents.CustomerSpecification.CustomerSpecification">
-    <Title localizable="true">Customer Specification</Title>
-    <Table namespace="ERP.CustomersSuppliers.Dbl.MA_CustomerSpecification">MA_CustomerSpecification</Table>
+  <Master namespace="<%= appName %>.<%= moduleName %>.<%= libraryName %>.<%= documentName %>.<%= documentName %>">
+    <Title localizable="true"><%= documentTitle %></Title>
+    <Table namespace="<%= appName %>.<%= moduleName %>.<%= dblName %>.<%= tablePhisicalName %>"><%= tablePhisicalName %></Table>
     <Slaves>
     </Slaves>
   </Master>

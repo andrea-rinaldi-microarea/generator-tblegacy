@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <MainExternalReferences>
-  <DBT namespace="ERP.CustomersSuppliers.Documents.CustomerSpecification.CustomerSpecification">
+  <DBT namespace="<%= appName %>.<%= moduleName %>.<%= libraryName %>.<%= documentName %>.<%= documentName %>">
     <Export>1</Export>
     <ExternalReferences>
     </ExternalReferences>

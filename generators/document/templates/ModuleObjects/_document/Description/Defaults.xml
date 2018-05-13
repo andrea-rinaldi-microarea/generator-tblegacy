@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Defaults>
-  <DocumentNamespace>ERP.CustomersSuppliers.Documents.CustomerSpecification</DocumentNamespace>
+  <DocumentNamespace><%= appName %>.<%= moduleName %>.<%= libraryName %>.<%= documentName %></DocumentNamespace>
   <Profile Preferred="">
   </Profile>
 </Defaults>
