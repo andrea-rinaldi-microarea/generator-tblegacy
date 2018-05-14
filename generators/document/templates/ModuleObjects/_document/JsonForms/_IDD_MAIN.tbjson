@@ -15,7 +15,7 @@
       "id": "IDC_<%= documentName.toUpperCase() %>CODE",
       "controlClass": "StringEdit",
       "binding": {
-        "datasource": "<%= documentName %>.<%= documentName %>"
+        "datasource": "<%= documentName %>.Code"
       },
       "type": 13,
       "width": 48,
