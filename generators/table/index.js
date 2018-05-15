@@ -34,7 +34,7 @@ module.exports = class extends Generator {
     
         this.addToInterface = function(contents) {
             var actions = [{
-                textToInsert: '#include "' + this.properties.tableClassName +'.h"',
+                textToInsert: '#include "' + this.properties.tableClassName +'.h"\n',
                 justBefore: '\n#ifdef _DEBUG'
             },{
                 textToInsert: 'REGISTER_TABLE		(' + this.properties.tableClassName + ')\n',

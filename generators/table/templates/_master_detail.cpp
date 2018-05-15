@@ -16,7 +16,7 @@ IMPLEMENT_DYNCREATE(<%= tableClassName %>, SqlRecord)
 	SqlRecord	(GetStaticName())
 {
 	f_DocNo.SetUpperCase();
-	
+
 	BindRecord();
 
 	if (bCallInit) Init();
@@ -46,7 +46,7 @@ IMPLEMENT_DYNCREATE(<%= tableClassName %>Details, SqlRecord)
 //-----------------------------------------------------------------------------
 <%= tableClassName %>Details::<%= tableClassName %>Details(BOOL bCallInit)
 	:
-	SqlRecord			(GetStaticName()),
+	SqlRecord			(GetStaticName())
 {
 	f_Code.SetUpperCase();
 
