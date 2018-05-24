@@ -7,6 +7,9 @@ const utils = require('../text-utils');
 const check = require('../check-utils');
 const path = require('path');
 
+const MASTER = 'master';
+const MASTER_DETAIL = 'master/detail'
+
 module.exports = class extends Generator {
 
     constructor(args, opts) {
@@ -30,14 +33,24 @@ module.exports = class extends Generator {
         }
     
         this.addToInterface = function(contents) {
+            var actions = [{
+                textToInsert: '#include "' + this.properties.tableClassName +'.h"\n',
+                justBefore: '\n#ifdef _DEBUG'
+            },{
+                textToInsert: 'REGISTER_TABLE		(' + this.properties.tableClassName + ')\n',
+                justBefore: 'END_REGISTER_TABLES'
+            }];
+            if (this.properties.tableType === MASTER_DETAIL) {
+                actions = actions.concat(
+                    [{
+                        textToInsert: 'REGISTER_TABLE		(' + this.properties.tableClassName + 'Details)\n',
+                        justBefore: 'END_REGISTER_TABLES'
+                    }]
+                );
+            }
             return utils.insertInSource(
-                contents.toString(), [{
-                    textToInsert: '#include "' + this.properties.tableClassName +'.h"',
-                    justBefore: '\n#ifdef _DEBUG'
-                },{
-                    textToInsert: 'REGISTER_TABLE		(' + this.properties.tableClassName + ')\n',
-                    justBefore: 'END_REGISTER_TABLES'
-                }]
+                contents.toString(), 
+                actions
             );
         }
 
@@ -97,6 +110,12 @@ module.exports = class extends Generator {
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Dbl',
             validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
+        },{
+            type: 'list',
+            name: 'tableType',
+            message: 'Which kind of table you want:',
+            choices: [MASTER, MASTER_DETAIL],
+            default: MASTER
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
@@ -113,9 +132,14 @@ module.exports = class extends Generator {
     }    
 
     writing() {
+        if (this.properties.tableType === MASTER) {
+            var template = '_master';
+        } else {
+            var template = '_master_detail';
+        }
         // SQL scripts
         this.fs.copyTpl(
-            this.templatePath('_table.sql'),
+            this.templatePath(template + '.sql'),
             this.modulePath('DatabaseScript\\Create\\All\\' + this.properties.tableName + '.sql'),
             this.properties
         );
@@ -127,12 +151,12 @@ module.exports = class extends Generator {
 
         // Source code
         this.fs.copyTpl(
-            this.templatePath('_table.h'),
+            this.templatePath(template + '.h'),
             this.libraryPath(this.properties.tableClassName + '.h'),
             this.properties
         );
         this.fs.copyTpl(
-            this.templatePath('_table.cpp'),
+            this.templatePath(template + '.cpp'),
             this.libraryPath(this.properties.tableClassName + '.cpp'),
             this.properties
         );

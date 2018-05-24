@@ -9,13 +9,12 @@
   "width": 654,
   "height": 73,
   "child": true,
-  "context": "ui<%= documentName %>",
   "items": [
     {
       "id": "IDC_<%= documentName.toUpperCase() %>CODE",
       "controlClass": "StringEdit",
       "binding": {
-        "datasource": "<%= documentName %>.<%= documentName %>"
+        "datasource": "<%= documentName %>.Code"
       },
       "type": 13,
       "width": 48,

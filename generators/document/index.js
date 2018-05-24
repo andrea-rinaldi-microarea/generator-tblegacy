@@ -44,15 +44,32 @@ module.exports = class extends Generator {
             );
         }
 
-        this.addToProj = function(contents, source) {
+        this.addToProj = function(contents, source, libDependency) {
+            var actions =  [{
+                textToInsert: '<ClCompile Include="' + source + '.cpp" />\n',
+                justBefore: '<ClCompile Include='
+            },{
+                textToInsert: '<ClInclude Include="' + source + '.h" />\n',
+                justBefore: '<ClInclude Include='
+            }];
+            if (libDependency) {
+                actions = actions.concat(
+                    [{
+                        textToInsert: this.properties.dblName + '.lib;',
+                        justBefore: '%(AdditionalDependencies)',
+                        skipIfAlreadyPresent: true,
+                        allOccurrencies: true
+                    },{
+                        textToInsert: this.properties.componentsName + '.lib;',
+                        justBefore: '%(AdditionalDependencies)',
+                        skipIfAlreadyPresent: true,
+                        allOccurrencies: true
+                    }]
+                );
+            }
             return utils.insertInSource(
-                contents.toString(), [{
-                    textToInsert: '<ClCompile Include="' + source + '.cpp" />\n',
-                    justBefore: '<ClCompile Include='
-                },{
-                    textToInsert: '<ClInclude Include="' + source + '.h" />\n',
-                    justBefore: '<ClInclude Include='
-                }]
+                contents.toString(),
+                actions
             );
         }
 
@@ -173,7 +190,7 @@ module.exports = class extends Generator {
         this.fs.copy(
             this.libraryPath(this.properties.libraryName + '.vcxproj'),
             this.libraryPath(this.properties.libraryName + '.vcxproj'),
-            { process: (contents) => { return this.addToProj(contents, 'D' + this.properties.documentName); } }
+            { process: (contents) => { return this.addToProj(contents, 'D' + this.properties.documentName, true); } }
         );
 
         // Module Objects

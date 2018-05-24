@@ -16,4 +16,4 @@ static char THIS_FILE[] = __FILE__;
 //								### ADM ###					
 /////////////////////////////////////////////////////////////////////////////
 //
-IMPLEMENT_ADMCLASS(ADM<%= documentName %>)
+IMPLEMENT_ADMCLASS(ADM<%= documentName %>Obj)

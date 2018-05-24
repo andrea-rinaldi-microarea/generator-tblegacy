@@ -2,6 +2,8 @@
 #include "stdafx.h"
 
 #include "D<%= documentName %>.h"  
+#include <<%= moduleName %>\<%= dblName %>\<%= tableName %>.h>
+
 
 #ifdef _DEBUG
 #undef THIS_FILE
