@@ -1,3 +1,6 @@
+const nodeFs = require('fs');
+const path = require('path');
+
 module.exports = {
 
     insertInSource(source, actions) {
@@ -22,6 +25,24 @@ module.exports = {
             }
         }
         return result;
+    },
+
+    extractPhisicalName(fname) {
+        if (!nodeFs.existsSync(fname)) {
+            return path.basename(fname, '.h');
+        }
+        var content = nodeFs.readFileSync(fname).toString();
+
+        var start = content.indexOf('_NS_TBL("');
+        if (start == -1) {
+            return path.basename(fname, '.h');
+        }
+        var stop = content.indexOf('");', start);
+        if (stop == -1) {
+            return path.basename(fname, '.h');
+        }
+
+        return content.substring(start + '_NS_TBL("'.length, stop);
     }
 
 }

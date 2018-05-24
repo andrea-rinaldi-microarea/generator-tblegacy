@@ -137,7 +137,7 @@ module.exports = class extends Generator {
         },{
             name: 'tablePhisicalName',
             message: 'What is the master table phisical name?',
-            default: (answers) => { return answers.tableName },
+            default: (answers) => { return utils.extractPhisicalName(this.contextRoot + "\\" + answers.dblName + "\\" + answers.tableName + ".cpp"); },
             validate: (input, answers) => { return check.validExistingFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All" , input, ".sql"); }
         },{
             name: 'componentsName',
