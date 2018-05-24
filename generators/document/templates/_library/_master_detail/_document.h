@@ -24,9 +24,13 @@ public:
 	<%= tableName %>* Get<%= tableBaseName %> () const { return (<%= tableName %>*) GetRecord(); }
 
 protected: 
+	virtual void	OnEnableControlsForFind		();
+	virtual void	OnDisableControlsForEdit	();
+	
 	virtual	void	OnDefineQuery		();
 	virtual	void	OnPrepareQuery		();
-
+	virtual	void	OnPrepareBrowser	(SqlTable* pTable);
+	
 	virtual	BOOL	OnCheckPrimaryKey	();
 	virtual	void	OnPreparePrimaryKey	() {}
 };
@@ -44,13 +48,10 @@ public:
 	DBT<%= documentName %>Details (CRuntimeClass*, CAbstractFormDoc*);
 
 public:
-	<%= tableName %>* 			Get<%= tableBaseName %> () 			const { return (D<%= documentName %>*)m_pDocument->Get<%= tableBaseName %>(); }
+	<%= tableName %>* 			Get<%= tableBaseName %> () 			const { return (<%= tableName %>*)m_pDocument->GetMaster()->GetRecord(); }
 	<%= tableName %>Details*	GetDetail 				(int nRow)	const { return (<%= tableName %>Details*) GetRow(nRow); }
 
 protected: 
-	virtual void	OnEnableControlsForFind		();
-	virtual void	OnDisableControlsForEdit	();
-	
 	virtual	void	OnDefineQuery		();
 	virtual	void	OnPrepareQuery		();
 

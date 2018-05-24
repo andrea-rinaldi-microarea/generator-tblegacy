@@ -70,6 +70,7 @@ void DBT<%= documentName %>::OnPrepareQuery ()
 //-----------------------------------------------------------------------------
 BOOL DBT<%= documentName %>::OnCheckPrimaryKey	()
 {
+	return TRUE;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -141,7 +142,7 @@ D<%= documentName %>::D<%= documentName %>()
 
 //-----------------------------------------------------------------------------
 <%= tableName %>*			D<%= documentName %>::Get<%= tableBaseName %>	()		 	const {return m_pDBT<%= documentName %>->Get<%= tableBaseName %>(); }
-<%= tableName %>Details*	D<%= documentName %>::GetDetail					(int nRow)  const {return m_pDBTDetail->GetDetail(i); }
+<%= tableName %>Details*	D<%= documentName %>::GetDetail					(int nRow)  const {return m_pDBTDetail->GetDetail(nRow); }
 
 //-----------------------------------------------------------------------------
 BOOL D<%= documentName %>::OnAttachData()
