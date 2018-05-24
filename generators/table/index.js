@@ -139,7 +139,7 @@ module.exports = class extends Generator {
         }
         // SQL scripts
         this.fs.copyTpl(
-            this.templatePath(template + '.sql'),
+            this.templatePath(template + '\\_table.sql'),
             this.modulePath('DatabaseScript\\Create\\All\\' + this.properties.tableName + '.sql'),
             this.properties
         );
@@ -151,12 +151,12 @@ module.exports = class extends Generator {
 
         // Source code
         this.fs.copyTpl(
-            this.templatePath(template + '.h'),
+            this.templatePath(template + '\\_table.h'),
             this.libraryPath(this.properties.tableClassName + '.h'),
             this.properties
         );
         this.fs.copyTpl(
-            this.templatePath(template + '.cpp'),
+            this.templatePath(template + '\\_table.cpp'),
             this.libraryPath(this.properties.tableClassName + '.cpp'),
             this.properties
         );
