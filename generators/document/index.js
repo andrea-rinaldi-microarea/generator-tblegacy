@@ -7,6 +7,9 @@ const utils = require('../text-utils');
 const check = require('../check-utils');
 const path = require('path');
 
+const MASTER = 'master';
+const MASTER_DETAIL = 'master/detail'
+
 module.exports = class extends Generator {
 
     constructor(args, opts) {
@@ -107,14 +110,20 @@ module.exports = class extends Generator {
             default: this.options.documentName,
             validate: (input, answers) => { return check.validNewFSName("Document", this.contextRoot + "\\ModuleObjects", input, "\\Description\\Document.xml" ); }
         },{
-            name: 'documentTitle',
-            message: 'Set the main form title',
-            default: (answers) => { return (this.options.documentName || answers.documentName) + ' document' }
-        },{
             name: 'libraryName',
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Documents',
             validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
+        },{
+            type: 'list',
+            name: 'documentType',
+            message: 'Which kind of document you want:',
+            choices: [MASTER, MASTER_DETAIL],
+            default: MASTER
+        },{
+            name: 'documentTitle',
+            message: 'Set the main form title',
+            default: (answers) => { return (this.options.documentName || answers.documentName) + ' document' }
         },{
             name: 'dblName',
             message: 'Which library contains the table definition ?',
@@ -149,6 +158,11 @@ module.exports = class extends Generator {
     }
 
     writing() {
+        if (this.properties.documentType === MASTER) {
+            var template = '_master';
+        } else {
+            var template = '_master_detail';
+        }
         // ADM
         this.fs.copyTpl(
             this.templatePath('_components\\_adm.h'),
@@ -168,17 +182,17 @@ module.exports = class extends Generator {
 
         //Document
         this.fs.copyTpl(
-            this.templatePath('_library\\_document.h'),
+            this.templatePath('_library\\' + template + '\\_document.h'),
             this.libraryPath('D' + this.properties.documentName + '.h'),
             this.properties
         );
         this.fs.copyTpl(
-            this.templatePath('_library\\_document.cpp'),
+            this.templatePath('_library\\' + template + '\\_document.cpp'),
             this.libraryPath('D' + this.properties.documentName + '.cpp'),
             this.properties
         );
         this.fs.copyTpl(
-            this.templatePath('_library\\_document.hjson'),
+            this.templatePath('_library\\' + template + '\\_document.hjson'),
             this.libraryPath('UI' + this.properties.documentName + '.hjson'),
             this.properties
         );
@@ -195,7 +209,7 @@ module.exports = class extends Generator {
 
         // Module Objects
         this.fs.copyTpl(
-            this.templatePath('ModuleObjects\\_document\\'),
+            this.templatePath('ModuleObjects\\' + template + '\\_document\\'),
             this.modulePath('ModuleObjects\\' + this.properties.documentName),
             this.properties
         );
