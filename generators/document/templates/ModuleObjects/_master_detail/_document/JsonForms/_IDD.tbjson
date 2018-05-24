@@ -1,0 +1,10 @@
+﻿{
+    "href": "M.Framework.TbGes.TbGes.IDD_MASTER_FRAME",
+    "id": "IDD_<%= documentName.toUpperCase() %>",
+    "name": "<%= documentName %>",
+    "items": [
+        {
+            "href": "IDD_<%= documentName.toUpperCase() %>_VIEW"
+        }
+    ]
+}

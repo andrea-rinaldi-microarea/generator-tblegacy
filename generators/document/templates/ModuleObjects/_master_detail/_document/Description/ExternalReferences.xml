@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MainExternalReferences>
+  <DBT namespace="<%= appName %>.<%= moduleName %>.<%= libraryName %>.<%= documentName %>.<%= documentName %>">
+    <Export>1</Export>
+    <ExternalReferences>
+    </ExternalReferences>
+  </DBT>
+</MainExternalReferences>

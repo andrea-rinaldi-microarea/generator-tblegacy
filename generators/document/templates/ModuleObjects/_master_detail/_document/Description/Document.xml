@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Version>1</Version>
+  <MaxDocuments>10</MaxDocuments>
+  <MaxDimension>100</MaxDimension>
+  <DataUrl><%= documentName %>.xml</DataUrl>
+  <EnvelopeClass extension="" localizable="true"><%= documentName %></EnvelopeClass>
+</Document>
