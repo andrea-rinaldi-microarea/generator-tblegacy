@@ -27,19 +27,19 @@ module.exports = {
         return result;
     },
 
-    extractPhisicalName(fname) {
-        if (!nodeFs.existsSync(fname)) {
-            return path.basename(fname, '.h');
+    extractPhisicalName(path, className) {
+        if (!nodeFs.existsSync(path + "\\" + className + '.cpp')) {
+            return className;
         }
-        var content = nodeFs.readFileSync(fname).toString();
+        var content = nodeFs.readFileSync(path + "\\" + className + '.cpp').toString();
 
         var start = content.indexOf('_NS_TBL("');
         if (start == -1) {
-            return path.basename(fname, '.h');
+            return className;
         }
         var stop = content.indexOf('");', start);
         if (stop == -1) {
-            return path.basename(fname, '.h');
+            return className;
         }
 
         return content.substring(start + '_NS_TBL("'.length, stop);
