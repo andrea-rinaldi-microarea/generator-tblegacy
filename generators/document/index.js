@@ -93,6 +93,9 @@ module.exports = class extends Generator {
     }
 
     initializing() {
+        if (typeof this.options.sourceRoot !== "undefined" && this.options.sourceRoot !== "")
+            this.sourceRoot(this.options.sourceRoot);
+
         var appRoot = path.dirname(path.dirname(this.contextRoot));
         if (!_.toLower(appRoot).endsWith('\\standard\\applications')) {
             this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");

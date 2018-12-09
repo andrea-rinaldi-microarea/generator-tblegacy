@@ -50,6 +50,9 @@ module.exports = class extends Generator {
     }
 
     initializing() {
+        if (typeof this.options.sourceRoot !== "undefined" && this.options.sourceRoot !== "")
+            this.sourceRoot(this.options.sourceRoot);
+
         if (!this.options.asSubgenerator) {
             var appRoot = path.dirname(path.dirname(this.contextRoot));
             if (!_.toLower(appRoot).endsWith('\\standard\\applications')) {
