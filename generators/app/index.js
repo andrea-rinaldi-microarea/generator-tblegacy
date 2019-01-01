@@ -58,6 +58,9 @@ module.exports = class extends Generator {
     }
 
     initializing() {
+        if (typeof this.options.sourceRoot !== "undefined" && this.options.sourceRoot !== "")
+            this.sourceRoot(this.options.sourceRoot);
+
         if (!_.toLower(this.contextRoot).endsWith('\\standard\\applications')) {
             this.env.error("Current folder must be the standard TaskBuilder Application folder (<your instance>\\Standard\\Applications).");
         }
@@ -80,7 +83,7 @@ module.exports = class extends Generator {
         }, {
             name: 'appDescription',
             message: 'Give your app a description',
-            default: (answers) => { return answers.appName + ' TB Application'; }
+            default: (answers) => { return (answers.appName ? answers.appName : this.options.appName) + ' TB Application'; }
         }, {
             name: 'initialVersion',
             message: 'Application version',
