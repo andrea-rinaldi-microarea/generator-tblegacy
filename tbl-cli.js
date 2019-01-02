@@ -42,7 +42,6 @@ if (args[0] === 'new' || args[0] === 'n') {
     return usage(args);
 }
 var params = args.slice(1).toString().replace(',',' ');
-
 try {
     env.run(gen + ' ' + params, { 'sourceRoot': tpl, 'force': true }, (err) => {
         if (err) {

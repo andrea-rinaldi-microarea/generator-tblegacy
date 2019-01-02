@@ -19,4 +19,6 @@ console.log(chalk.red (" (_(_()) )(_)) )\\ ((_)\\((_)_  /((_)((_) _   ((_))/((_)
 console.log(chalk.blue(" |_   _|")+ chalk.red("(_)_ ((_)")+ chalk.blue(" | |")+ chalk.red("(_)")+ chalk.blue("| _ )")+ chalk.red("(_))(")+ chalk.blue("  (_)| |  _| |")+ chalk.red("(_))   ((_) ((")+ chalk.blue("/ __|| |   |_ _|"));  
 console.log(chalk.blue("   | |  / _` |(_-<| / / | _ \\| || | | || |/ _` |/ -_) | '_|  | (__ | |__  | |"));   
 console.log(chalk.blue("   |_|  \\__,_|/__/|_\\_\\ |___/ \\_,_| |_||_|\\__,_|\\___| |_|     \\___||____||___|"));  
+
+console.log('\nVersion: ' + require('./package.json').version);
 } 
