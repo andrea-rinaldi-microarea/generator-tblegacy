@@ -31,7 +31,7 @@ module.exports = class extends Generator {
                     justBefore: '#ifdef _DEBUG'
                 },{
                     textToInsert: '\WHEN_SERVER_DOC (D' + this.properties.serverDocName + ')\n' + 
-                                        '\t\tATTACH_CLIENT_DOC(CD' + this.properties.clientDocName + ',	_NS_CD("CD' + this.properties.clientDocName + '")\n' +
+                                        '\t\tATTACH_CLIENT_DOC(CD' + this.properties.clientDocName + ',	_NS_CD("CD' + this.properties.clientDocName + '"))\n' +
                                   '\END_SERVER_DOC ()\n',
                     justBefore: 'END_CLIENT_DOC'
                 }]
