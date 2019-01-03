@@ -31,10 +31,12 @@ CD<%= clientDocName %>::~CD<%= clientDocName %>()
 
 //-----------------------------------------------------------------------------
 BOOL CD<%= clientDocName %>::OnAttachData()
-{              
+{            
+    return TRUE;  
 }
 
 //-----------------------------------------------------------------------------
 BOOL CD<%= clientDocName %>::OnPrepareAuxData()
 {
+    return TRUE;  
 }
