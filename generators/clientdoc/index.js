@@ -65,7 +65,7 @@ module.exports = class extends Generator {
         this.addClientDocumentObjects = function(contents, source) {
             return utils.insertInSource(
                 contents.toString(), [{
-                    textToInsert: '\t<ServerDocument namespace="'+ this.properties.serverAppName + '.' + this.properties.serverModuleName + '.' + this.properties.serverLibraryName + '.' + this.properties.serverDocName  + '" >\n' +
+                    textToInsert: '\t<ServerDocument namespace="'+ this.properties.serverDocNSpace  + '" >\n' +
                                   '\t\t<ClientDocument namespace="' + this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.clientDocName + '" localize="' + this.properties.clientDocDescription + '" >\n' +
                                   '\t</ServerDocument>\n',
                     justBefore: '</ClientDocuments>'
@@ -105,35 +105,24 @@ module.exports = class extends Generator {
             message: 'Set the Client Document description',
             default: (answers) => { return (this.options.clientDocName || answers.clientDocName) + ' client document' }
         },{
-            name: 'serverAppName',
-            message: 'Which application contains the document to extend ?',
-            default: this.options.appName,
-            validate: (input, answers) => { return check.validExistingFSName("Application", this.options.appRoot, input, "\\Application.config"); }
-        },{
-            name: 'serverModuleName',
-            message: 'Which module of the external application?',
-            default: this.options.moduleName,
-            validate: (input, answers) => { return check.validExistingFSName("Module", this.options.appRoot + "\\" + answers.serverAppName , input, "\\Module.config"); }
-        },{
-            name: 'serverLibraryName',
-            message: 'Which library ?',
-            default: this.options.moduleName + 'Documents',
-            validate: (input, answers) => { return check.validExistingFSName("Library", this.options.appRoot + "\\" + answers.serverAppName + "\\" + answers.serverModuleName, input); }
+            name: 'serverDocNSpace',
+            message: 'Which is the namespace of the document to extend ?',
+            validate: (input, answers) => { return check.validExistingDocNamespace(this.options.appRoot, input); }
         },{
             name: 'dependencyLibrary',
             message: 'Dependency library to link ?',
-            default: (answers) => { return answers.serverLibraryName; }
-        },{
-            name: 'serverDocName',
-            message: 'Which document ?',
-            default: this.options.serverDocName,
-            validate: (input, answers) => { return check.validExistingFSName("Document", this.options.appRoot + "\\" + answers.serverAppName + "\\" + answers.serverModuleName + "\\ModuleObjects", input, "\\Description\\Document.xml" ); }
+            default: (answers) => { var segments = answers.serverDocNSpace.split("."); return segments[1] + segments[2]; }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
             this.properties = properties;
             this.properties.appName = this.options.appName;
             this.properties.moduleName = this.options.moduleName;
+            var segments = this.properties.serverDocNSpace.split(".");
+            this.properties.serverAppName = segments[0];
+            this.properties.serverModuleName = segments[1];
+            this.properties.serverLibraryName = segments[2];
+            this.properties.serverDocName = segments[3];
         });
     }
 

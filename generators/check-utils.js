@@ -28,10 +28,35 @@ module.exports = {
         if (!name) {
             return "Empty name not allowed";
         }
+        var p = root + '\\' + name + (ext ? ext : '');
         if (!nodeFs.existsSync(root + '\\' + name + (ext ? ext : ''))) {
             return _.capitalize(type) + " " + name + " does not exist.";
         }
         return true;
-    }
+    },
 
+    validExistingDocNamespace(root, namespace) {
+        if (!namespace) {
+            return "Empty namespace not allowed";
+        }
+        var segments = namespace.split(".");
+        if (segments.length != 4) {
+            return "Document namespace must have the form: <application>.<module>.<library>.<document>";
+        }
+
+        var check = this.validExistingFSName("Application", root, segments[0], "\\Application.config");
+        if (check !== true)
+            return check;
+        check = this.validExistingFSName("Module", root + "\\" + segments[0], segments[1], "\\Module.config");
+        if (check !== true)
+            return check;
+        check = this.validExistingFSName("Library", root + "\\" + segments[0] + "\\" + segments[1], segments[2]);
+        if (check !== true)
+            return check;
+        check = this.validExistingFSName("Document", root + "\\" + segments[0] + "\\" + segments[1] + "\\ModuleObjects", segments[3], "\\Description\\Document.xml");
+        if (check !== true)
+            return check;
+
+        return true;
+    }
 }

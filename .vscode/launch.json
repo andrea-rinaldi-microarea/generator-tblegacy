@@ -45,6 +45,18 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "client document",
+            "program": "C:\\Users\\${env:USERNAME}\\AppData\\Roaming\\npm\\node_modules\\yo\\lib\\cli.js",
+            "cwd": "C:\\Users\\${env:USERNAME}\\Documents\\Working\\Standard\\Applications\\SampleApp\\core",
+            "args": [
+                "tblegacy:clientdoc",
+                "--force"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "create table",
             "program": "C:\\Users\\${env:USERNAME}\\AppData\\Roaming\\npm\\node_modules\\yo\\lib\\cli.js",
             "cwd": "C:\\Users\\${env:USERNAME}\\Documents\\Working\\Standard\\Applications\\sandbox\\core",
