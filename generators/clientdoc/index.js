@@ -49,7 +49,7 @@ module.exports = class extends Generator {
             if (libDependency) {
                 actions = actions.concat(
                     [{
-                        textToInsert: this.properties.serverLibraryName + '.lib;',
+                        textToInsert: libDependency + '.lib;',
                         justBefore: '%(AdditionalDependencies)',
                         skipIfAlreadyPresent: true,
                         allOccurrencies: true
@@ -120,6 +120,10 @@ module.exports = class extends Generator {
             default: this.options.moduleName + 'Documents',
             validate: (input, answers) => { return check.validExistingFSName("Library", this.options.appRoot + "\\" + answers.serverAppName + "\\" + answers.serverModuleName, input); }
         },{
+            name: 'dependencyLibrary',
+            message: 'Dependency library to link ?',
+            default: (answers) => { return answers.serverLibraryName; }
+        },{
             name: 'serverDocName',
             message: 'Which document ?',
             default: this.options.serverDocName,
@@ -153,7 +157,7 @@ module.exports = class extends Generator {
         this.fs.copy(
             this.libraryPath(this.properties.libraryName + '.vcxproj'),
             this.libraryPath(this.properties.libraryName + '.vcxproj'),
-            { process: (contents) => { return this.addToProj(contents, 'CD' + this.properties.clientDocName, true); } }
+            { process: (contents) => { return this.addToProj(contents, 'CD' + this.properties.clientDocName, this.properties.dependencyLibrary); } }
         );
 
         // Module Objects
