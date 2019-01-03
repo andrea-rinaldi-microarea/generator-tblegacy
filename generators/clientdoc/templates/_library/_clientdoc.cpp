@@ -20,6 +20,16 @@ BEGIN_MESSAGE_MAP(CD<%= clientDocName %>, CClientDoc)
 END_MESSAGE_MAP()
 
 //-----------------------------------------------------------------------------
+CD<%= clientDocName %>::CD<%= clientDocName %>()
+{              
+}
+
+//-----------------------------------------------------------------------------
+CD<%= clientDocName %>::~CD<%= clientDocName %>()
+{              
+}
+
+//-----------------------------------------------------------------------------
 BOOL CD<%= clientDocName %>::OnAttachData()
 {              
 }
