@@ -39,6 +39,10 @@ BEGIN_ADDON_INTERFACE()
 	BEGIN_TEMPLATE()
 	END_TEMPLATE()
 
+	//-----------------------------------------------------------------------------
+	BEGIN_CLIENT_DOC()
+	END_CLIENT_DOC()
+
 END_ADDON_INTERFACE()
 
 #undef _AddOn_Interface_Of
