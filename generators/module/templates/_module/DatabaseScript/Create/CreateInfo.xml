@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<CreateInfo>
+  <ModuleInfo name="<%= moduleName %>" />
+  <Level1>
+  </Level1>
+  <Level2 />
+</CreateInfo>

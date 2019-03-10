@@ -18,31 +18,6 @@ module.exports = class extends Generator {
 
         this.optionOrPrompt = optionOrPrompt;
 
-        this.noEmpty = function(element) {
-            if (!element) {
-                return "Empty value not allowed";
-            }
-
-            return true;
-        }
-
-        this.valid4CharsCode = function(value) {
-            if (!value) {
-                return "Empty value not allowed";
-            }
-
-            if (value.length != 4) {
-                return "You must enter exactly 4 chars";
-            }
-
-            var seedPattern = /^[a-z\s]+$/gi;
-            if (!seedPattern.test(value)) {
-                return "Invalid characters in code (letters only).";
-            }
-
-            return true;
-        }
-
         this.checkAppName = function(appName) {
             if (!appName) return;
 
@@ -73,7 +48,7 @@ module.exports = class extends Generator {
         const prompts = [{
             name: 'organization',
             message: 'What is the name of your organization?',
-            validate: (input, answers) => { return this.noEmpty(input); },
+            validate: (input, answers) => { return check.noEmpty(input); },
             store: true
         }, {
             name: 'appName',
@@ -110,8 +85,9 @@ module.exports = class extends Generator {
         }, {
             name: 'activationChars',
             message: 'Your 4-chars activation seed',
-            validate: (input, answers) => { return this.valid4CharsCode(input); },
-            filter: (input) => { return _.toUpper(input); }
+            validate: (input, answers) => { return check.valid4CharsCode(input); },
+            filter: (input) => { return _.toUpper(input); },
+            store: true
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
