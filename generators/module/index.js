@@ -1,5 +1,6 @@
 const Generator = require('yeoman-generator');
 const check = require('../check-utils');
+const utils = require('../text-utils');
 const _ = require('lodash');
 const path = require('path');
 const chalk = require('chalk');
@@ -18,6 +19,16 @@ module.exports = class extends Generator {
         this.appPath = function(name) {
             return this.properties.appFolder + (name ? ('\\' + name) : '');
         }
+
+        this.addSolutionXml = function(contents) {
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: '<SalesModule name="' + this.properties.moduleName + '" />\n',
+                    justBefore: '</Product>'
+                }]
+            );
+        }
+
     }
     
     initializing() {
@@ -77,6 +88,12 @@ module.exports = class extends Generator {
             this.templatePath('Solutions\\Modules\\_module.xml'),
             this.appPath('Solutions\\Modules\\' + this.properties.moduleName + '.xml'),
             this.properties
+        );
+
+        this.fs.copy(
+            this.appPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
+            this.appPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
+            { process: (contents) => { return this.addSolutionXml(contents); } }
         );
 
         // module config

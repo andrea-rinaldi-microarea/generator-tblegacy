@@ -5,9 +5,7 @@ const nodeFs = require('fs');
 const uuid = require('uuid/v1');
 const check = require('../check-utils');
 
-
 var optionOrPrompt = require('yeoman-option-or-prompt');
-
 
 module.exports = class extends Generator {
 
