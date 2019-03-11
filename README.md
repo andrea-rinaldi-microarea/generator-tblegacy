@@ -4,7 +4,7 @@ It is a Yeoman Generator available also as a CLI.
 ## Installation
 Clone the repository:
 ```
-git clone 
+git clone https://github.com/andrea-rinaldi-microarea/generator-tblegacy.git
 ```
 move in the folder and install dependencies
 ```
