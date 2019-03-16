@@ -63,9 +63,9 @@ module.exports = class extends Generator {
             default: '1.0.0.0'
         }, {
             type: 'confirm',
-            name: 'standalone',
-            message: 'Is your application standalone?',
-            default: false
+            name: 'useErpPch',
+            message: 'Re-use ERP precompiled headers?',
+            default: true
         }, {
             name: 'defaultModule',
             message: 'Name of the first module',
@@ -113,7 +113,7 @@ module.exports = class extends Generator {
                 moduleName: this.properties.defaultModule,
                 libraryName: this.properties.defaultLibrary,
                 appFolder: this.applicationPath(),
-                standalone: this.properties.standalone,
+                useErpPch: this.properties.useErpPch,
                 asSubgenerator: true
             });
     }

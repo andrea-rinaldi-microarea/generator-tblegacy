@@ -77,8 +77,8 @@ module.exports = class extends Generator {
             validate: (input, answers) => { return check.validNewFSName("Library", this.options.appFolder + '\\' + this.options.moduleName, input); }
         }, {
             type: 'confirm',
-            name: 'standalone',
-            message: 'Is your application standalone?',
+            name: 'useErpPch',
+            message: 'Re-use ERP precompiled headers?',
             default: false
         }];
 
@@ -97,12 +97,12 @@ module.exports = class extends Generator {
             this.modulePath(this.properties.libraryName),
             this.properties
         );
-        if (this.properties.standalone) {
-            var stdafxFile = '_stdafx-NoERP.h';
-            var noStdafxfile = '_stdafx-ERP.h';
-        } else {
+        if (this.properties.useErpPch) {
             var stdafxFile = '_stdafx-ERP.h';
             var noStdafxfile = '_stdafx-NoERP.h';
+        } else {
+            var stdafxFile = '_stdafx-NoERP.h';
+            var noStdafxfile = '_stdafx-ERP.h';
         }
         this.fs.move(
             this.libraryPath(stdafxFile),
