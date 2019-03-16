@@ -31,41 +31,29 @@ module.exports = class extends Generator {
         }
 
         this.retrieveOrganizationName = function(appName, appFolder) {
-            var solutionBrand = path.join(appFolder, 'Solutions', appName + '.Solution.Brand.xml')
-            if (!nodeFs.existsSync(solutionBrand)) {
-                this.env.error("Solution brand files not found for app " + appName);
+            var solutionBrand = path.join(appFolder, 'Solutions', appName + '.Solution.Brand.xml');
+            var res = utils.extractInfo(
+                solutionBrand,
+                'source="Company" branded="',
+                '" />'
+            );
+            if (res === false) {
+                this.env.error("Solution brand file not found or bad formed for app " + appName + ":\n" + solutionBrand);
             }
-            var content = nodeFs.readFileSync(solutionBrand).toString();
-
-            var start = content.indexOf('source="Company" branded="');
-            if (start == -1) {
-                this.env.error("Solution brand file bad formed for app " + appName);;
-            }
-            var stop = content.indexOf('" />', start);
-            if (stop == -1) {
-                this.env.error("Solution brand file bad formed for app " + appName);;
-            }
-    
-            return content.substring(start + 'source="Company" branded="'.length, stop);
+            return res;
         }
 
         this.retrieveAppDescription = function(appName, appFolder) {
-            var solutionBrand = path.join(appFolder, 'Solutions', appName + '.Solution.Brand.xml')
-            if (!nodeFs.existsSync(solutionBrand)) {
-                this.env.error("Solution brand files not found for app " + appName);
+            var solutionBrand = path.join(appFolder, 'Solutions', appName + '.Solution.Brand.xml');
+            var res = utils.extractInfo(
+                solutionBrand,
+                '<MenuTitle>',
+                '</MenuTitle>'
+            );
+            if (res === false) {
+                this.env.error("Solution brand file not found or bad formed for app " + appName + ":\n" + solutionBrand);
             }
-            var content = nodeFs.readFileSync(solutionBrand).toString();
-
-            var start = content.indexOf('<MenuTitle>');
-            if (start == -1) {
-                this.env.error("Solution brand file bad formed for app " + appName);;
-            }
-            var stop = content.indexOf('</MenuTitle>', start);
-            if (stop == -1) {
-                this.env.error("Solution brand file bad formed for app " + appName);;
-            }
-    
-            return content.substring(start + '<MenuTitle>'.length, stop);
+            return res;
         }
 
     }

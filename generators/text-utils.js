@@ -27,22 +27,23 @@ module.exports = {
         return result;
     },
 
-    extractPhisicalName(path, className) {
-        if (!nodeFs.existsSync(path + "\\" + className + '.cpp')) {
-            return className;
+    extractInfo(file, matchStart, matchEnd) {
+        if (!nodeFs.existsSync(file)) {
+            return false;
         }
-        var content = nodeFs.readFileSync(path + "\\" + className + '.cpp').toString();
 
-        var start = content.indexOf('_NS_TBL("');
+        var content = nodeFs.readFileSync(file).toString();
+
+        var start = content.indexOf(matchStart);
         if (start == -1) {
-            return className;
+            return false;
         }
-        var stop = content.indexOf('");', start);
+        var stop = content.indexOf(matchEnd, start);
         if (stop == -1) {
-            return className;
+            return false;
         }
 
-        return content.substring(start + '_NS_TBL("'.length, stop);
+        return content.substring(start + matchStart.length, stop);
     }
 
 }
