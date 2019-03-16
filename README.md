@@ -64,8 +64,8 @@ The generated elements are:
 * the application's main folder, along with the `Application.config` file
 * the VS solution and its `.props` file
 * the application's license files, in the `Solutions` subfolder
-* the first declared module (see [Modules](##Modules))
-* the first declared library inside it (see [Libraries](##Libraries))
+* the first declared module (see [Modules](#Modules))
+* the first declared library inside it (see [Libraries](#Libraries))
 
 ## Modules
 
