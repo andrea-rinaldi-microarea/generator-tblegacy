@@ -97,6 +97,17 @@ module.exports = class extends Generator {
 
     default() {
         this.composeWith(
+            require.resolve('../module'), {
+                appName: this.properties.appName,
+                appFolder: this.applicationPath(),
+                organization: this.properties.organization,
+                appDescription: this.properties.appDescription,
+                moduleName: this.properties.defaultModule,
+                moduleDescription: this.properties.defaultModuleDescription,
+                shortName: this.properties.shortName,
+                asSubgenerator: true
+            });
+        this.composeWith(
             require.resolve('../library'), {
                 appName: this.properties.appName,
                 moduleName: this.properties.defaultModule,
@@ -127,7 +138,7 @@ module.exports = class extends Generator {
             this.properties
         );
 
-        // Solution and module (activation)
+        // License Solution
         this.fs.copyTpl(
             this.templatePath('Solutions\\_solution.xml'),
             this.applicationPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
@@ -138,52 +149,53 @@ module.exports = class extends Generator {
             this.applicationPath('Solutions\\' + this.properties.appName + '.Solution.Brand.xml'),
             this.properties
         );
-        this.fs.copyTpl(
-            this.templatePath('Solutions\\Modules\\_module.xml'),
-            this.applicationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
-            this.properties
-        );
 
-        // Default module
-        this.fs.copyTpl(
-            this.templatePath('_module\\Module.config'),
-            this.applicationPath(this.properties.defaultModule + '\\Module.config'),
-            this.properties
-        );
+        // this.fs.copyTpl(
+        //     this.templatePath('Solutions\\Modules\\_module.xml'),
+        //     this.applicationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
+        //     this.properties
+        // );
 
-        // Default module -- database script
-        this.fs.copyTpl(
-            this.templatePath('_module\\DatabaseScript\\Create\\CreateInfo.xml'),
-            this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Create\\CreateInfo.xml'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath('_module\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            this.properties
-        );
+        // // Default module
+        // this.fs.copyTpl(
+        //     this.templatePath('_module\\Module.config'),
+        //     this.applicationPath(this.properties.defaultModule + '\\Module.config'),
+        //     this.properties
+        // );
 
-        // Default module -- menu and files (images)
-        this.fs.copyTpl(
-            this.templatePath('_module\\Menu\\_module.menu'),
-            this.applicationPath(this.properties.defaultModule + '\\Menu\\' + this.properties.defaultModule + '.menu'),
-            this.properties
-        );
-        this.fs.copy(
-            this.templatePath('_module\\Files\\Images\\'),
-            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\')
-        );
-        this.fs.move(
-            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\_module.png'),
-            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png')
-        );
+        // // Default module -- database script
+        // this.fs.copyTpl(
+        //     this.templatePath('_module\\DatabaseScript\\Create\\CreateInfo.xml'),
+        //     this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Create\\CreateInfo.xml'),
+        //     this.properties
+        // );
+        // this.fs.copyTpl(
+        //     this.templatePath('_module\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
+        //     this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
+        //     this.properties
+        // );
 
-        // Default module -- ModuleObjects files
-        this.fs.copyTpl(
-            this.templatePath('_module\\ModuleObjects\\'),
-            this.applicationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
-            this.properties
-        );
+        // // Default module -- menu and files (images)
+        // this.fs.copyTpl(
+        //     this.templatePath('_module\\Menu\\_module.menu'),
+        //     this.applicationPath(this.properties.defaultModule + '\\Menu\\' + this.properties.defaultModule + '.menu'),
+        //     this.properties
+        // );
+        // this.fs.copy(
+        //     this.templatePath('_module\\Files\\Images\\'),
+        //     this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\')
+        // );
+        // this.fs.move(
+        //     this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\_module.png'),
+        //     this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png')
+        // );
+
+        // // Default module -- ModuleObjects files
+        // this.fs.copyTpl(
+        //     this.templatePath('_module\\ModuleObjects\\'),
+        //     this.applicationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
+        //     this.properties
+        // );
     }
 
     end() {}
