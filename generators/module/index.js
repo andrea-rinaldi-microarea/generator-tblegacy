@@ -4,6 +4,7 @@ const utils = require('../text-utils');
 const _ = require('lodash');
 const path = require('path');
 const chalk = require('chalk');
+const nodeFs = require('fs');
 
 var optionOrPrompt = require('yeoman-option-or-prompt');
 
@@ -29,6 +30,44 @@ module.exports = class extends Generator {
             );
         }
 
+        this.retrieveOrganizationName = function(appName, appFolder) {
+            var solutionBrand = path.join(appFolder, 'Solutions', appName + '.Solution.Brand.xml')
+            if (!nodeFs.existsSync(solutionBrand)) {
+                this.env.error("Solution brand files not found for app " + appName);
+            }
+            var content = nodeFs.readFileSync(solutionBrand).toString();
+
+            var start = content.indexOf('source="Company" branded="');
+            if (start == -1) {
+                this.env.error("Solution brand file bad formed for app " + appName);;
+            }
+            var stop = content.indexOf('" />', start);
+            if (stop == -1) {
+                this.env.error("Solution brand file bad formed for app " + appName);;
+            }
+    
+            return content.substring(start + 'source="Company" branded="'.length, stop);
+        }
+
+        this.retrieveAppDescription = function(appName, appFolder) {
+            var solutionBrand = path.join(appFolder, 'Solutions', appName + '.Solution.Brand.xml')
+            if (!nodeFs.existsSync(solutionBrand)) {
+                this.env.error("Solution brand files not found for app " + appName);
+            }
+            var content = nodeFs.readFileSync(solutionBrand).toString();
+
+            var start = content.indexOf('<MenuTitle>');
+            if (start == -1) {
+                this.env.error("Solution brand file bad formed for app " + appName);;
+            }
+            var stop = content.indexOf('</MenuTitle>', start);
+            if (stop == -1) {
+                this.env.error("Solution brand file bad formed for app " + appName);;
+            }
+    
+            return content.substring(start + '<MenuTitle>'.length, stop);
+        }
+
     }
     
     initializing() {
@@ -43,6 +82,9 @@ module.exports = class extends Generator {
 
             this.options.appName = path.basename(this.contextRoot);
             this.options.appFolder = appRoot + '\\' + this.options.appName;
+
+            this.options.organization = this.retrieveOrganizationName(this.options.appName, this.options.appFolder);
+            this.options.appDescription = this.retrieveAppDescription(this.options.appName, this.options.appFolder);
         }
     }
     prompting() {
@@ -51,11 +93,6 @@ module.exports = class extends Generator {
             this.log('You are about to add a module to the ' + chalk.bold(this.options.appName) + ' application.' )
         }
         const prompts = [ {
-            name: 'organization',
-            message: 'What is the name of your organization?',
-            validate: (input, answers) => { return check.noEmpty(input); },
-            store: true
-        }, {
             name: 'moduleName',
             message: 'What is your module name ?',
             default: this.options.moduleName,
@@ -65,12 +102,8 @@ module.exports = class extends Generator {
             message: 'Description of the module',
             default: (answers) => { return answers.moduleName + ' module'; }
         }, {
-            name: 'appDescription',
-            message: 'Description of the application',
-            default: (answers) => { return this.options.appName + ' TB Application'; }
-        }, {
-            name: 'activationChars',
-            message: 'Your 4-chars activation seed',
+            name: 'shortName',
+            message: 'Module 4-chars short name',
             validate: (input, answers) => { return check.valid4CharsCode(input); },
             filter: (input) => { return _.toUpper(input); },
             store: true
@@ -79,6 +112,8 @@ module.exports = class extends Generator {
             this.properties = properties;
             this.properties.appName = this.options.appName;
             this.properties.appFolder = this.options.appFolder;
+            this.properties.organization = this.options.organization;
+            this.properties.appDescription = this.options.appDescription;
         });
     }
 

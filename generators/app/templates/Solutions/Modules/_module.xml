@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <SalesModule producer="<%= organization %>" localize="<%= defaultModuleDescription %>" edition="Professional">
   <ShortNames>
-    <ShortName name="<%= activationChars %>" />
+    <ShortName name="<%= shortName %>" />
   </ShortNames>
   <Application container="Applications" name="<%= appName %>">
     <Module name="<%= defaultModule %>" />

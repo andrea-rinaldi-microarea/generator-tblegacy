@@ -76,16 +76,16 @@ module.exports = class extends Generator {
             message: 'Description of the module',
             default: (answers) => { return answers.defaultModule + ' module'; }
         }, {
+            name: 'shortName',
+            message: 'Module 4-chars short name',
+            validate: (input, answers) => { return check.valid4CharsCode(input); },
+            filter: (input) => { return _.toUpper(input); },
+            store: true
+        }, {
             name: 'defaultLibrary',
             message: 'Name of the first library',
             default: (answers) => { return answers.defaultModule + 'Lib'; },
             validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); }
-        }, {
-            name: 'activationChars',
-            message: 'Your 4-chars activation seed',
-            validate: (input, answers) => { return check.valid4CharsCode(input); },
-            filter: (input) => { return _.toUpper(input); },
-            store: true
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
