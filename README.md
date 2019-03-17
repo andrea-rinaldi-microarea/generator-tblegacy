@@ -89,3 +89,24 @@ The generated elements are:
 * a default empty `Menu`, with a default `.png` image to represent the module in the main menu
 * the `ModuleObjects` folder, with empty metadata files for `DocumentObjects`, `AddOnDatabaseObjects`, `ClientDocumentObjects`, `DatabaseObjects`, `Enums` and `EventHandlerObjects`
 ## Libraries
+To scaffold a new library, your current folder must be inside an existing module, that is:
+```
+[instance folder]\Standard\Applications\[application]\[module]
+```
+i.e: `C:\Development\Standard\Applications\MyApp\MainModule`.
+
+The generator asks for a number of parameters; those worth to mention are:  
+
+**Library Name**: the library name is used to name its containing folder (inside the module folder), so it must be a valid non-existing folder name. It may contains only letters, numbers and the characters: `_` (underscore)  `-` (minus).  
+These restrictions are due to the TB namespace management.
+
+**Re-use ERP precompiled headers**: as the usual case is that the library make use of some resource defined in ERP, it may be useful to re-use ERP precompiled headers to save compilation time.
+### Scaffolded contents
+The generated elements are:
+* the library's folder
+* basic files in it: `stdafx.h`, `[library].cpp`, `interface.cpp`
+* the VS project file, `.vcxproj`
+* the `module.config` of the containing module is updated to include the library
+* the VS solution `.sln` of the application is upodated to include the `.vcxproj` of the library
+
+
