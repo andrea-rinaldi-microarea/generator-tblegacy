@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<SalesModule producer="<%= organization %>" localize="<%= moduleDescription %>" edition="Professional">
+  <ShortNames>
+    <ShortName name="<%= shortName %>" />
+  </ShortNames>
+  <Application container="Applications" name="<%= appName %>">
+    <Module name="<%= moduleName %>" />
+  </Application>
+</SalesModule>

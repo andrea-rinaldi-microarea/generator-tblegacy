@@ -5,9 +5,7 @@ const nodeFs = require('fs');
 const uuid = require('uuid/v1');
 const check = require('../check-utils');
 
-
 var optionOrPrompt = require('yeoman-option-or-prompt');
-
 
 module.exports = class extends Generator {
 
@@ -17,31 +15,6 @@ module.exports = class extends Generator {
         this.argument('appName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
-
-        this.noEmpty = function(element) {
-            if (!element) {
-                return "Empty value not allowed";
-            }
-
-            return true;
-        }
-
-        this.valid4CharsCode = function(value) {
-            if (!value) {
-                return "Empty value not allowed";
-            }
-
-            if (value.length != 4) {
-                return "You must enter exactly 4 chars";
-            }
-
-            var seedPattern = /^[a-z\s]+$/gi;
-            if (!seedPattern.test(value)) {
-                return "Invalid characters in code (letters only).";
-            }
-
-            return true;
-        }
 
         this.checkAppName = function(appName) {
             if (!appName) return;
@@ -73,7 +46,7 @@ module.exports = class extends Generator {
         const prompts = [{
             name: 'organization',
             message: 'What is the name of your organization?',
-            validate: (input, answers) => { return this.noEmpty(input); },
+            validate: (input, answers) => { return check.noEmpty(input); },
             store: true
         }, {
             name: 'appName',
@@ -90,9 +63,9 @@ module.exports = class extends Generator {
             default: '1.0.0.0'
         }, {
             type: 'confirm',
-            name: 'standalone',
-            message: 'Is your application standalone?',
-            default: false
+            name: 'useErpPch',
+            message: 'Re-use ERP precompiled headers?',
+            default: true
         }, {
             name: 'defaultModule',
             message: 'Name of the first module',
@@ -103,15 +76,16 @@ module.exports = class extends Generator {
             message: 'Description of the module',
             default: (answers) => { return answers.defaultModule + ' module'; }
         }, {
+            name: 'shortName',
+            message: 'Module 4-chars short name',
+            validate: (input, answers) => { return check.valid4CharsCode(input); },
+            filter: (input) => { return _.toUpper(input); },
+            store: true
+        }, {
             name: 'defaultLibrary',
             message: 'Name of the first library',
             default: (answers) => { return answers.defaultModule + 'Lib'; },
             validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); }
-        }, {
-            name: 'activationChars',
-            message: 'Your 4-chars activation seed',
-            validate: (input, answers) => { return this.valid4CharsCode(input); },
-            filter: (input) => { return _.toUpper(input); }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
@@ -123,12 +97,23 @@ module.exports = class extends Generator {
 
     default() {
         this.composeWith(
+            require.resolve('../module'), {
+                appName: this.properties.appName,
+                appFolder: this.applicationPath(),
+                organization: this.properties.organization,
+                appDescription: this.properties.appDescription,
+                moduleName: this.properties.defaultModule,
+                moduleDescription: this.properties.defaultModuleDescription,
+                shortName: this.properties.shortName,
+                asSubgenerator: true
+            });
+        this.composeWith(
             require.resolve('../library'), {
                 appName: this.properties.appName,
                 moduleName: this.properties.defaultModule,
                 libraryName: this.properties.defaultLibrary,
                 appFolder: this.applicationPath(),
-                standalone: this.properties.standalone,
+                useErpPch: this.properties.useErpPch,
                 asSubgenerator: true
             });
     }
@@ -153,7 +138,7 @@ module.exports = class extends Generator {
             this.properties
         );
 
-        // Solution and module (activation)
+        // License Solution
         this.fs.copyTpl(
             this.templatePath('Solutions\\_solution.xml'),
             this.applicationPath('Solutions\\' + this.properties.appName + '.Solution.xml'),
@@ -162,52 +147,6 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
             this.templatePath('Solutions\\_solution.Brand.xml'),
             this.applicationPath('Solutions\\' + this.properties.appName + '.Solution.Brand.xml'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath('Solutions\\Modules\\_module.xml'),
-            this.applicationPath('Solutions\\Modules\\' + this.properties.defaultModule + '.xml'),
-            this.properties
-        );
-
-        // Default module
-        this.fs.copyTpl(
-            this.templatePath('_module\\Module.config'),
-            this.applicationPath(this.properties.defaultModule + '\\Module.config'),
-            this.properties
-        );
-
-        // Default module -- database script
-        this.fs.copyTpl(
-            this.templatePath('_module\\DatabaseScript\\Create\\CreateInfo.xml'),
-            this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Create\\CreateInfo.xml'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath('_module\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            this.applicationPath(this.properties.defaultModule + '\\DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            this.properties
-        );
-
-        // Default module -- menu and files (images)
-        this.fs.copyTpl(
-            this.templatePath('_module\\Menu\\_module.menu'),
-            this.applicationPath(this.properties.defaultModule + '\\Menu\\' + this.properties.defaultModule + '.menu'),
-            this.properties
-        );
-        this.fs.copy(
-            this.templatePath('_module\\Files\\Images\\'),
-            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\')
-        );
-        this.fs.move(
-            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\_module.png'),
-            this.applicationPath(this.properties.defaultModule + '\\Files\\Images\\' + this.properties.defaultModule + '.png')
-        );
-
-        // Default module -- ModuleObjects files
-        this.fs.copyTpl(
-            this.templatePath('_module\\ModuleObjects\\'),
-            this.applicationPath(this.properties.defaultModule + '\\ModuleObjects\\'),
             this.properties
         );
     }

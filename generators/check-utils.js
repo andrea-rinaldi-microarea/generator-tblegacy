@@ -3,6 +3,31 @@ const _ = require('lodash');
 
 module.exports = {
 
+    noEmpty(element) {
+        if (!element) {
+            return "Empty value not allowed";
+        }
+
+        return true;
+    },
+
+    valid4CharsCode(value) {
+        if (!value) {
+            return "Empty value not allowed";
+        }
+
+        if (value.length != 4) {
+            return "You must enter exactly 4 chars";
+        }
+
+        var seedPattern = /^[a-z\s]+$/gi;
+        if (!seedPattern.test(value)) {
+            return "Invalid characters in code (letters only).";
+        }
+
+        return true;
+    },
+
     validNewFSName(type, root, name, ext) {
         if (!name) {
             return "Empty name not allowed";

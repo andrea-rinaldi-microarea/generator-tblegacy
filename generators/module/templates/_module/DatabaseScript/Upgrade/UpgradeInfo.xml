@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UpgradeInfo>
-	<ModuleInfo name="<%= defaultModule %>" />
+	<ModuleInfo name="<%= moduleName %>" />
 </UpgradeInfo>

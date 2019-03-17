@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var yeoman = require('yeoman-environment');
 var GeneratorApp = require('./generators/app/index.js');
+var GeneratorMod = require('./generators/module/index.js');
 var GeneratorLib = require('./generators/library/index.js');
 var GeneratorDoc = require('./generators/document/index.js');
 var GeneratorTbl = require('./generators/table/index.js');
@@ -11,6 +12,7 @@ var usage = function(args) {
     banner();
     console.log('\nUsage:');
     console.log('\ttbl n(ew) [appName]');
+    console.log('\ttbl m(od) [modName]');
     console.log('\ttbl l(ib) [libName]');
     console.log('\ttbl d(oc) [docName]');
     console.log('\ttbl t(able) [tableName]');
@@ -19,6 +21,7 @@ var usage = function(args) {
 
 var env = yeoman.createEnv();
 env.registerStub(GeneratorApp, 'tbl:app');
+env.registerStub(GeneratorMod, 'tbl:module');
 env.registerStub(GeneratorLib, 'tbl:library');
 env.registerStub(GeneratorDoc, 'tbl:document');
 env.registerStub(GeneratorTbl, 'tbl:table');
@@ -32,6 +35,9 @@ var tpl = require('path').dirname(process.argv[1]) + "\\generators";
 if (args[0] === 'new' || args[0] === 'n') {
     gen = 'tbl:app';
     tpl = tpl + '\\app\\templates';
+} else if (args[0] === 'mod' || args[0] === 'm') {
+    gen = 'tbl:module';
+    tpl = tpl + '\\module\\templates';
 } else if (args[0] === 'lib' || args[0] === 'l') {
     gen = 'tbl:library';
     tpl = tpl + '\\library\\templates';

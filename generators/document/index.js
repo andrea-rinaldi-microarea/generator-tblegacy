@@ -90,6 +90,15 @@ module.exports = class extends Generator {
                 }]
             );
         }
+
+        this.extractPhisicalName = function(path, className) {
+            var res = utils.extractInfo(path + "\\" + className + '.cpp', '_NS_TBL("', '");');
+            if (res === false) {
+                return className;
+            }
+            return res;
+        }
+    
     }
 
     initializing() {
@@ -140,7 +149,7 @@ module.exports = class extends Generator {
         },{
             name: 'tablePhisicalName',
             message: 'What is the master table phisical name?',
-            default: (answers) => { return utils.extractPhisicalName(this.contextRoot + "\\" + answers.dblName, answers.tableName); },
+            default: (answers) => { return this.extractPhisicalName(this.contextRoot + "\\" + answers.dblName, answers.tableName); },
             validate: (input, answers) => { return check.validExistingFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All" , input, ".sql"); }
         },{
             name: 'componentsName',

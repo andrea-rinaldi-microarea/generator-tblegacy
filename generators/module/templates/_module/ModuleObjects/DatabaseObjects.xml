@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <DatabaseObjects>
-  <Signature><%= defaultModule %></Signature>
+  <Signature><%= moduleName %></Signature>
   <Release>1</Release>
   <Tables>
   </Tables>
