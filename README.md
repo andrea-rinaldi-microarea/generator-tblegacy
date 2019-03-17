@@ -31,9 +31,9 @@ tbl
 tbl-cli
 ```
 Available commands:
-* `tbl n(ew) [appName]` scaffold a new application
-* `tbl m(od) [modName]` scaffold a module
-* `tbl l(ib) [libName]` scaffold a library
+* `tbl n(ew) [appName]` scaffold a new [application](#Application)
+* `tbl m(od) [modName]` scaffold a [module](#Modules)
+* `tbl l(ib) [libName]` scaffold a [library](#Libraries)
 * `tbl t(able) [tableName]` scaffold a table
 * `tbl d(oc) [docName]` scaffold a document
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
@@ -68,5 +68,24 @@ The generated elements are:
 * the first declared library inside it (see [Libraries](#Libraries))
 
 ## Modules
+To scaffold a new module, your current folder must be inside an existing application, that is:
+```
+[instance folder]\Standard\Applications\[application]
+```
+i.e: `C:\Development\Standard\Applications\MyApp`.
 
+The generator asks for a number of parameters; those worth to mention are:  
+
+**Module Name**: the module name is used to name its containing folder (inside the application folder), so it must be a valid non-existing folder name. It may contains only letters, numbers and the characters: `_` (underscore)  `-` (minus).  
+These restrictions are due to the TB namespace management.
+
+**Module 4-chars short name**: these 4 characters are used as a seed for the generation of the module's serial number, which can be done through the [specific page](http://www.microarea.it/Prodotti/Verticalizzazioni/SerialNumbersGenerator.aspx) of the Microarea portal (requires login).
+
+### Scaffolded contents
+The generated elements are:
+* the module's license files, in the `Solutions\Modules` subfolder of the application. The `.Solution.xml` file is updated to include the new module.
+* the module's folder, along with the `Module.config` file
+* the `Databasecript` folder, with empty `Create` and `Update` configuration files
+* a default empty `Menu`, with a default `.png` image to represent the module in the main menu
+* the `ModuleObjects` folder, with empty metadata files for `DocumentObjects`, `AddOnDatabaseObjects`, `ClientDocumentObjects`, `DatabaseObjects`, `Enums` and `EventHandlerObjects`
 ## Libraries
