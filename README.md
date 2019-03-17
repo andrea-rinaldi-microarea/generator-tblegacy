@@ -34,7 +34,7 @@ Available commands:
 * `tbl n(ew) [appName]` scaffold a new [application](#Application)
 * `tbl m(od) [modName]` scaffold a [module](#Modules)
 * `tbl l(ib) [libName]` scaffold a [library](#Libraries)
-* `tbl t(able) [tableName]` scaffold a table
+* `tbl t(able) [tableName]` scaffold a [table](#Tables)
 * `tbl d(oc) [docName]` scaffold a document
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
 ## Application
@@ -108,5 +108,31 @@ The generated elements are:
 * the VS project file, `.vcxproj`
 * the `module.config` of the containing module is updated to include the library
 * the VS solution `.sln` of the application is upodated to include the `.vcxproj` of the library
+## Tables
+The table generator let you generate the code template to manage a table in your application.  
+It is possible to generate a single table, master-only style, or a table pair, master/detail style, such as a document with an header and some rows.
 
+To scaffold a new table, your current folder must be inside an existing module, that is:
+```
+[instance folder]\Standard\Applications\[application]\[module]
+```
+i.e: `C:\Development\Standard\Applications\MyApp\MainModule`.
+
+The generator asks for a number of parameters; those worth to mention are:  
+
+**Table name**: the physical name of the table, that is, the name that will be used for the DB. It must be a non-existing valid name, which cannot include spaces or special characters, as it is used also to generate the name for the `SQLRecord` class 
+
+**Hosting Library**: the library in which host the code for the table's `SQLRecord`. It must be an already existing library inside the current module
+
+**Table type**: it allows to choose among *master* and *master/detail*. In the latter, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
+
+*Note on the table name*: if the pysical name respects the standard format `[AA]_[name]`, `[name]` is extracted as a *base* name to generate to class name. I.e.: if the phisical table name is `SB_Contracts`, the `SQLRecord` class will be named `TContracts`, the source files will be named `TContracts.h` and `TContracts.cpp`, and so on.
+
+### Scaffolded contents
+The generated elements are:
+* the SQL scripts in the `DatabaseScript\Create` subfolder. The `CreateInfo.xml` file is updated to include the new table.
+* the `.h` and `.cpp` source file defining the `SQLRecord` class for the table
+* the `Interface.cpp` file is updated with the table class registration in the catalog
+* the VS project `.vcxproj` is updated to compile the `SQLRecord` source code
+* the `DatabaseObjects.xml` file is updated to include the new table
 
