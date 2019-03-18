@@ -14,6 +14,8 @@ module.exports = class extends Generator {
         super(args, opts);
 
         this.argument('moduleName', { type: String, required: false });
+        this.argument('moduleDescription', { type: String, required: false });
+        this.argument('shortName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
 
@@ -88,7 +90,9 @@ module.exports = class extends Generator {
         }, {
             name: 'moduleDescription',
             message: 'Description of the module',
-            default: (answers) => { return answers.moduleName + ' module'; }
+            default: (answers) => { 
+                return this.options.moduleDescription ? this.options.moduleDescription : answers.moduleName + ' module'; 
+            }
         }, {
             name: 'shortName',
             message: 'Module 4-chars short name',
