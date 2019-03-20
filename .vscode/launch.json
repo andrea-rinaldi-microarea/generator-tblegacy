@@ -10,11 +10,9 @@
             "request": "launch",
             "name": "use CLI",
             "program": "${workspaceFolder}/tbl-cli.js",
-            "cwd": "C:\\Users\\${env:USERNAME}\\Documents\\Working\\Standard\\Applications",
+            "cwd": "C:\\Development\\Standard\\Applications",
             "args": [
-                "new",
-                "someApp",
-                "--standalone=yes"
+                "new"
             ],
             "console": "integratedTerminal"
         },

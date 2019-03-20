@@ -67,6 +67,18 @@ The generated elements are:
 * the first declared module (see [Modules](#Modules))
 * the first declared library inside it (see [Libraries](#Libraries))
 
+### Next steps
+To make the scaffolded application working:
+* open in VS 2017 the `.sln` file and compile it
+* register the application in the [Microarea portal](http://www.microarea.it/int/Prodotti/Verticalizzazioni/PreInsertScheda.aspx)
+* crypt the default module definition (`Solutions\Modules\[default module].xml`), and download the returned `.csm` file in the same folder
+* generate at least one serial number for your application, from the [specific page](http://www.microarea.it/Prodotti/Verticalizzazioni/SerialNumbersGenerator.aspx) of the portal
+* restart IIS to make the LoginManager web services reload the list of available applications
+* launch the Administration Console and activate the new application entering the serial number
+* upgrade the companies databases; even if there are no new tables present, it is needed to "brand" the DB with the new application
+
+Launching Mago, the application's menu should appear among the others. You may need to hit the "refresh" icon (upper-right corner, next to the user icon) to force a cache clear.
+
 ## Modules
 To scaffold a new module, your current folder must be inside an existing application, that is:
 ```
