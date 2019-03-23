@@ -11,23 +11,25 @@
   "child": true,
   "items": [
     {
-      "id": "IDC_<%= documentName.toUpperCase() %>CODE",
+      "id": "IDC_<%= documentName.toUpperCase() %>_DOCNO",
       "controlClass": "StringEdit",
       "binding": {
-        "datasource": "<%= documentName %>.Code"
+        "datasource": "<%= documentName %>.DocNo"
       },
       "type": 13,
       "width": 48,
       "height": 12,
       "autoHScroll": true,
-      "controlCaption": "Code",
-      "anchor": "COL1"
+      "controlCaption": "Document No.",
+      "anchor": "COL1",
+      "captionSize": 3,
+      "controlSize": 6
     },
     {
-      "id": "IDC_<%= documentName.toUpperCase() %>_DESCRI",
-      "controlClass": "StringEdit",
+      "id": "IDC_<%= documentName.toUpperCase() %>_DOCDATE",
+      "controlClass": "DateEdit",
       "binding": {
-        "datasource": "<%= documentName %>.Description"
+        "datasource": "<%= documentName %>.DocDate"
       },
       "type": 13,
       "width": 154,
@@ -35,9 +37,12 @@
       "autoVScroll": true,
       "wantReturn": true,
       "multiline": true,
-      "controlCaption": "Description",
-      "anchor": "COL1"
+      "controlCaption": "Document Date",
+      "anchor": "COL1",
+      "captionSize": 3,
+      "controlSize": 6
     }
   ],
-  "hasStaticArea": true
+  "hasStaticArea": true,
+  "grid": "col col-md-6"
 }

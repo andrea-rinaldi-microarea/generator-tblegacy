@@ -1,0 +1,4 @@
+﻿#pragma once
+#include	<TbNameSolver\TBResourcesMap.h>
+#define	IDD_TD_<%= documentName.toUpperCase() %>_DETAIL			GET_IDD(IDD_TD_<%= documentName.toUpperCase() %>_DETAIL, D.<%= appName %>.<%= moduleName %>.<%= documentName %>)
+#define	IDC_<%= documentName.toUpperCase() %>_DETAIL			GET_IDC(IDC_<%= documentName.toUpperCase() %>_DETAIL)

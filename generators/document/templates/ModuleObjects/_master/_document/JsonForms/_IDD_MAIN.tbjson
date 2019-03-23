@@ -11,7 +11,7 @@
   "child": true,
   "items": [
     {
-      "id": "IDC_<%= documentName.toUpperCase() %>CODE",
+      "id": "IDC_<%= documentName.toUpperCase() %>_CODE",
       "controlClass": "StringEdit",
       "binding": {
         "datasource": "<%= documentName %>.Code"
@@ -21,7 +21,9 @@
       "height": 12,
       "autoHScroll": true,
       "controlCaption": "Code",
-      "anchor": "COL1"
+      "anchor": "COL1",
+      "captionSize": 3,
+      "controlSize": 6
     },
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_DESCRI",
@@ -36,8 +38,11 @@
       "wantReturn": true,
       "multiline": true,
       "controlCaption": "Description",
-      "anchor": "COL1"
+      "anchor": "COL1",
+      "captionSize": 3,
+      "controlSize": 6
     }
   ],
-  "hasStaticArea": true
+  "hasStaticArea": true,
+  "grid": "col col-md-6"
 }

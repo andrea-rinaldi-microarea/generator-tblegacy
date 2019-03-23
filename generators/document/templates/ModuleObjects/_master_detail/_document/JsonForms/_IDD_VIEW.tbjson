@@ -1,7 +1,7 @@
 ﻿{
   "id": "IDD_<%= documentName.toUpperCase() %>_VIEW",
   "name": "<%= documentName %>",
-  "type": 1,
+  "type": 1/*View*/,
   "child": true,
   "items": [
     {
@@ -12,6 +12,9 @@
       "items": [
         {
           "href": "IDD_TD_<%= documentName.toUpperCase() %>_MAIN"
+        },
+        {
+          "href": "IDD_TD_<%= documentName.toUpperCase() %>_DETAIL"
         }
       ]
     }
