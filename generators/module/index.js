@@ -1,3 +1,15 @@
+/*
+generator-tblegacy - scaffolding of TB Legacy C++ applications 
+Copyright (C) 2017 Microarea s.p.a.
+This program is free software: you can redistribute it and/or modify it under the 
+terms of the GNU General Public License as published by the Free Software Foundation, 
+either version 3 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+or FITNESS FOR A PARTICULAR PURPOSE. 
+See the GNU General Public License for more details.
+*/
+
 const Generator = require('yeoman-generator');
 const check = require('../check-utils');
 const utils = require('../text-utils');
@@ -14,6 +26,8 @@ module.exports = class extends Generator {
         super(args, opts);
 
         this.argument('moduleName', { type: String, required: false });
+        this.argument('moduleDescription', { type: String, required: false });
+        this.argument('shortName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
 
@@ -88,7 +102,9 @@ module.exports = class extends Generator {
         }, {
             name: 'moduleDescription',
             message: 'Description of the module',
-            default: (answers) => { return answers.moduleName + ' module'; }
+            default: (answers) => { 
+                return this.options.moduleDescription ? this.options.moduleDescription : answers.moduleName + ' module'; 
+            }
         }, {
             name: 'shortName',
             message: 'Module 4-chars short name',

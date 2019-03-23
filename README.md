@@ -31,10 +31,10 @@ tbl
 tbl-cli
 ```
 Available commands:
-* `tbl n(ew) [appName]` scaffold a new application
-* `tbl m(od) [modName]` scaffold a module
-* `tbl l(ib) [libName]` scaffold a library
-* `tbl t(able) [tableName]` scaffold a table
+* `tbl n(ew) [appName]` scaffold a new [application](#Application)
+* `tbl m(od) [modName]` scaffold a [module](#Modules)
+* `tbl l(ib) [libName]` scaffold a [library](#Libraries)
+* `tbl t(able) [tableName]` scaffold a [table](#Tables)
 * `tbl d(oc) [docName]` scaffold a document
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
 ## Application
@@ -67,6 +67,84 @@ The generated elements are:
 * the first declared module (see [Modules](#Modules))
 * the first declared library inside it (see [Libraries](#Libraries))
 
-## Modules
+### Next steps
+To make the scaffolded application working:
+* open in VS 2017 the `.sln` file and compile it
+* register the application in the [Microarea portal](http://www.microarea.it/int/Prodotti/Verticalizzazioni/PreInsertScheda.aspx)
+* crypt the default module definition (`Solutions\Modules\[default module].xml`), and download the returned `.csm` file in the same folder
+* generate at least one serial number for your application, from the [specific page](http://www.microarea.it/Prodotti/Verticalizzazioni/SerialNumbersGenerator.aspx) of the portal
+* restart IIS to make the LoginManager web services reload the list of available applications
+* launch the Administration Console and activate the new application entering the serial number
+* upgrade the companies databases; even if there are no new tables present, it is needed to "brand" the DB with the new application
 
+Launching Mago, the application's menu should appear among the others. You may need to hit the "refresh" icon (upper-right corner, next to the user icon) to force a cache clear.
+
+## Modules
+To scaffold a new module, your current folder must be inside an existing application, that is:
+```
+[instance folder]\Standard\Applications\[application]
+```
+i.e: `C:\Development\Standard\Applications\MyApp`.
+
+The generator asks for a number of parameters; those worth to mention are:  
+
+**Module Name**: the module name is used to name its containing folder (inside the application folder), so it must be a valid non-existing folder name. It may contains only letters, numbers and the characters: `_` (underscore)  `-` (minus).  
+These restrictions are due to the TB namespace management.
+
+**Module 4-chars short name**: these 4 characters are used as a seed for the generation of the module's serial number, which can be done through the [specific page](http://www.microarea.it/Prodotti/Verticalizzazioni/SerialNumbersGenerator.aspx) of the Microarea portal (requires login).
+
+### Scaffolded contents
+The generated elements are:
+* the module's license files, in the `Solutions\Modules` subfolder of the application. The `.Solution.xml` file is updated to include the new module.
+* the module's folder, along with the `Module.config` file
+* the `Databasecript` folder, with empty `Create` and `Update` configuration files
+* a default empty `Menu`, with a default `.png` image to represent the module in the main menu
+* the `ModuleObjects` folder, with empty metadata files for `DocumentObjects`, `AddOnDatabaseObjects`, `ClientDocumentObjects`, `DatabaseObjects`, `Enums` and `EventHandlerObjects`
 ## Libraries
+To scaffold a new library, your current folder must be inside an existing module, that is:
+```
+[instance folder]\Standard\Applications\[application]\[module]
+```
+i.e: `C:\Development\Standard\Applications\MyApp\MainModule`.
+
+The generator asks for a number of parameters; those worth to mention are:  
+
+**Library Name**: the library name is used to name its containing folder (inside the module folder), so it must be a valid non-existing folder name. It may contains only letters, numbers and the characters: `_` (underscore)  `-` (minus).  
+These restrictions are due to the TB namespace management.
+
+**Re-use ERP precompiled headers**: as the usual case is that the library make use of some resource defined in ERP, it may be useful to re-use ERP precompiled headers to save compilation time.
+### Scaffolded contents
+The generated elements are:
+* the library's folder
+* basic files in it: `stdafx.h`, `[library].cpp`, `interface.cpp`
+* the VS project file, `.vcxproj`
+* the `module.config` of the containing module is updated to include the library
+* the VS solution `.sln` of the application is upodated to include the `.vcxproj` of the library
+## Tables
+The table generator let you generate the code template to manage a table in your application.  
+It is possible to generate a single table, master-only style, or a table pair, master/detail style, such as a document with an header and some rows.
+
+To scaffold a new table, your current folder must be inside an existing module, that is:
+```
+[instance folder]\Standard\Applications\[application]\[module]
+```
+i.e: `C:\Development\Standard\Applications\MyApp\MainModule`.
+
+The generator asks for a number of parameters; those worth to mention are:  
+
+**Table name**: the physical name of the table, that is, the name that will be used for the DB. It must be a non-existing valid name, which cannot include spaces or special characters, as it is used also to generate the name for the `SQLRecord` class 
+
+**Hosting Library**: the library in which host the code for the table's `SQLRecord`. It must be an already existing library inside the current module
+
+**Table type**: it allows to choose among *master* and *master/detail*. In the latter, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
+
+*Note on the table name*: if the pysical name respects the standard format `[AA]_[name]`, `[name]` is extracted as a *base* name to generate to class name. I.e.: if the phisical table name is `SB_Contracts`, the `SQLRecord` class will be named `TContracts`, the source files will be named `TContracts.h` and `TContracts.cpp`, and so on.
+
+### Scaffolded contents
+The generated elements are:
+* the SQL scripts in the `DatabaseScript\Create` subfolder. The `CreateInfo.xml` file is updated to include the new table.
+* the `.h` and `.cpp` source file defining the `SQLRecord` class for the table
+* the `Interface.cpp` file is updated with the table class registration in the catalog
+* the VS project `.vcxproj` is updated to compile the `SQLRecord` source code
+* the `DatabaseObjects.xml` file is updated to include the new table
+
