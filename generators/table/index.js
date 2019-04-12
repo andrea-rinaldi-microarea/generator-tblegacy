@@ -27,14 +27,14 @@ const MASTER_MASTER_FIELDS =
     '<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />\n';
 
 const MASTER_DETAILS_MASTER_FIELDS = 
-    '<Column name="DocID" localize="Doc ID" lenght="4" type="integer" defaultvalue="0" release="1" />\n' +
+    '<Column name="DocID" localize="Doc ID" lenght="0" type="Long" defaultvalue="0" release="1" />\n' +
     '<Column name="DocNo" localize="Doc Number" lenght="10" type="string" defaultvalue="" release="1" />\n'+
     '<Column name="DocDate" localize="Doc Date" lenght="10" type="date" defaultvalue="1799-12-31T00:00:00" release="1" />\n'+
-    '<Column name="LastSubId" localize="Last SubId" lenght="4" type="integer" defaultvalue="0" release="1" />\n';
+    '<Column name="LastSubId" localize="Last SubId" lenght="0" type="Long" defaultvalue="0" release="1" />\n';
 
 const MASTER_DETAILS_DETAILS_FIELDS = 
-    '<Column name="DocID" localize="Doc ID" lenght="4" type="integer" defaultvalue="0" release="1" />\n' +
-    '<Column name="DocSubId" localize="Doc SubId" lenght="4" type="integer" defaultvalue="0" release="1" />\n'+
+    '<Column name="DocID" localize="Doc ID" lenght="0" type="Long" defaultvalue="0" release="1" />\n' +
+    '<Column name="DocSubId" localize="Doc SubId" lenght="0" type="Long" defaultvalue="0" release="1" />\n'+
     '<Column name="Code" localize="Code" lenght="10" type="string" defaultvalue="" release="1" />\n' +
     '<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />\n';
 
