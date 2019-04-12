@@ -80,13 +80,28 @@ module.exports = class extends Generator {
 
         this.addToDatabaseObjects = function(contents) {
             var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
+
+            var actions = [{
+                textToInsert: '<Table namespace="' + namespace + '" mastertable="true">\n' +
+                              '<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                              '</Table>\n', 
+                justBefore: '</Tables>'
+            }];
+            if (this.properties.tableType === MASTER_DETAIL) {
+                var namespaceDet = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName + 'Details';
+                actions = actions.concat(
+                    [{
+                        textToInsert: '<Table namespace="' + namespaceDet + '">\n' +
+                        '<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                        '</Table>\n', 
+                        justBefore: '</Tables>'
+                    }]
+                );
+            }
+
             return utils.insertInSource(
-                contents.toString(), [{
-                    textToInsert: '<Table namespace="' + namespace + '" mastertable="true">\n' +
-                                  '<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                                  '</Table>\n', 
-                    justBefore: '</Tables>'
-                }]
+                contents.toString(), 
+                actions
             );
         }
 
