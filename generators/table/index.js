@@ -18,25 +18,10 @@ const nodeFs = require('fs');
 const utils = require('../text-utils');
 const check = require('../check-utils');
 const path = require('path');
+const snippets = require('./snippets');
 
 const MASTER = 'master';
 const MASTER_DETAIL = 'master/detail'
-
-const MASTER_MASTER_FIELDS = 
-    '<Column name="Code" localize="Code" lenght="10" type="string" defaultvalue="" release="1" />\n' +
-    '<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />\n';
-
-const MASTER_DETAILS_MASTER_FIELDS = 
-    '<Column name="DocID" localize="Doc ID" lenght="0" type="Long" defaultvalue="0" release="1" />\n' +
-    '<Column name="DocNo" localize="Doc Number" lenght="10" type="string" defaultvalue="" release="1" />\n'+
-    '<Column name="DocDate" localize="Doc Date" lenght="10" type="date" defaultvalue="1799-12-31T00:00:00" release="1" />\n'+
-    '<Column name="LastSubId" localize="Last SubId" lenght="0" type="Long" defaultvalue="0" release="1" />\n';
-
-const MASTER_DETAILS_DETAILS_FIELDS = 
-    '<Column name="DocID" localize="Doc ID" lenght="0" type="Long" defaultvalue="0" release="1" />\n' +
-    '<Column name="DocSubId" localize="Doc SubId" lenght="0" type="Long" defaultvalue="0" release="1" />\n'+
-    '<Column name="Code" localize="Code" lenght="10" type="string" defaultvalue="" release="1" />\n' +
-    '<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />\n';
 
 module.exports = class extends Generator {
 
@@ -98,20 +83,24 @@ module.exports = class extends Generator {
             var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
 
             var actions = [{
-                textToInsert: '<Table namespace="' + namespace + '" mastertable="true">\n' +
-                              '<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                              (this.properties.tableType === MASTER ? MASTER_MASTER_FIELDS : MASTER_DETAILS_MASTER_FIELDS) +
-                              '</Table>\n', 
+                textToInsert: '\t<Table namespace="' + namespace + '" mastertable="true">\n' +
+                              '\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                              '\t\t<Columns>\n' +
+                              (this.properties.tableType === MASTER ? snippets.databaseObj.master.masterFields : snippets.databaseObj.masterDetails.masterFields) +
+                              '\t\t</Columns>\n' +
+                              '\t</Table>\n', 
                 justBefore: '</Tables>'
             }];
             if (this.properties.tableType === MASTER_DETAIL) {
                 var namespaceDet = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName + 'Details';
                 actions = actions.concat(
                     [{
-                        textToInsert: '<Table namespace="' + namespaceDet + '">\n' +
-                        '<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                        MASTER_DETAILS_DETAILS_FIELDS +
-                        '</Table>\n', 
+                        textToInsert: '\t<Table namespace="' + namespaceDet + '">\n' +
+                        '\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                        '\t\t<Columns>\n' +
+                        snippets.databaseObj.masterDetails.detailsFields +
+                        '\t\t</Columns>\n' +
+                        '\t</Table>\n', 
                         justBefore: '</Tables>'
                     }]
                 );
