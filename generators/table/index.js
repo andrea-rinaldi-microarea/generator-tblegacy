@@ -14,11 +14,10 @@ const Generator = require('yeoman-generator');
 var optionOrPrompt = require('yeoman-option-or-prompt');
 const chalk = require('chalk');
 const _ = require('lodash');
-const nodeFs = require('fs');
 const utils = require('../text-utils');
 const check = require('../check-utils');
 const path = require('path');
-const snippets = require('./snippets');
+const snippet = require('../snippet-utils');
 
 const MASTER = 'master';
 const MASTER_DETAIL = 'master/detail'
@@ -79,74 +78,26 @@ module.exports = class extends Generator {
             );
         }
 
-        this.addToDatabaseObjects = function(contents) {
-            var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
+        this.snippetPath = function() {
+            return path.normalize(path.join(this.sourceRoot(), '../snippets'));
+        }
 
+        this.addToDatabaseObjects = function(template, contents) {
             var actions = [{
-                textToInsert: '\t<Table namespace="' + namespace + '" mastertable="true">\n' +
-                              '\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                              '\t\t<Columns>\n' +
-                              (this.properties.tableType === MASTER ? snippets.databaseObj.master.masterFields : snippets.databaseObj.masterDetails.masterFields) +
-                              '\t\t</Columns>\n' +
-                              '\t</Table>\n', 
+                textToInsert: snippet.render(path.join(this.snippetPath(), template, 'databaseObjects.xml'), this.properties), 
                 justBefore: '</Tables>'
             }];
-            if (this.properties.tableType === MASTER_DETAIL) {
-                var namespaceDet = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName + 'Details';
-                actions = actions.concat(
-                    [{
-                        textToInsert: '\t<Table namespace="' + namespaceDet + '">\n' +
-                        '\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                        '\t\t<Columns>\n' +
-                        snippets.databaseObj.masterDetails.detailsFields +
-                        '\t\t</Columns>\n' +
-                        '\t</Table>\n', 
-                        justBefore: '</Tables>'
-                    }]
-                );
-            }
-
             return utils.insertInSource(
                 contents.toString(), 
                 actions
             );
         }
 
-        this.addToEFSchemaObjects = function(contents) {
-            var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
-
+        this.addToEFSchemaObjects = function(template, contents) {
             var actions = [{
-                textToInsert: '\t\t<Table namespace="' + namespace + '" mastertable="true">\n' +
-                              '\t\t\t<DocumentationInfo localizable_1="true"></DocumentationInfo>\n' +
-                              '\t\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                              '\t\t\t<Columns>\n' +
-                              (this.properties.tableType === MASTER ? snippets.efSchemaObjects.master.masterFields : snippets.efSchemaObjects.masterDetails.masterFields) +
-                              '\t\t\t</Columns>\n' +
-                              '\t\t\t<PrimaryKey name="PK_' + this.properties.tableBaseName + '" type="NONCLUSTERED">\n' +
-                              (this.properties.tableType === MASTER ? snippets.efSchemaObjects.master.masterSegments : snippets.efSchemaObjects.masterDetails.masterSegments) +
-                              '\t\t\t</PrimaryKey>\n' +
-                              '\t\t\t<Indexes/>\n' +
-                              '\t\t</Table>\n', 
+                textToInsert: snippet.render(path.join(this.snippetPath(), template, 'efSchemaObjects.xml'), this.properties), 
                 justBefore: '</Tables>'
             }];
-            if (this.properties.tableType === MASTER_DETAIL) {
-                var namespaceDet = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName + 'Details';
-                actions = actions.concat(
-                    [{
-                        textToInsert: '\t\t<Table namespace="' + namespaceDet + '">\n' +
-                        '\t\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
-                        '\t\t\t<Columns>\n' +
-                        snippets.efSchemaObjects.masterDetails.detailsFields +
-                        '\t\t\t</Columns>\n' +
-                        '\t\t\t<PrimaryKey name="PK_' + this.properties.tableBaseName + 'Details" type="NONCLUSTERED">\n' +
-                        snippets.efSchemaObjects.masterDetails.detailsSegments +
-                        '\t\t\t</PrimaryKey>\n' +
-                        '\t\t\t<Indexes/>\n' +
-                        '\t\t</Table>\n', 
-                        justBefore: '</Tables>'
-                    }]
-                );
-            }
 
             return utils.insertInSource(
                 contents.toString(), 
@@ -207,6 +158,8 @@ module.exports = class extends Generator {
                                             this.properties.tableName;
 
             this.properties.tableClassName = 'T' + this.properties.tableBaseName;
+
+            this.properties.tableNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
         });
     }    
 
@@ -254,14 +207,14 @@ module.exports = class extends Generator {
         this.fs.copy(
             this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
             this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
-            { process: (contents) => { return this.addToDatabaseObjects(contents); } }
+            { process: (contents) => { return this.addToDatabaseObjects(template, contents); } }
         );
 
         //EFCore
         this.fs.copy(
             this.modulePath('EFCore\\EFSchemaObjects.xml'),
             this.modulePath('EFCore\\EFSchemaObjects.xml'),
-            { process: (contents) => { return this.addToEFSchemaObjects(contents); } }
+            { process: (contents) => { return this.addToEFSchemaObjects(template, contents); } }
         );
     }    
 }

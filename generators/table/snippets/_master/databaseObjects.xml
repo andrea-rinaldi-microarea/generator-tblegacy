@@ -1,0 +1,7 @@
+	<Table namespace="<%= tableNamespace %>" mastertable="true">
+		<Create release="1" createstep="<%= numStep %>" />
+		<Columns>
+			<Column name="Code" localize="Code" lenght="10" type="string" defaultvalue="" release="1" />
+			<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />
+		</Columns>
+	</Table>

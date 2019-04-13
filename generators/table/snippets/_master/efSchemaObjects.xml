@@ -1,0 +1,18 @@
+        <Table namespace="<%= tableNamespace %>" mastertable="true">
+			<DocumentationInfo localizable_1="true"><%= tableBaseName %> master table</DocumentationInfo>
+			<Create release="1" createstep="<%= numStep %>" />
+			<Columns>
+				<Column>
+					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="10">Code</SchemaInfo>
+					<DocumentationInfo localizable_1="true" mandatory="true"><%= tableBaseName %> code</DocumentationInfo>
+				</Column>
+				<Column>
+					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="128">Description</SchemaInfo>
+					<DocumentationInfo localizable_1="true"><%= tableBaseName %> description</DocumentationInfo>
+				</Column>
+			</Columns>
+			<PrimaryKey name="PK_<%= tableBaseName %>" type="NONCLUSTERED">
+				<Segments>Code</Segments>
+			</PrimaryKey>
+			<Indexes/>
+		</Table>
