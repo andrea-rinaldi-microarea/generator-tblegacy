@@ -176,5 +176,11 @@ module.exports = class extends Generator {
             this.properties
         );
 
+        //  EFCore files
+        this.fs.copyTpl(
+            this.templatePath('_module\\EFCore\\'),
+            this.appPath(this.properties.moduleName + '\\EFCore\\'),
+            this.properties
+        );
     }
 }

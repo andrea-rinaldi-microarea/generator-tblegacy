@@ -33,3 +33,32 @@ snippets.databaseObj = {
             '\t\t\t<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />\n'
     }
 }
+
+snippets.efSchemaObjects = {
+    master: {
+        masterFields :
+        '\t\t\t\t<Column>\n' +
+        '\t\t\t\t\t<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="10">Code</SchemaInfo>\n' +
+        '\t\t\t\t\t<DocumentationInfo localizable_1="true" mandatory="true"></DocumentationInfo>\n' +
+        '\t\t\t\t</Column>\n' +
+        '\t\t\t\t<Column>\n' +
+        '\t\t\t\t\t<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="128">Description</SchemaInfo>\n' +
+        '\t\t\t\t\t<DocumentationInfo localizable_1="true"></DocumentationInfo>\n' +
+        '\t\t\t\t</Column>\n'
+        
+        , masterSegments: 
+        '\t\t\t\t<Segments>Code</Segments>\n'
+    },
+
+    masterDetails: {
+        masterFields : ''
+
+        , masterSegments: 
+        '\t\t\t\t<Segments>DocID</Segments>\n'
+        
+        , detailsFields: ''
+        
+        , detailsSegments: 
+        '\t\t\t\t<Segments>DocID, DocSubID</Segments>\n'
+    }
+}

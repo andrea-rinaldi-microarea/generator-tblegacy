@@ -112,6 +112,48 @@ module.exports = class extends Generator {
             );
         }
 
+        this.addToEFSchemaObjects = function(contents) {
+            var namespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
+
+            var actions = [{
+                textToInsert: '\t\t<Table namespace="' + namespace + '" mastertable="true">\n' +
+                              '\t\t\t<DocumentationInfo localizable_1="true"></DocumentationInfo>\n' +
+                              '\t\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                              '\t\t\t<Columns>\n' +
+                              (this.properties.tableType === MASTER ? snippets.efSchemaObjects.master.masterFields : snippets.efSchemaObjects.masterDetails.masterFields) +
+                              '\t\t\t</Columns>\n' +
+                              '\t\t\t<PrimaryKey name="PK_' + this.properties.tableBaseName + '" type="NONCLUSTERED">\n' +
+                              (this.properties.tableType === MASTER ? snippets.efSchemaObjects.master.masterSegments : snippets.efSchemaObjects.masterDetails.masterSegments) +
+                              '\t\t\t</PrimaryKey>\n' +
+                              '\t\t\t<Indexes/>\n' +
+                              '\t\t</Table>\n', 
+                justBefore: '</Tables>'
+            }];
+            if (this.properties.tableType === MASTER_DETAIL) {
+                var namespaceDet = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName + 'Details';
+                actions = actions.concat(
+                    [{
+                        textToInsert: '\t\t<Table namespace="' + namespaceDet + '">\n' +
+                        '\t\t\t<Create release="1" createstep="' + this.properties.numStep + '" />\n' +
+                        '\t\t\t<Columns>\n' +
+                        snippets.efSchemaObjects.masterDetails.detailsFields +
+                        '\t\t\t</Columns>\n' +
+                        '\t\t\t<PrimaryKey name="PK_' + this.properties.tableBaseName + 'Details" type="NONCLUSTERED">\n' +
+                        snippets.efSchemaObjects.masterDetails.detailsSegments +
+                        '\t\t\t</PrimaryKey>\n' +
+                        '\t\t\t<Indexes/>\n' +
+                        '\t\t</Table>\n', 
+                        justBefore: '</Tables>'
+                    }]
+                );
+            }
+
+            return utils.insertInSource(
+                contents.toString(), 
+                actions
+            );
+        }
+
         this.modulePath = function(name) {
             return this.contextRoot + (name ? ('\\' + name) : '');
         }
@@ -215,5 +257,11 @@ module.exports = class extends Generator {
             { process: (contents) => { return this.addToDatabaseObjects(contents); } }
         );
 
+        //EFCore
+        this.fs.copy(
+            this.modulePath('EFCore\\EFSchemaObjects.xml'),
+            this.modulePath('EFCore\\EFSchemaObjects.xml'),
+            { process: (contents) => { return this.addToEFSchemaObjects(contents); } }
+        );
     }    
 }
