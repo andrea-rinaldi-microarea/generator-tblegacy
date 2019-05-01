@@ -178,6 +178,8 @@ module.exports = class extends Generator {
             this.properties.tableBaseName = (this.properties.tableName[0] == 'T') ? 
                                             this.properties.tableName.substring(1) : 
                                             this.properties.tableName;
+            this.properties.MASTER = MASTER;
+            this.properties.MASTER_DETAIL = MASTER_DETAIL;
         });
     }
 

@@ -73,3 +73,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+#VSCode ipch files
+.VSCode/ipch
