@@ -18,6 +18,7 @@ const nodeFs = require('fs');
 const utils = require('../text-utils');
 const check = require('../check-utils');
 const path = require('path');
+const snippet = require('../snippet-utils');
 
 const MASTER = 'master';
 const MASTER_DETAIL = 'master/detail'
@@ -41,6 +42,10 @@ module.exports = class extends Generator {
 
         this.componentsPath = function(name) {
             return this.modulePath(this.properties.componentsName) + (name ? ('\\' + name) : '');
+        }
+
+        this.snippetPath = function() {
+            return path.normalize(path.join(this.sourceRoot(), '../snippets'));
         }
 
         this.addToInterface = function(contents) {
@@ -88,10 +93,10 @@ module.exports = class extends Generator {
             );
         }
 
-        this.addDocumentObjects = function(contents, source) {
+        this.addDocumentObjects = function(contents) {
             return utils.insertInSource(
                 contents.toString(), [{
-                    textToInsert: '\t<Document namespace="'+ this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName + '" localize="' + this.properties.documentTitle + '" classhierarchy="D' + this.properties.documentName + '">\n' +
+                    textToInsert: '\t<Document namespace="'+ this.properties.documentNamespace + '" localize="' + this.properties.documentTitle + '" classhierarchy="D' + this.properties.documentName + '">\n' +
                                   '\t\t<InterfaceClass>ADM' + this.properties.documentName + 'Obj</InterfaceClass>\n' +
                                   '\t\t<ViewModes>\n' +
                                   '\t\t\t<Mode name="Default" />\n' +
@@ -99,6 +104,15 @@ module.exports = class extends Generator {
                                   '\t\t</ViewModes>\n' +
                                   '\t</Document>\n',
                     justBefore: '</Documents>'
+                }]
+            );
+        }
+
+        this.addToMenu = function(contents) {
+            return utils.insertInSource(
+                contents.toString(), [{
+                    textToInsert: snippet.render(path.join(this.snippetPath(),'_module.menu'), this.properties), 
+                    justBefore: '</Menu>'
                 }]
             );
         }
@@ -178,6 +192,8 @@ module.exports = class extends Generator {
             this.properties.tableBaseName = (this.properties.tableName[0] == 'T') ? 
                                             this.properties.tableName.substring(1) : 
                                             this.properties.tableName;
+
+            this.properties.documentNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName;                                
             this.properties.MASTER = MASTER;
             this.properties.MASTER_DETAIL = MASTER_DETAIL;
         });
@@ -282,6 +298,10 @@ module.exports = class extends Generator {
             this.modulePath('ModuleObjects\\DocumentObjects.xml'),
             { process: (contents) => { return this.addDocumentObjects(contents); } }
         );
-
+        this.fs.copy(
+            this.modulePath('Menu\\' + this.properties.moduleName + '.menu'),
+            this.modulePath('Menu\\' + this.properties.moduleName + '.menu'),
+            { process: (contents) => { return this.addToMenu(contents); } }
+        );
     }
 }

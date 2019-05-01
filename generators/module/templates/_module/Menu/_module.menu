@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <AppMenu>
-  <Application name="<%= appName %>" image_namespace="Image.<%= appName %>.<%= moduleName %>.Images.<%= moduleName %>.png">
-    <Title localizable="true"><%= appDescription %></Title>
-    <Group name="<%= appName %>.<%= moduleName %>">
-      <Title localizable="true"><%= moduleDescription %></Title>
-      <Menu name="myMenu">
-        <Title localizable="true">My Menu</Title>
-      </Menu>
-    </Group>
-  </Application>
+	<Application name="<%= appName %>" image_namespace="Image.<%= appName %>.<%= moduleName %>.Images.<%= moduleName %>.png">
+		<Title localizable="true"><%= appDescription %></Title>
+		<Group name="<%= appName %>.<%= moduleName %>">
+			<Title localizable="true"><%= moduleDescription %></Title>
+			<Menu name="<%= moduleName %>Options">
+			<Title localizable="true"><%= moduleName %> Options</Title>
+			</Menu>
+		</Group>
+	</Application>
 </AppMenu>
