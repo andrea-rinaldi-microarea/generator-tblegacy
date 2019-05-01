@@ -1,0 +1,8 @@
+    <Document namespace="<%= documentNamespace %>" localize="<%= documentTitle %>" classhierarchy="D<%= documentName %>">
+        <InterfaceClass>ADM<%= documentName %>Obj</InterfaceClass>
+        <ViewModes>
+            <Mode name="Default" />
+            <Mode name="BackGround" />
+        </ViewModes>
+    </Document>
+    

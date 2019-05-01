@@ -1,4 +1,5 @@
-            <Document>
-                <Title localizable="true"><%= documentTitle %></Title>
-                <Object><%= documentNamespace %></Object>
-            </Document>
+				<Document>
+					<Title localizable="true"><%= documentTitle %></Title>
+					<Object><%= documentNamespace %></Object>
+				</Document>
+            

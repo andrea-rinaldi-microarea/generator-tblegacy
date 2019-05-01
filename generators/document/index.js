@@ -96,13 +96,7 @@ module.exports = class extends Generator {
         this.addDocumentObjects = function(contents) {
             return utils.insertInSource(
                 contents.toString(), [{
-                    textToInsert: '\t<Document namespace="'+ this.properties.documentNamespace + '" localize="' + this.properties.documentTitle + '" classhierarchy="D' + this.properties.documentName + '">\n' +
-                                  '\t\t<InterfaceClass>ADM' + this.properties.documentName + 'Obj</InterfaceClass>\n' +
-                                  '\t\t<ViewModes>\n' +
-                                  '\t\t\t<Mode name="Default" />\n' +
-                                  '\t\t\t<Mode name="BackGround" />\n' +
-                                  '\t\t</ViewModes>\n' +
-                                  '\t</Document>\n',
+                    textToInsert: snippet.render(path.join(this.snippetPath(),'documentObjects.xml'), this.properties),
                     justBefore: '</Documents>'
                 }]
             );
