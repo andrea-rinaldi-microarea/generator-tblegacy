@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HotKeyLink>
+	<Function namespace="HotKeyLink.NewApplication1.NewModule1.DynamicDocuments.Areas" published="true" localize="HotKeyLink.ERP.Contacts.Documents.Areas" type="string"></Function>
+	<DbTable name="MA_Areas"></DbTable>
+	<DbField name="MA_Areas.Area"></DbField>
+	<DbFieldDescription name="MA_Areas.Description"></DbFieldDescription>
+	<CallLink namespace="Document.ERP.SalesPeople.Documents.Areas" addOnFlyEnabled="true" mustExistData="true" browseEnabled="true"></CallLink>
+	<SelectionModes>
+		<Mode name="Direct" type="query"><![CDATA[SELECT { Columns MA_Areas} FROM MA_Areas WHERE Area  LIKE { IN  hkl_Value } ]]></Mode>
+		<Mode name="Upper" type="query"><![CDATA[SELECT { Columns MA_Areas} FROM MA_Areas WHERE Area  LIKE { IN  hkl_Value }  ORDER BY Area]]></Mode>
+		<Mode name="Lower" type="query"><![CDATA[SELECT { Columns MA_Areas} FROM MA_Areas WHERE Description  LIKE { IN  hkl_Description }  ORDER BY Description]]></Mode>
+		<Mode name="Combo" type="query"><![CDATA[SELECT { Columns MA_Areas} FROM MA_Areas WHERE Area  LIKE { IN  hkl_Value }  ORDER BY Area]]></Mode>
+	</SelectionModes>
+	<SelectionTypes>
+		<Selection name="Direct" type="Direct" localize="Cerca per chiave"></Selection>
+		<Selection name="Upper" type="Upper" localize="Cerca per chiave"></Selection>
+		<Selection name="Lower" type="Lower" localize="Cerca per descrizione"></Selection>
+		<Selection name="Combo" type="Combo" localize="Cerca per chiave"></Selection>
+	</SelectionTypes>
+</HotKeyLink>
