@@ -6,7 +6,7 @@
 
 #ifdef _AFXDLL
 #		undef TB_EXPORT
-#		ifdef _<%= appName.toUpperCase() %>_<%= libraryName.toUpperCase() %>EXT
+#		ifdef _<%= appName.toUpperCase().replace('-', '_') %>_<%= libraryName.toUpperCase().replace('-', '_') %>EXT
 #			define TB_EXPORT  _declspec(dllexport)
 #		else
 #			define TB_EXPORT  _declspec(dllimport)
