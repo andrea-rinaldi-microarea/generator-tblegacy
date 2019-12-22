@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DBTs xmlns:sl="urn:TBStringLoader">
-  <Master namespace="<%= appName %>.<%= moduleName %>.<%= libraryName %>.<%= documentName %>.<%= documentName %>">
+  <Master namespace="<%= documentNamespace %>.<%= documentName %>">
     <Title localizable="true"><%= documentTitle %></Title>
     <Table namespace="<%= appName %>.<%= moduleName %>.<%= dblName %>.<%= tablePhisicalName %>"><%= tablePhisicalName %></Table>
     <Slaves>

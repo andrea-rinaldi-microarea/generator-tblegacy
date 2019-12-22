@@ -1,0 +1,6 @@
+    <Document namespace="<%= documentNamespace %>" localize="<%= documentTitle %>" classhierarchy="" dynamic="true">
+        <ViewModes>
+            <Mode name="Default" localize="Default" type="DataEntry" schedulable="false" frameID="IDD_<%= documentName.toUpperCase() %>" />
+        </ViewModes>
+    </Document>
+    

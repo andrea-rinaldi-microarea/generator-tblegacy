@@ -94,9 +94,11 @@ module.exports = class extends Generator {
         }
 
         this.addDocumentObjects = function(contents) {
+            var documentObjects  = this.properties.codeless ? 'documentObjects-CL.xml' : 'documentObjects.xml';
+                
             return utils.insertInSource(
                 contents.toString(), [{
-                    textToInsert: snippet.render(path.join(this.snippetPath(),'documentObjects.xml'), this.properties),
+                    textToInsert: snippet.render(path.join(this.snippetPath(), documentObjects), this.properties),
                     justBefore: '</Documents>'
                 }]
             );
@@ -142,10 +144,16 @@ module.exports = class extends Generator {
             default: this.options.documentName,
             validate: (input, answers) => { return check.validNewFSName("Document", this.contextRoot + "\\ModuleObjects", input, "\\Description\\Document.xml" ); }
         },{
+            type: 'confirm',
+            name: 'codeless',
+            message: 'Is it a codeless document?',
+            default: false
+        },{
             name: 'libraryName',
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Documents',
-            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
+            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); },
+            when: (answers) => { return !answers.codeless; }
         },{
             type: 'list',
             name: 'documentType',
@@ -175,7 +183,8 @@ module.exports = class extends Generator {
             name: 'componentsName',
             message: 'Which library will contain the ADM definition ?',
             default: this.options.moduleName + 'Components',
-            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
+            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); },
+            when: (answers) => { return !answers.codeless; }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
@@ -187,6 +196,8 @@ module.exports = class extends Generator {
                                             this.properties.tableName.substring(1) : 
                                             this.properties.tableName;
 
+            if (this.properties.codeless)
+                this.properties.libraryName = 'codeless';
             this.properties.documentNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName;                                
             this.properties.MASTER = MASTER;
             this.properties.MASTER_DETAIL = MASTER_DETAIL;
@@ -199,49 +210,51 @@ module.exports = class extends Generator {
         } else {
             var template = '_master_detail';
         }
-        // ADM
-        this.fs.copyTpl(
-            this.templatePath('_components\\_adm.h'),
-            this.componentsPath('ADM' + this.properties.documentName + '.h'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath('_components\\_adm.cpp'),
-            this.componentsPath('ADM' + this.properties.documentName + '.cpp'),
-            this.properties
-        );
-        this.fs.copy(
-            this.componentsPath(this.properties.componentsName + '.vcxproj'),
-            this.componentsPath(this.properties.componentsName + '.vcxproj'),
-            { process: (contents) => { return this.addToProj(contents, 'ADM' + this.properties.documentName); } }
-        );
+        if (!this.properties.codeless) {
+            // ADM
+            this.fs.copyTpl(
+                this.templatePath('_components\\_adm.h'),
+                this.componentsPath('ADM' + this.properties.documentName + '.h'),
+                this.properties
+            );
+            this.fs.copyTpl(
+                this.templatePath('_components\\_adm.cpp'),
+                this.componentsPath('ADM' + this.properties.documentName + '.cpp'),
+                this.properties
+            );
+            this.fs.copy(
+                this.componentsPath(this.properties.componentsName + '.vcxproj'),
+                this.componentsPath(this.properties.componentsName + '.vcxproj'),
+                { process: (contents) => { return this.addToProj(contents, 'ADM' + this.properties.documentName); } }
+            );
 
-        //Document
-        this.fs.copyTpl(
-            this.templatePath('_library\\' + template + '\\_document.h'),
-            this.libraryPath('D' + this.properties.documentName + '.h'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath('_library\\' + template + '\\_document.cpp'),
-            this.libraryPath('D' + this.properties.documentName + '.cpp'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath('_library\\' + template + '\\_document.hjson'),
-            this.libraryPath('UI' + this.properties.documentName + '.hjson'),
-            this.properties
-        );
-        this.fs.copy(
-            this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
-            this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
-            { process: (contents) => { return this.addToInterface(contents); } }
-        );
-        this.fs.copy(
-            this.libraryPath(this.properties.libraryName + '.vcxproj'),
-            this.libraryPath(this.properties.libraryName + '.vcxproj'),
-            { process: (contents) => { return this.addToProj(contents, 'D' + this.properties.documentName, true); } }
-        );
+            //Document
+            this.fs.copyTpl(
+                this.templatePath('_library\\' + template + '\\_document.h'),
+                this.libraryPath('D' + this.properties.documentName + '.h'),
+                this.properties
+            );
+            this.fs.copyTpl(
+                this.templatePath('_library\\' + template + '\\_document.cpp'),
+                this.libraryPath('D' + this.properties.documentName + '.cpp'),
+                this.properties
+            );
+            this.fs.copyTpl(
+                this.templatePath('_library\\' + template + '\\_document.hjson'),
+                this.libraryPath('UI' + this.properties.documentName + '.hjson'),
+                this.properties
+            );
+            this.fs.copy(
+                this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
+                this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
+                { process: (contents) => { return this.addToInterface(contents); } }
+            );
+            this.fs.copy(
+                this.libraryPath(this.properties.libraryName + '.vcxproj'),
+                this.libraryPath(this.properties.libraryName + '.vcxproj'),
+                { process: (contents) => { return this.addToProj(contents, 'D' + this.properties.documentName, true); } }
+            );
+        }
 
         // Module Objects
         this.fs.copyTpl(
