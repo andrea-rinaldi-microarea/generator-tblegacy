@@ -166,7 +166,7 @@ module.exports = class extends Generator {
             this.properties.tableClassName = 'T' + this.properties.tableBaseName;
 
             if (this.properties.codeless)
-                this.properties.libraryName = 'DynamicDocuments'; // default used by EasyStudio
+                this.properties.libraryName = 'codeless'; 
             this.properties.tableNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
         });
     }    

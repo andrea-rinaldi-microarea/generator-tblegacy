@@ -174,7 +174,8 @@ module.exports = class extends Generator {
             name: 'tableName',
             message: 'Which is the master table?',
             default: (answers) => { return 'T' + answers.documentName },
-            validate: (input, answers) => { return check.validExistingFSName("Table", this.contextRoot+ "\\" + answers.dblName , input, ".h"); }
+            validate: (input, answers) => { return check.validExistingFSName("Table", this.contextRoot+ "\\" + answers.dblName , input, ".h"); },
+            when: (answers) => { return !answers.codeless; }
         },{
             name: 'tablePhisicalName',
             message: 'What is the master table phisical name?',
@@ -193,12 +194,16 @@ module.exports = class extends Generator {
             this.properties.appName = this.options.appName;
             this.properties.moduleName = this.options.moduleName;
     
-            this.properties.tableBaseName = (this.properties.tableName[0] == 'T') ? 
-                                            this.properties.tableName.substring(1) : 
-                                            this.properties.tableName;
+            if (!this.properties.codeless) {
+                this.properties.tableBaseName = (this.properties.tableName[0] == 'T') ? 
+                this.properties.tableName.substring(1) : 
+                this.properties.tableName;
+            }
 
-            if (this.properties.codeless)
-                this.properties.libraryName = 'DynamicDocuments'; // default used by EasyStudio
+            if (this.properties.codeless) {
+                this.properties.libraryName = 'codeless'; 
+                this.properties.dblName = 'codeless'; 
+            }
             this.properties.documentNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName;                                
             this.properties.MASTER = MASTER;
             this.properties.MASTER_DETAIL = MASTER_DETAIL;
