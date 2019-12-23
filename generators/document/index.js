@@ -197,7 +197,7 @@ module.exports = class extends Generator {
                                             this.properties.tableName;
 
             if (this.properties.codeless)
-                this.properties.libraryName = 'codeless';
+                this.properties.libraryName = 'DynamicDocuments'; // default used by EasyStudio
             this.properties.documentNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName;                                
             this.properties.MASTER = MASTER;
             this.properties.MASTER_DETAIL = MASTER_DETAIL;
