@@ -136,10 +136,16 @@ module.exports = class extends Generator {
             default: this.options.tableName,
             validate: (input, answers) => { return check.validNewFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All", input, ".sql" ); }
         },{
+            type: 'confirm',
+            name: 'codeless',
+            message: 'Is it a codeless table?',
+            default: false
+        },{
             name: 'libraryName',
             message: 'Which is the hosting library ?',
             default: this.options.moduleName + 'Dbl',
-            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
+            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); },
+            when: (answers) => { return !answers.codeless; }
         },{
             type: 'list',
             name: 'tableType',
@@ -159,6 +165,8 @@ module.exports = class extends Generator {
 
             this.properties.tableClassName = 'T' + this.properties.tableBaseName;
 
+            if (this.properties.codeless)
+                this.properties.libraryName = 'DynamicDocuments'; // default used by EasyStudio
             this.properties.tableNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
         });
     }    
@@ -181,27 +189,29 @@ module.exports = class extends Generator {
             { process: (contents) => { return this.addToCreateInfo(contents); } }
         );
 
-        // Source code
-        this.fs.copyTpl(
-            this.templatePath(template + '\\_table.h'),
-            this.libraryPath(this.properties.tableClassName + '.h'),
-            this.properties
-        );
-        this.fs.copyTpl(
-            this.templatePath(template + '\\_table.cpp'),
-            this.libraryPath(this.properties.tableClassName + '.cpp'),
-            this.properties
-        );
-        this.fs.copy(
-            this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
-            this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
-            { process: (contents) => { return this.addToInterface(contents); } }
-        );
-        this.fs.copy(
-            this.libraryPath(this.properties.libraryName + '.vcxproj'),
-            this.libraryPath(this.properties.libraryName + '.vcxproj'),
-            { process: (contents) => { return this.addToProj(contents); } }
-        );
+        if (!this.properties.codeless) {
+            // Source code
+            this.fs.copyTpl(
+                this.templatePath(template + '\\_table.h'),
+                this.libraryPath(this.properties.tableClassName + '.h'),
+                this.properties
+            );
+            this.fs.copyTpl(
+                this.templatePath(template + '\\_table.cpp'),
+                this.libraryPath(this.properties.tableClassName + '.cpp'),
+                this.properties
+            );
+            this.fs.copy(
+                this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
+                this.libraryPath(this.properties.libraryName + 'Interface.cpp'),
+                { process: (contents) => { return this.addToInterface(contents); } }
+            );
+            this.fs.copy(
+                this.libraryPath(this.properties.libraryName + '.vcxproj'),
+                this.libraryPath(this.properties.libraryName + '.vcxproj'),
+                { process: (contents) => { return this.addToProj(contents); } }
+            );
+        }
 
         //module objects
         this.fs.copy(
