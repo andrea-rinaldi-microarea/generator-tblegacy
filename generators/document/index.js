@@ -168,7 +168,8 @@ module.exports = class extends Generator {
             name: 'dblName',
             message: 'Which library contains the table definition ?',
             default: this.options.moduleName + 'Dbl',
-            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); }
+            validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); },
+            when: (answers) => { return !answers.codeless; }
         },{
             name: 'tableName',
             message: 'Which is the master table?',
