@@ -187,6 +187,12 @@ module.exports = class extends Generator {
             default: this.options.moduleName + 'Components',
             validate: (input, answers) => { return check.validExistingFSName("Library", this.contextRoot, input); },
             when: (answers) => { return !answers.codeless; }
+        },{
+            type: 'confirm',
+            name: 'HKLGeneration',
+            message: 'Do you want to generate the Hotlink for it?',
+            default: true,
+            when: (answers) => { return answers.codeless; }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
@@ -311,6 +317,16 @@ module.exports = class extends Generator {
             this.modulePath('ModuleObjects\\DocumentObjects.xml'),
             { process: (contents) => { return this.addDocumentObjects(contents); } }
         );
+
+        //Reference Objects
+        if (this.properties.HKLGeneration) {
+            this.fs.copyTpl(
+                this.templatePath('ReferenceObjects\\_document.xml'),
+                this.modulePath('ReferenceObjects\\' + this.properties.documentName + '.xml'),
+                this.properties
+            );            
+        }
+
         this.fs.copy(
             this.modulePath('Menu\\' + this.properties.moduleName + '.menu'),
             this.modulePath('Menu\\' + this.properties.moduleName + '.menu'),

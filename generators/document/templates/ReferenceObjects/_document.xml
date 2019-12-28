@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<HotKeyLink>
+  <Function namespace="HotKeyLink.<%= documentNamespace %>" localize="<%= documentTitle %>" type="string" />
+  <DbTable name="<%= tablePhisicalName %>" />
+  <DbField name="<%= tablePhisicalName %>.Code" />
+  <DbFieldDescription name="<%= tablePhisicalName %>.Description" />
+  <CallLink namespace="<%= documentNamespace %>" addOnFlyEnabled="true" mustExistData="true" browseEnabled="true"></CallLink>
+  <ComboBox />
+
+  <SelectionTypes>
+    <Selection name="Radar" type="radar" localize="radar" />
+    <Selection name="Direct" type="Direct" localize="Search By Key" />
+    <Selection name="Upper" type="Upper" localize="Search By Key" />
+    <Selection name="Lower" type="Lower" localize="Search By Description" />
+    <Selection name="Combo" type="Combo" localize="Search By Key" />
+  </SelectionTypes>
+
+  <SelectionModes>
+    <Mode name="Radar" type="query">
+      <![CDATA[  
+	    SELECT
+		    <%= tablePhisicalName %>.Code        {COL <%= tablePhisicalName %>.Code KEY },
+		    <%= tablePhisicalName %>.Description      {COL <%= tablePhisicalName %>.Description }
+	    FROM <%= tablePhisicalName %>
+	    ORDER BY <%= tablePhisicalName %>.Code 
+    ]]>
+    </Mode>
+
+    <Mode name="Direct" type="query">
+      <![CDATA[
+      SELECT 
+        { Columns <%= tablePhisicalName %>} 
+      FROM <%= tablePhisicalName %> 
+      WHERE Code  LIKE { IN  hkl_Value } 
+    ]]>
+    </Mode>
+    
+    <Mode name="Upper" type="query">
+      <![CDATA[
+      SELECT 
+        { Columns <%= tablePhisicalName %>} 
+      FROM <%= tablePhisicalName %> 
+      WHERE Code  LIKE { IN  hkl_Value }  
+      ORDER BY Code
+    ]]>
+    </Mode>
+    
+    <Mode name="Lower" type="query">
+      <![CDATA[
+        SELECT { Columns <%= tablePhisicalName %>} 
+        FROM <%= tablePhisicalName %> 
+        WHERE Description  LIKE { IN  hkl_Description }  
+        ORDER BY Description
+    ]]>
+    </Mode>
+    
+    <Mode name="Combo" type="query">
+      <![CDATA[
+        SELECT { Columns <%= tablePhisicalName %>} 
+        FROM <%= tablePhisicalName %> 
+        WHERE Code  LIKE { IN  hkl_Value }  
+        ORDER BY Code
+    ]]>
+    </Mode>
+
+  </SelectionModes>
+  <ColumnTitles>
+    <Column name="<%= tablePhisicalName %>.Code" 		    localize="Code"/>
+    <Column name="<%= tablePhisicalName %>.Description" 		  localize="Description"/>
+  </ColumnTitles>
+</HotKeyLink>
