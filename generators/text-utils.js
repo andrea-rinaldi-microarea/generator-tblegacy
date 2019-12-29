@@ -12,6 +12,7 @@ See the GNU General Public License for more details.
 
 const nodeFs = require('fs');
 const path = require('path');
+const _ = require('lodash');
 
 module.exports = {
 
@@ -24,7 +25,15 @@ module.exports = {
                     continue;
                 }
             }
-            var ip = result.indexOf(actions[a].justBefore);
+            var start = 0;
+            if (actions[a].after) {
+                start = _.lowerCase(source).indexOf(_.lowerCase(actions[a].after));
+                if (start == -1) {
+                    continue;
+                }
+                start += actions[a].after.length;
+            }
+            var ip = result.indexOf(actions[a].justBefore, start);
             while (ip != -1) {
                 result = result.substring(0, ip) + 
                 actions[a].textToInsert +
@@ -35,6 +44,26 @@ module.exports = {
                     break;
                 }
             }
+        }
+        return result;
+    },
+
+    replaceInSource(source, actions) {
+        var result = source;
+        for (a = 0; a < actions.length; a++) {
+
+            var start = result.indexOf(actions[a].matchStart);
+            if (start == -1) {
+                continue;
+            }
+            var stop = result.indexOf(actions[a].matchEnd, start);
+            if (stop == -1) {
+                continue;
+            }
+    
+            result =    result.substring(0, start + actions[a].matchStart.length) +
+                        actions[a].newContent +
+                        result.substring(stop);
         }
         return result;
     },

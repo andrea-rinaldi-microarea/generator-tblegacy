@@ -19,6 +19,7 @@ var GeneratorLib = require('./generators/library/index.js');
 var GeneratorDoc = require('./generators/document/index.js');
 var GeneratorTbl = require('./generators/table/index.js');
 var GeneratorCD = require('./generators/clientdoc/index.js');
+var GeneratorFld = require('./generators/field/index.js');
 var banner = require('./banner');
 
 var usage = function(args) {
@@ -29,6 +30,7 @@ var usage = function(args) {
     console.log('\ttbl l(ib) [libName]');
     console.log('\ttbl d(oc) [docName]');
     console.log('\ttbl t(able) [tableName]');
+    console.log('\ttbl f(ield) [fieldName]');
     console.log('\ttbl cd|clientdoc [clientDocName]');
 }
 
@@ -38,6 +40,7 @@ env.registerStub(GeneratorMod, 'tbl:module');
 env.registerStub(GeneratorLib, 'tbl:library');
 env.registerStub(GeneratorDoc, 'tbl:document');
 env.registerStub(GeneratorTbl, 'tbl:table');
+env.registerStub(GeneratorFld, 'tbl:field');
 env.registerStub(GeneratorCD, 'tbl:clientdoc');
 
 var args = process.argv.slice(2);
@@ -60,6 +63,9 @@ if (args[0] === 'new' || args[0] === 'n') {
 } else if (args[0] === 'table' || args[0] === 't') {
     gen = 'tbl:table';
     tpl = tpl + '\\table\\templates';
+} else if (args[0] === 'field' || args[0] === 'f') {
+    gen = 'tbl:field';
+    tpl = tpl + '\\field\\templates';
 } else if (args[0] === 'clientdoc' || args[0] === 'cd') {
     gen = 'tbl:clientdoc';
     tpl = tpl + '\\clientdoc\\templates';

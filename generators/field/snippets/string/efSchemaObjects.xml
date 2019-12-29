@@ -1,0 +1,5 @@
+    <Column>
+                    <SchemaInfo localizable_1="true" type="String" defaultvalue="" length="<%= fieldLen %>"><%= fieldName %></SchemaInfo>
+                    <DocumentationInfo localizable_1="true" mandatory="true"><%= fieldDescri %></DocumentationInfo>
+                </Column>
+            

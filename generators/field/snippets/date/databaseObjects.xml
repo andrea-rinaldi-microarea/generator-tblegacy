@@ -1,0 +1,2 @@
+            <Column name="<%= fieldName %>" localize="<%= fieldDescri %>" lenght="10" type="date" defaultvalue="1799-12-31T00:00:00" release="<%= dbRel %>" />
+        

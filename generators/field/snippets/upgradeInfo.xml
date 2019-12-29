@@ -1,0 +1,5 @@
+  <DBRel numrel="<%= dbRel %>">
+    <Level1>
+      <Step numstep="1" script="Alter_<%= tablePhisicalName %>.sql" />
+    </Level1>
+  </DBRel>

@@ -1,0 +1,5 @@
+    <Column>
+                    <SchemaInfo localizable_1="true" type="Date" defaultvalue="1799-12-31T00:00:00" length="0"><%= fieldName %></SchemaInfo>
+                    <DocumentationInfo localizable_1="true"  mandatory="true"><%= fieldDescri %></DocumentationInfo>
+                </Column>
+            

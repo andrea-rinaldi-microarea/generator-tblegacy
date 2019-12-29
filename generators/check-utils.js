@@ -61,6 +61,23 @@ module.exports = {
         return true;
     },
 
+    validIdentifierName(type, name) {
+        if (!name) {
+            return "Empty name not allowed";
+        }
+
+        var fNamePattern = /^[a-z0-9_\s]+$/gi;
+        if (!fNamePattern.test(name)) {
+            return "Invalid characters in " + _.lowerFirst(type) + " name.";
+        }
+
+        if (_.includes(name, ' ')) {
+            return _.capitalize(type) + " name must not contain spaces.";
+        }
+
+        return true;
+    },
+
     validExistingFSName(type, root, name, ext) {
         if (!name) {
             return "Empty name not allowed";

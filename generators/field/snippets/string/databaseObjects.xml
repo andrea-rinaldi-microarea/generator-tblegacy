@@ -1,0 +1,2 @@
+            <Column name="<%= fieldName %>" localize="<%= fieldDescri %>" lenght="<%= fieldLen %>" type="string" defaultvalue="" release="<%= dbRel %>" />
+        
