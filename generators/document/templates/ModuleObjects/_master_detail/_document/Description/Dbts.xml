@@ -4,6 +4,10 @@
     <Title localizable="true"><%= documentTitle %></Title>
     <Table namespace="<%= appName %>.<%= moduleName %>.<%= dblName %>.<%= tablePhisicalName %>"><%= tablePhisicalName %></Table>
     <Slaves>
+      <SlaveBuffered namespace="<%= documentNamespace %>.<%= documentName %>Details">
+        <Title localizable="true">Details</Title>
+        <Table namespace="<%= appName %>.<%= moduleName %>.<%= dblName %>.<%= tablePhisicalName %>Details"><%= tablePhisicalName %>Details</Table>
+      </SlaveBuffered>
     </Slaves>
   </Master>
 </DBTs>
