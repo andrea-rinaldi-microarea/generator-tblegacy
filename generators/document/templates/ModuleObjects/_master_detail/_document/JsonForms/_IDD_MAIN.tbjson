@@ -16,14 +16,14 @@
       "binding": {
         "datasource": "<%= documentName %>.DocNo"
       },
-      "type": 13,
-      "width": 48,
+      "type": "Edit",
+      "width": 57,
       "height": 12,
       "autoHScroll": true,
       "controlCaption": "Document No.",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 6
+      "controlSize": 4
     },
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_DOCDATE",
@@ -31,16 +31,14 @@
       "binding": {
         "datasource": "<%= documentName %>.DocDate"
       },
-      "type": 13,
-      "width": 154,
-      "height": 36,
-      "autoVScroll": true,
-      "wantReturn": true,
-      "multiline": true,
+      "type": "Edit",
+      "width": 57,
+      "height": 12,
+      "autoHScroll": true,
       "controlCaption": "Document Date",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 6
+      "controlSize": 3
     }
   ],
   "hasStaticArea": true,
