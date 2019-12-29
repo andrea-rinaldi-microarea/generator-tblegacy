@@ -304,11 +304,11 @@ module.exports = class extends Generator {
         if (this.properties.documentType === MASTER_DETAIL) {
             this.fs.move(
                 this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_DETAIL.hjson'),
-                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_DETAIL.hjson')
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_DETAIL.hjson')
             );
             this.fs.move(
                 this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_DETAIL.tbjson'),
-                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_DETAIL.tbjson')
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_DETAIL.tbjson')
             );
         }
 
