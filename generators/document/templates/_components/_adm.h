@@ -4,7 +4,9 @@
 #include "beginh.dex"
 
 class <%= tableName %>;
+<% if (documentType === MASTER_DETAIL) { -%>
 class <%= tableName %>Details;
+<% } -%>
 
 /////////////////////////////////////////////////////////////////////////////
 //							ADM<%= documentName %>Obj
