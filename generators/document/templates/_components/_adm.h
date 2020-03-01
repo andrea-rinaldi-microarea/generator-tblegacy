@@ -4,6 +4,7 @@
 #include "beginh.dex"
 
 class <%= tableName %>;
+class <%= tableName %>Details;
 
 /////////////////////////////////////////////////////////////////////////////
 //							ADM<%= documentName %>Obj
