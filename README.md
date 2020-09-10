@@ -52,11 +52,13 @@ The generator asks for a number of parameters; those worth to mention are:
 **Application Name**: the application name is used to name its containing folder (inside `Standard\Applications`), so it must be a valid non-existing folder name. It may contains only letters, numbers and the characters: `_` (underscore)  `-` (minus).  
 These restrictions are due to the TB namespace management.
 
-**Re-use ERP precompiled headers**: as the usual case is that the application extends ERP, it may be useful to re-use ERP precompiled headers to save compilation time.
+**Codeless Application**: the application may not need any compiled code, just metadata. An empty VS solution is however scaffolded, in case some need of code arise later.
+
+**Re-use ERP precompiled headers**: as the usual case is that the application extends ERP, it may be useful to re-use ERP precompiled headers to save compilation time (Not asked for "codeless" applications).
 
 **Default Module**  
 **Default Library**: the new application is scaffolded with at least one module and one library inside it, so that it is immediately usable.  
-Other modules and libraries can be added later.
+Other modules and libraries can be added later (the default library is not asked for "codeless" applications).
 
 **Module 4-chars short name**: these 4 characters are used as a seed for the generation of the module's serial number, which can be done through the [specific page](http://www.microarea.it/Prodotti/Verticalizzazioni/SerialNumbersGenerator.aspx) of the Microarea portal (requires login).
 
@@ -66,11 +68,11 @@ The generated elements are:
 * the VS solution and its `.props` file
 * the application's license files, in the `Solutions` subfolder
 * the first declared module (see [Modules](#Modules))
-* the first declared library inside it (see [Libraries](#Libraries))
+* if the application is not "codeless", the first declared library inside it. (see [Libraries](#Libraries))
 
 ### Next steps
 To make the scaffolded application working:
-* open in VS 2017 the `.sln` file and compile it
+* open in VS 2017 the `.sln` file and compile it (not needed for "codeless" applications)
 * register the application in the [Microarea portal](http://www.microarea.it/int/Prodotti/Verticalizzazioni/PreInsertScheda.aspx)
 * crypt the default module definition (`Solutions\Modules\[default module].xml`), and download the returned `.csm` file in the same folder
 * generate at least one serial number for your application, from the [specific page](http://www.microarea.it/Prodotti/Verticalizzazioni/SerialNumbersGenerator.aspx) of the portal
@@ -101,6 +103,7 @@ The generated elements are:
 * the `Databasecript` folder, with empty `Create` and `Update` configuration files
 * a default empty `Menu`, with a default `.png` image to represent the module in the main menu
 * the `ModuleObjects` folder, with empty metadata files for `DocumentObjects`, `AddOnDatabaseObjects`, `ClientDocumentObjects`, `DatabaseObjects`, `Enums` and `EventHandlerObjects`
+
 ## Libraries
 To scaffold a new library, your current folder must be inside an existing module, that is:
 ```
@@ -121,6 +124,7 @@ The generated elements are:
 * the VS project file, `.vcxproj`
 * the `module.config` of the containing module is updated to include the library
 * the VS solution `.sln` of the application is upodated to include the `.vcxproj` of the library
+
 ## Tables
 The table generator let you generate the code template to manage a table in your application.  
 It is possible to generate a single table, master-only style, or a table pair, master/detail style, such as a document with an header and some rows.
@@ -135,7 +139,9 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Table name**: the physical name of the table, that is, the name that will be used for the DB. It must be a non-existing valid name, which cannot include spaces or special characters, as it is used also to generate the name for the `SQLRecord` class 
 
-**Hosting Library**: the library in which host the code for the table's `SQLRecord`. It must be an already existing library inside the current module
+**Codeless table**: the table is defined via metadata only, there is no C++ wrapper class. *Note: a codeless table can exists in a non-codeless application, but the vice-versa is not supported out-of-the-box*.
+
+**Hosting Library**: the library in which host the code for the table's `SQLRecord`. It must be an already existing library inside the current module (not asked for "codeless" tables).
 
 **Table type**: it allows to choose among *master* and *master/detail*. In the latter, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
 
