@@ -150,10 +150,12 @@ The generator asks for a number of parameters; those worth to mention are:
 ### Scaffolded contents
 The generated elements are:
 * the SQL scripts in the `DatabaseScript\Create` subfolder. The `CreateInfo.xml` file is updated to include the new table.
+* the `DatabaseObjects.xml` file is updated to include the new table
+
+*the following steps are not executed for codeless tables*
 * the `.h` and `.cpp` source file defining the `SQLRecord` class for the table
 * the `Interface.cpp` file is updated with the table class registration in the catalog
 * the VS project `.vcxproj` is updated to compile the `SQLRecord` source code
-* the `DatabaseObjects.xml` file is updated to include the new table
 
 ## Fields
 The field generator let you generate and adjust the code template to manage a new field in a table of your application.  
