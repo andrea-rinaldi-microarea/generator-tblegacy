@@ -4,7 +4,7 @@ It is a [Yeoman Generator](https://yeoman.io/) available also as a CLI.
 ## Prerequisites
 To use this generator you need [Node.js](https://nodejs.org/en/) 8.9 or higher.  
 
-It scaffolds Task Builder Studio applications in their predefined folder structure, so it is reccommended to have TB Studio installed, and the ERP solution compiled and working.  
+It scaffolds Task Builder Studio applications in their predefined folder structure, so it is recommended to have TB Studio installed, and the ERP solution compiled and working.  
 This allows to make immediate use of the scaffolded applications. 
 ## Installation
 Clone the repository:
@@ -20,7 +20,7 @@ Create a symbolik link to the CLI:
 npm link
 ```
 ## Usage
-If you have Yeaoman installed, you can invoke it as any other generator:
+If you have Yeoman installed, you can invoke it as any other generator:
 ```
 yo tblegacy
 ```
@@ -52,9 +52,9 @@ The generator asks for a number of parameters; those worth to mention are:
 **Application Name**: the application name is used to name its containing folder (inside `Standard\Applications`), so it must be a valid non-existing folder name. It may contains only letters, numbers and the characters: `_` (underscore)  `-` (minus).  
 These restrictions are due to the TB namespace management.
 
-**Codeless Application**: the application may not need any compiled code, just metadata. An empty VS solution is however scaffolded, in case some need of code arise later.
+**Codeless Application**: the application may not need any compiled code, just metadata. An empty VS solution is however scaffolded, in case some need of code arises later.
 
-**Re-use ERP precompiled headers**: as the usual case is that the application extends ERP, it may be useful to re-use ERP precompiled headers to save compilation time (Not asked for "codeless" applications).
+**Re-use ERP precompiled headers**: as the usual case is that the application extends ERP, it may be useful to re-use ERP precompiled headers to save compilation time (not asked for "codeless" applications).
 
 **Default Module**  
 **Default Library**: the new application is scaffolded with at least one module and one library inside it, so that it is immediately usable.  
@@ -126,7 +126,7 @@ The generated elements are:
 * the VS solution `.sln` of the application is upodated to include the `.vcxproj` of the library
 
 ## Tables
-The table generator let you generate the code template to manage a table in your application.  
+The table generator let you generate the required metadata and the code wrapper to manage a table in your application.  
 It is possible to generate a single table, master-only style, or a table pair, master/detail style, such as a document with an header and some rows.
 
 To scaffold a new table, your current folder must be inside an existing module, that is:
@@ -145,12 +145,12 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Table type**: it allows to choose among *master* and *master/detail*. In the latter, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
 
-*Note on the table name*: if the pysical name respects the standard format `[AA]_[name]`, `[name]` is extracted as a *base* name to generate to class name. I.e.: if the phisical table name is `SB_Contracts`, the `SQLRecord` class will be named `TContracts`, the source files will be named `TContracts.h` and `TContracts.cpp`, and so on.
+*Note on the table name*: if the pysical name respects the standard prefixed format `[AA]_[name]`, `[name]` is extracted as a *base* name to generate to class name. I.e.: if the phisical table name is `SB_Contracts`, the `SQLRecord` class will be named `TContracts`, the source files will be named `TContracts.h` and `TContracts.cpp`, and so on.
 
 ### Scaffolded contents
 The generated elements are:
 * the SQL scripts in the `DatabaseScript\Create` subfolder. The `CreateInfo.xml` file is updated to include the new table.
-* the `DatabaseObjects.xml` file is updated to include the new table
+* the `DatabaseObjects.xml` and `EFSchemaObjects.xml` files are updated to include the new table
 
 *the following steps are not executed for codeless tables*
 * the `.h` and `.cpp` source file defining the `SQLRecord` class for the table
