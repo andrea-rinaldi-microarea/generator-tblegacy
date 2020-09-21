@@ -27,7 +27,7 @@ module.exports = {
             }
             var start = 0;
             if (actions[a].after) {
-                start = _.lowerCase(source).indexOf(_.lowerCase(actions[a].after));
+                start = source.toLowerCase().indexOf(actions[a].after.toLowerCase());
                 if (start == -1) {
                     continue;
                 }
