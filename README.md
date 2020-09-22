@@ -38,6 +38,7 @@ Available commands:
 * `tbl f(ield) [fieldName]` scaffold a new table [field](#Fields)
 * `tbl d(oc) [docName]` scaffold a document
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
+* `tbl e(num) [enumName]` scaffold an [enum definition](#Enums)
 ## Application
 To scaffold a new application, your current folder must be inside the predefined TB Studio `Applications` folder, that is:
 ```
@@ -158,7 +159,7 @@ The generated elements are:
 * the VS project `.vcxproj` is updated to compile the `SQLRecord` source code
 
 ## Fields
-The field generator let you generate and adjust the code template to manage a new field in a table of your application.  
+The field generator lets you generate and adjust the code template to manage a new field in a table of your application.  
 It is possible to generate a single field, of one of the predefined data types.
 
 ***WARNING**: the field generator works only for "codeless" tables.*
@@ -175,10 +176,32 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Field name**: the name of the new field in the database. It must be a valid identifier, no spaces or special characters are allowed.
 
-**Field type**: the type of the new field, out of a list of allowed types. For fields of `string` type, it is requested to enter also the length.
+**Field type**: the type of the new field, out of a list of allowed types. For fields of `string` type, it is requested to enter also the length; For fields of `enum` type it is requested the name of the enum to associate to the new field.
 
 ### Scaffolded contents
 The generated and modified elements are:
 * the `DatabaseObjects.xml` and `EFSchemaObjects.xml` files are updated to include the new field in the corresponding table. The release number is also increased by 1
 * the SQL script for the table creation is updated to include the new field
 * the SQL script to upgrade the table is created in `DatabaseScript\Upgrade` subfolder. The `UpgradeInfo.xml` is also updated.
+
+## Enums
+The enum generator lets you generate the definition of an enum data type, that is a list of possible values for a property. Such type is mapped in the DB as a column of `int` type.
+
+***WARNING**: the enum generator works only for "codeless" applications.*
+
+To scaffold a new enum, your current folder must be inside an existing module, that is:
+```
+[instance folder]\Standard\Applications\[application]\[module]
+```
+i.e: `C:\Development\Standard\Applications\MyApp\MainModule`.
+
+The generator asks for a number of parameters; those worth to mention are:
+
+**Enum name**: the name of the new enum. It must be unique for the whole application.
+
+**Base value**: the enum values are represented as `int` numbers, starting from a seed. This is the seed of the enum, the actual values will be generated as `base << 16 + value`. I.e. a base of `512` will generate values such as `33554432`, `33554433`, etc.
+
+**Number of values**: this indicates how many different values the enum will contain.
+
+### Scaffolded contents
+The generator updates the `Enums.xml` file to include the new enum definition.
