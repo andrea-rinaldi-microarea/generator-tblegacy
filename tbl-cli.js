@@ -20,6 +20,7 @@ var GeneratorDoc = require('./generators/document/index.js');
 var GeneratorTbl = require('./generators/table/index.js');
 var GeneratorCD = require('./generators/clientdoc/index.js');
 var GeneratorFld = require('./generators/field/index.js');
+var GeneratorEnum = require('./generators/enum/index.js');
 var banner = require('./banner');
 
 var usage = function(args) {
@@ -32,6 +33,7 @@ var usage = function(args) {
     console.log('\ttbl t(able) [tableName]');
     console.log('\ttbl f(ield) [fieldName]');
     console.log('\ttbl cd|clientdoc [clientDocName]');
+    console.log('\ttbl e(num) [enumName]');
 }
 
 var env = yeoman.createEnv();
@@ -42,6 +44,7 @@ env.registerStub(GeneratorDoc, 'tbl:document');
 env.registerStub(GeneratorTbl, 'tbl:table');
 env.registerStub(GeneratorFld, 'tbl:field');
 env.registerStub(GeneratorCD, 'tbl:clientdoc');
+env.registerStub(GeneratorEnum, 'tbl:enum');
 
 var args = process.argv.slice(2);
 if (args.length < 1) return usage(args);
@@ -69,6 +72,9 @@ if (args[0] === 'new' || args[0] === 'n') {
 } else if (args[0] === 'clientdoc' || args[0] === 'cd') {
     gen = 'tbl:clientdoc';
     tpl = tpl + '\\clientdoc\\templates';
+} else if (args[0] === 'enum' || args[0] === 'e') {
+    gen = 'tbl:enum';
+    tpl = tpl + '\\enum\\templates';
 } else {
     return usage(args);
 }
