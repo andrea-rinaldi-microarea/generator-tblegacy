@@ -165,8 +165,12 @@ module.exports = class extends Generator {
 
             this.properties.tableClassName = 'T' + this.properties.tableBaseName;
 
-            if (this.properties.codeless)
+            if (this.properties.codeless) {
                 this.properties.libraryName = 'codeless'; 
+                this.properties.dynamicTable = 'dynamic="true"';
+            } else {
+                this.properties.dynamicTable = '';
+            }
             this.properties.tableNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tableName;
         });
     }    
