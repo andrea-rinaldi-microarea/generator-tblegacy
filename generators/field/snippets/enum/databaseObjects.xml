@@ -1,0 +1,2 @@
+            <Column name="<%= fieldName %>" localize="<%= fieldDescri %>" lenght="0" type="Enum" enumname="<%= enumName %>" defaultvalue="<%= defaultValue %>" release="<%= dbRel %>" />
+        
