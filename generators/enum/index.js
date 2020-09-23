@@ -16,6 +16,7 @@ const _ = require('lodash');
 const path = require('path');
 const utils = require('../text-utils');
 const snippet = require('../snippet-utils');
+const check = require('../check-utils');
 
 module.exports = class extends Generator {
 
@@ -61,6 +62,7 @@ module.exports = class extends Generator {
                 actions
             );
         }
+
     }
 
     initializing() {
@@ -83,7 +85,14 @@ module.exports = class extends Generator {
         const prompts = [ {
             name: 'enumName',
             message: 'What is the name of the new enum?',
-            validate: (input, answers) => { return true; /* TODO check for duplicates */ }
+            validate: (input, answers) => { 
+                var attrs = check.enumAttributes(this.options.appRoot, this.options.appName, input);
+                if ( attrs != null) {
+                    return `Enum ${input} already existing in module ${attrs.module}`;
+                } else {
+                    return true;
+                } 
+            }
         },{
             name: 'enumDescri',
             message: 'Enter a description for the enum',

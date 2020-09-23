@@ -17,7 +17,6 @@ const utils = require('../text-utils');
 const check = require('../check-utils');
 const path = require('path');
 const snippet = require('../snippet-utils');
-const parseKVP = require('parse-key-value');
 
 module.exports = class extends Generator {
 
@@ -101,10 +100,6 @@ module.exports = class extends Generator {
             return res;
         }
         
-        this.extractEnumAttributes = function(enumName) {
-            var res = utils.extractInfo(this.modulePath('ModuleObjects\\Enums.xml'), `<Tag name="${enumName}"`, '>');
-            return res;
-        }
     }
 
     initializing() {
@@ -155,18 +150,12 @@ module.exports = class extends Generator {
             message: 'Enum name:',
             when: (answers) => { return answers.fieldType === 'enum'; },
             validate: (input, answers) => { 
-                var attributesText = this.extractEnumAttributes(input); 
-                if (!attributesText) return false;
-                var attributes = parseKVP(attributesText.replace(/\" /g, '";'));
-                this.options.defaultValue = attributes.value << 16 + attributes.defaultValue;
+                var attributes = check.enumAttributes(this.options.appRoot, this.options.appName, input);
+                if (!attributes)
+                    return `Enum ${input} does not exist`;
+                answers.defaultValue = attributes.value << 16 + attributes.defaultValue;
                 return true;
             }
-        },{
-            type: 'number',
-            name: 'defaultValue',
-            message: 'Default value:',
-            default: (answers) => { return this.options.defaultValue },
-            when: (answers) => { return answers.fieldType === 'enum'; }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
