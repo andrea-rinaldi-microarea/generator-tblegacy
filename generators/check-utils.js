@@ -12,6 +12,9 @@ See the GNU General Public License for more details.
 
 const nodeFs = require('fs');
 const _ = require('lodash');
+const path = require('path');
+const utils = require('./text-utils');
+const parseKVP = require('parse-key-value');
 
 module.exports = {
 
@@ -112,5 +115,38 @@ module.exports = {
             return check;
 
         return true;
+    },
+
+    allModules(root, appName) {
+        var appPath = path.join(root, appName);
+        var modules = [];
+        if (nodeFs.existsSync(appPath)) {
+            nodeFs.readdirSync(appPath).forEach(function(entry) {
+                var entry_path = path.join(appPath, entry);
+                if  (
+                        nodeFs.lstatSync(entry_path).isDirectory() &&
+                        nodeFs.existsSync(path.join(entry_path, "Module.config"))
+                    ) {
+                    modules.push(path.basename(entry_path));
+                }
+            });
+        }
+
+        return modules;
+    },
+
+    enumAttributes(root, appName, enumName) {
+        var modules = this.allModules(root, appName);
+        var attributes = null;
+        for ( let mod of modules) {
+            var attributesText = utils.extractInfo(path.join(root, appName, mod, 'ModuleObjects\\Enums.xml'), `<Tag name="${enumName}"`, '>');
+            if (attributesText) {
+                var attributes = parseKVP(attributesText.replace(/\" /g, '";'));                    
+                attributes.name = enumName;
+                attributes.module = mod;
+                break;
+            }
+        }
+        return attributes;
     }
 }

@@ -100,7 +100,6 @@ module.exports = class extends Generator {
             return res;
         }
         
-
     }
 
     initializing() {
@@ -137,7 +136,7 @@ module.exports = class extends Generator {
             type: 'list',
             name: 'fieldType',
             message: 'Choose the field type:',
-            choices: ['string', 'Long', 'date'],
+            choices: ['string', 'Long', 'date', 'enum'],
             default: 'string'
         },{
             type: 'number',
@@ -145,6 +144,18 @@ module.exports = class extends Generator {
             message: 'Field lenght:',
             default: 10,
             when: (answers) => { return answers.fieldType === 'string'; }
+        },{
+            type: 'string',
+            name: 'enumName',
+            message: 'Enum name:',
+            when: (answers) => { return answers.fieldType === 'enum'; },
+            validate: (input, answers) => { 
+                var attributes = check.enumAttributes(this.options.appRoot, this.options.appName, input);
+                if (!attributes)
+                    return `Enum ${input} does not exist`;
+                answers.defaultValue = attributes.value << 16 + attributes.defaultValue;
+                return true;
+            }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {

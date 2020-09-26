@@ -75,9 +75,15 @@ module.exports = class extends Generator {
             default: '1.0.0.0'
         }, {
             type: 'confirm',
+            name: 'codeless',
+            message: 'Is it a codeless application?',
+            default: false
+        }, {
+            type: 'confirm',
             name: 'useErpPch',
             message: 'Re-use ERP precompiled headers?',
-            default: true
+            default: true,
+            when: (answers) => { return !answers.codeless; }
         }, {
             name: 'defaultModule',
             message: 'Name of the first module',
@@ -97,7 +103,8 @@ module.exports = class extends Generator {
             name: 'defaultLibrary',
             message: 'Name of the first library',
             default: (answers) => { return answers.defaultModule + 'Lib'; },
-            validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); }
+            validate: (input, answers) => { return check.validNewFSName("Library", this.destinationRoot(), input); },
+            when: (answers) => { return !answers.codeless; }
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
@@ -119,15 +126,17 @@ module.exports = class extends Generator {
                 shortName: this.properties.shortName,
                 asSubgenerator: true
             });
-        this.composeWith(
-            require.resolve('../library'), {
-                appName: this.properties.appName,
-                moduleName: this.properties.defaultModule,
-                libraryName: this.properties.defaultLibrary,
-                appFolder: this.applicationPath(),
-                useErpPch: this.properties.useErpPch,
-                asSubgenerator: true
-            });
+        if (!this.properties.codeless) {
+            this.composeWith(
+                require.resolve('../library'), {
+                    appName: this.properties.appName,
+                    moduleName: this.properties.defaultModule,
+                    libraryName: this.properties.defaultLibrary,
+                    appFolder: this.applicationPath(),
+                    useErpPch: this.properties.useErpPch,
+                    asSubgenerator: true
+                });
+        }
     }
 
     writing() {

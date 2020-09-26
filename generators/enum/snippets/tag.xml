@@ -1,0 +1,3 @@
+<Tag name="<%= enumName %>" value="<%= enumBase %>" defaultValue="0">
+  <%= enumDescri %>
+</Tag>

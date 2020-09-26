@@ -1,0 +1,5 @@
+    <Column>
+                    <SchemaInfo localizable_1="true" type="Enum" enumname="<%= enumName %>" defaultvalue="<%= defaultValue %>" length="0"><%= fieldName %></SchemaInfo>
+                    <DocumentationInfo localizable_1="true" mandatory="true"><%= fieldDescri %></DocumentationInfo>
+                </Column>
+            
