@@ -16,14 +16,14 @@
       "binding": {
         "datasource": "<%= documentName %>.Code"
       },
-      "type": 13,
+      "type": "Edit",
       "width": 48,
       "height": 12,
       "autoHScroll": true,
       "controlCaption": "Code",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 6
+      "controlSize": 2
     },
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_DESCRI",
@@ -31,7 +31,7 @@
       "binding": {
         "datasource": "<%= documentName %>.Description"
       },
-      "type": 13,
+      "type": "Edit",
       "width": 154,
       "height": 36,
       "autoVScroll": true,
