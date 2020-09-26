@@ -13,6 +13,7 @@
     <Selection name="Upper" type="Upper" localize="Search By Key" />
     <Selection name="Lower" type="Lower" localize="Search By Description" />
     <Selection name="Combo" type="Combo" localize="Search By Key" />
+    <Selection name="WebCombo" type="default" localize="Search By Key"></Selection>
   </SelectionTypes>
 
   <SelectionModes>
@@ -31,7 +32,7 @@
       SELECT 
         { Columns <%= tablePhisicalName %>} 
       FROM <%= tablePhisicalName %> 
-      WHERE Code  LIKE { IN  hkl_Value } 
+      WHERE Code  = { IN  hkl_Value } 
     ]]>
     </Mode>
     
@@ -55,6 +56,15 @@
     </Mode>
     
     <Mode name="Combo" type="query">
+      <![CDATA[
+        SELECT { Columns <%= tablePhisicalName %>} 
+        FROM <%= tablePhisicalName %> 
+        WHERE Code  LIKE { IN  hkl_Value }  
+        ORDER BY Code
+    ]]>
+    </Mode>
+    
+    <Mode name="WebCombo" type="query">
       <![CDATA[
         SELECT { Columns <%= tablePhisicalName %>} 
         FROM <%= tablePhisicalName %> 
