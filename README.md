@@ -19,6 +19,7 @@ Create a symbolik link to the CLI:
 ```
 npm link
 ```
+*Note on npm link*: for the command to be correctly generated, the starting source (i.e.: `tbl-cli.js`) **MUST** start with `#!/usr/bin/env node`) 
 ## Usage
 If you have Yeoman installed, you can invoke it as any other generator:
 ```
