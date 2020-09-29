@@ -209,6 +209,7 @@ module.exports = class extends Generator {
             if (this.properties.codeless) {
                 this.properties.libraryName = 'codeless'; 
                 this.properties.dblName = 'codeless'; 
+                this.properties.dynamic = 'dynamic="true"';
             }
             this.properties.documentNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.documentName;                                
             this.properties.MASTER = MASTER;
