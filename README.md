@@ -179,6 +179,8 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Field type**: the type of the new field, out of a list of allowed types. For fields of `string` type, it is requested to enter also the length; For fields of `enum` type it is requested the name of the enum to associate to the new field.
 
+**Require an upgrade step**: if the answer is `yes`, the field will be added causing an upgrade step for the DB. Otherwise, the field will be added in the last DB upgrade step found. This ease adding more than one field in a session, by setting the DB step for the first field added, and then attaching the others to same step. 
+
 ### Scaffolded contents
 The generated and modified elements are:
 * the `DatabaseObjects.xml` and `EFSchemaObjects.xml` files are updated to include the new field in the corresponding table. The release number is also increased by 1
