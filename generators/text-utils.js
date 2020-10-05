@@ -33,15 +33,19 @@ module.exports = {
                 }
                 start += actions[a].after.length;
             }
-            var ip = result.indexOf(actions[a].justBefore, start);
-            while (ip != -1) {
-                result = result.substring(0, ip) + 
-                actions[a].textToInsert +
-                result.substring(ip);
-
-                ip = result.indexOf(actions[a].justBefore, ip + actions[a].textToInsert.length + actions[a].justBefore.length);
-                if (!actions[a].allOccurrencies) {
-                    break;
+            if (!actions[a].justBefore) { // if justBefore is null, append
+                result += actions[a].textToInsert;
+            } else {
+                var ip = result.indexOf(actions[a].justBefore, start);
+                while (ip != -1) {
+                    result = result.substring(0, ip) + 
+                    actions[a].textToInsert +
+                    result.substring(ip);
+    
+                    ip = result.indexOf(actions[a].justBefore, ip + actions[a].textToInsert.length + actions[a].justBefore.length);
+                    if (!actions[a].allOccurrencies) {
+                        break;
+                    }
                 }
             }
         }

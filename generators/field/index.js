@@ -23,6 +23,7 @@ module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
 
+        this.argument('tablePhisicalName', { type: String, required: false });
         this.argument('fieldName', { type: String, required: false });
 
         this.optionOrPrompt = optionOrPrompt;
@@ -78,6 +79,17 @@ module.exports = class extends Generator {
             );
         }
 
+        this.addToUpgradeSQLScript = function(contents) {
+            var actions = [{
+                textToInsert: snippet.render(this.templatePath(this.properties.fieldType + '\\_alter.sql'), this.properties), 
+                justBefore: null // append
+            }];
+            return utils.insertInSource(
+                contents.toString(), 
+                actions
+            );
+        }
+
         this.addToUpgradeInfo = function(contents) {
             var actions = [{
                 textToInsert: snippet.render(path.join(this.snippetPath(), 'upgradeInfo.xml'), this.properties), 
@@ -110,6 +122,13 @@ module.exports = class extends Generator {
         if (!_.toLower(appRoot).endsWith('\\standard\\applications')) {
             this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
         }
+
+        if  (
+                this.options.tablePhisicalName != '' &&
+                check.validExistingFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All" , this.options.tablePhisicalName, ".sql") != true
+            ) {
+            this.env.error(`The table ${this.options.tablePhisicalName} does not exist.`);
+        }
         this.options.appRoot = appRoot;
         this.options.moduleName = path.basename(this.contextRoot);
         this.options.appName = path.basename(path.dirname(this.contextRoot));
@@ -119,6 +138,8 @@ module.exports = class extends Generator {
         this.log('Welcome to the ' + chalk.red('TBLegacy database field') + ' generator!');
         this.log('You are about to add a field in a table of the ' + chalk.bold(this.options.moduleName) + ' module of the ' + chalk.bold(this.options.appName) + ' application.' )
         this.log(chalk.yellow('WARNING: only codeless tables are supported'));
+        if (this.options.tablePhisicalName)
+            this.log('Table ' + chalk.bold(this.options.tablePhisicalName));
         const prompts = [ {
             name: 'tablePhisicalName',
             message: 'What is the table phisical name in which add the field?',
@@ -156,6 +177,11 @@ module.exports = class extends Generator {
                 answers.defaultValue = attributes.value << 16 + attributes.defaultValue;
                 return true;
             }
+        },{
+            type: 'confirm',
+            name: 'doUpgradeStep',
+            message: 'Require an upgrade step (Y) or append to the last one (n)?',
+            default: true
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {
@@ -163,7 +189,7 @@ module.exports = class extends Generator {
             this.properties.appName = this.options.appName;
             this.properties.moduleName = this.options.moduleName;
             this.properties.libraryName = 'codeless'; 
-            this.properties.dbRel = parseInt(this.extractDBRel(), 10) + 1;
+            this.properties.dbRel = parseInt(this.extractDBRel(), 10) + (this.properties.doUpgradeStep ? 1 : 0);
             this.properties.tableNamespace = this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.tablePhisicalName;
             this.properties.tableBaseName = (this.properties.tablePhisicalName[2] == '_') ? 
                                             this.properties.tablePhisicalName.substring(3) : 
@@ -178,11 +204,12 @@ module.exports = class extends Generator {
             this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
             { process: (contents) => { return this.addToDatabaseObjects('databaseObjects.xml', contents); } }
         );
-        this.fs.copy(
-            this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
-            this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
-            { process: (contents) => { return this.UpdateDBRel(contents); } }
-        );
+        if (this.properties.doUpgradeStep)
+            this.fs.copy(
+                this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
+                this.modulePath('ModuleObjects\\DatabaseObjects.xml'),
+                { process: (contents) => { return this.UpdateDBRel(contents); } }
+            );
 
         //EFCore
         this.fs.copy(
@@ -190,11 +217,12 @@ module.exports = class extends Generator {
             this.modulePath('EFCore\\EFSchemaObjects.xml'),
             { process: (contents) => { return this.addToDatabaseObjects('efSchemaObjects.xml', contents); } }
         );
-        this.fs.copy(
-            this.modulePath('EFCore\\EFSchemaObjects.xml'),
-            this.modulePath('EFCore\\EFSchemaObjects.xml'),
-            { process: (contents) => { return this.UpdateDBRel(contents); } }
-        );
+        if (this.properties.doUpgradeStep)
+            this.fs.copy(
+                this.modulePath('EFCore\\EFSchemaObjects.xml'),
+                this.modulePath('EFCore\\EFSchemaObjects.xml'),
+                { process: (contents) => { return this.UpdateDBRel(contents); } }
+            );
 
         //database scripts
         this.fs.copy(
@@ -202,16 +230,24 @@ module.exports = class extends Generator {
             this.modulePath('DatabaseScript\\Create\\All\\' + this.properties.tablePhisicalName + '.sql'),
             { process: (contents) => { return this.addToCreateSQLScript(contents); } }
         );
-        this.fs.copyTpl(
-            this.templatePath(this.properties.fieldType + '\\_alter.sql'),
-            this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql'),
-            this.properties
-        );
-        this.fs.copy(
-            this.modulePath('DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            this.modulePath('DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
-            { process: (contents) => { return this.addToUpgradeInfo(contents); } }
-        );
+        if (this.properties.doUpgradeStep) {
+            this.fs.copyTpl(
+                this.templatePath(this.properties.fieldType + '\\_alter.sql'),
+                this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql'),
+                this.properties
+            );
+            this.fs.copy(
+                this.modulePath('DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
+                this.modulePath('DatabaseScript\\Upgrade\\UpgradeInfo.xml'),
+                { process: (contents) => { return this.addToUpgradeInfo(contents); } }
+            );
+        } else {
+            this.fs.copy(
+                this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql'),
+                this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql'),
+                { process: (contents) => { return this.addToUpgradeSQLScript(contents); } }
+            );
+        }
     }
 
 }
