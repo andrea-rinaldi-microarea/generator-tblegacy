@@ -136,7 +136,7 @@ module.exports = class extends Generator {
             type: 'list',
             name: 'fieldType',
             message: 'Choose the field type:',
-            choices: ['string', 'Long', 'date', 'enum'],
+            choices: ['string', 'Long', 'date', 'enum', 'bool'],
             default: 'string'
         },{
             type: 'number',

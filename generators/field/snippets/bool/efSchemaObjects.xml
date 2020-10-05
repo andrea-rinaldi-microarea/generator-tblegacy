@@ -1,0 +1,5 @@
+    <Column>
+                    <SchemaInfo localizable_1="true" type="Bool" defaultvalue="false" length="1"><%= fieldName %></SchemaInfo>
+                    <DocumentationInfo localizable_1="true"><%= fieldDescri %></DocumentationInfo>
+                </Column>
+            
