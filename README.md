@@ -37,7 +37,7 @@ Available commands:
 * `tbl l(ib) [libName]` scaffold a [library](#Libraries)
 * `tbl t(able) [tableName]` scaffold a [table](#Tables)
 * `tbl f(ield) [fieldName]` scaffold a new table [field](#Fields)
-* `tbl d(oc) [docName]` scaffold a document
+* `tbl d(oc) [docName]` scaffold a [document](#Document)
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
 * `tbl e(num) [enumName]` scaffold an [enum definition](#Enums)
 ## Application
@@ -147,6 +147,8 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Table type**: it allows to choose among *master* and *master/detail*. In the latter, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
 
+**Scaffold default fields**: if the answer is `yes`, some fields will be generated inside the table, with predefined names, types and lenghts. To have a better control over the table fields, answer `no`, and then immediately add them with the [field](#Fields) generator.
+
 *Note on the table name*: if the pysical name respects the standard prefixed format `[AA]_[name]`, `[name]` is extracted as a *base* name to generate to class name. I.e.: if the phisical table name is `SB_Contracts`, the `SQLRecord` class will be named `TContracts`, the source files will be named `TContracts.h` and `TContracts.cpp`, and so on.
 
 ### Scaffolded contents
@@ -179,13 +181,51 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Field type**: the type of the new field, out of a list of allowed types. For fields of `string` type, it is requested to enter also the length; For fields of `enum` type it is requested the name of the enum to associate to the new field.
 
-**Require an upgrade step**: if the answer is `yes`, the field will be added causing an upgrade step for the DB. Otherwise, the field will be added in the last DB upgrade step found. This ease adding more than one field in a session, by setting the DB step for the first field added, and then attaching the others to same step. 
+**Is part of primary key**: if the answer is `yes` the field will be defined as `NOT NULL` and added to the primary key definition.  
+*Note*: only `string` and `long` fields can be added to the primary key.
+
+**Require an upgrade step**: if the answer is `yes`, the field will be added causing an upgrade step for the DB. Otherwise, the field will be added in the last DB upgrade step found. This ease adding more than one field in a session, by setting the DB step for the first field added, and then attaching the others to the same step.  
+*Note*: if the table has not upgrade steps yet (that is, it was freshly created), the field will be just added to the table definition and creation.
 
 ### Scaffolded contents
 The generated and modified elements are:
 * the `DatabaseObjects.xml` and `EFSchemaObjects.xml` files are updated to include the new field in the corresponding table. The release number is also increased by 1
 * the SQL script for the table creation is updated to include the new field
 * the SQL script to upgrade the table is created in `DatabaseScript\Upgrade` subfolder. The `UpgradeInfo.xml` is also updated.
+
+## Document
+The document generator lets you generate the code and metadata needed for a data-entry document. It supports scaffolding a simple *master* document as well as a *master/detail* one.
+
+The generator asks for a number of parameters; those worth to mention are:
+
+**Document Name**: the name of the document to generate. It is checked that a document with the same name does not exist (in the `ModuleObjects` folder)
+
+**Codeless document**: the document is defined via metadata only, there is no C++ wrapper class. *Note: a codeless document can exists in a non-codeless application, but the vice-versa is not supported out-of-the-box*.
+
+**Hosting Library**: the library in which host the code for the document's `CAbstractFormDoc` and `DBT`. It must be an already existing library inside the current module (not asked for "codeless" documents).
+
+**Document type**: it allows to choose among *master* and *master/detail*. The first generates a document containing just a header (`DBTMaster`). The second generates a document with a header (`DBTMaster`) and a detail (`DBTSlaveBuffered`). 
+
+**Master table name**: the table which contains the data of the document header. It must be an existing table. If the document is a *master/detail* type, the name of the details table is inferred by adding `Details` to the master name.
+
+**Library for ADM definition**: the document's `ADM` is defined to allow using it for automation in C++ code; this is the name of the library containing it, normally is separated from the one containing the document. It must be an existing library (not asked for "codeless" documents).
+
+**Scaffold default UI**: if the answer is `yes`, some default field is scaffolded inside the UI. Answering `no`, the UI is left empty, with just a containing frame, a default view and an empty tile.
+
+**Generates Hotlink**: (codeless document only). It scaffold the XML definition of the Hotlink for the document, to search for referenced data and add-on-fly of new data.
+
+### Scaffolded contents
+The generated and modified elements are:
+* in the `ModuleObjects` folder, the XML definition for the document structure is created, along with the `.tbjson` UI definition 
+* the `DocumentObjects.xml` file (in the `ModuleObjects` folder) is updated to include the definition of the new document.
+* the Hotlink definition (if requested) is created in the `ReferenceObjects` folder
+* the module menu is updated, adding an option to open the new document
+
+*the following steps are not executed for codeless documents*
+
+* the `.h` and `.cpp` source file defining the `AbstractFormDocument`, `DBT`s and the `ADM` classes for the document are generated
+* the `Interface.cpp` file is updated with the document class registration in the catalog
+* the VS project `.vcxproj` is updated to compile the document source code
 
 ## Enums
 The enum generator lets you generate the definition of an enum data type, that is a list of possible values for a property. Such type is mapped in the DB as a column of `int` type.
