@@ -2,6 +2,7 @@
 			<DocumentationInfo localizable_1="true"><%= tableBaseName %> header</DocumentationInfo>
 			<Create release="1" createstep="<%= numStep %>" />
 			<Columns>
+			<%if (defaultFields) { -%>
 				<Column>
 					<SchemaInfo localizable_1="true" type="Long" defaultvalue="0" length="0">DocID</SchemaInfo>
 					<DocumentationInfo localizable_1="true" mandatory="true">Document ID</DocumentationInfo>
@@ -18,9 +19,14 @@
 					<SchemaInfo localizable_1="true" type="Long" defaultvalue="0" length="0">LastSubID</SchemaInfo>
 					<DocumentationInfo localizable_1="true">Last lines Sub-ID</DocumentationInfo>
 				</Column>
+			<% } -%>
 			</Columns>
 			<PrimaryKey name="PK_<%= tableBaseName %>" type="NONCLUSTERED">
+			<%if (defaultFields) { -%>
 				<Segments>DocID</Segments>
+			<% } else { -%>
+				<Segments></Segments>
+			<% } -%>
 			</PrimaryKey>
 			<Indexes/>
 		</Table>
@@ -28,6 +34,7 @@
 			<DocumentationInfo localizable_1="true"><%= tableBaseName %> lines</DocumentationInfo>
 			<Create release="1" createstep="<%= numStep %>" />
 			<Columns>
+			<%if (defaultFields) { -%>
 				<Column>
 					<SchemaInfo localizable_1="true" type="Long" defaultvalue="0" length="0">DocID</SchemaInfo>
 					<DocumentationInfo localizable_1="true" mandatory="true">Document ID</DocumentationInfo>
@@ -44,9 +51,14 @@
 					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="128">Description</SchemaInfo>
 					<DocumentationInfo localizable_1="true"></DocumentationInfo>
 				</Column>
+			<% } -%>
 			</Columns>
 			<PrimaryKey name="PK_<%= tableBaseName %>Details" type="NONCLUSTERED">
+			<%if (defaultFields) { -%>
 				<Segments>DocID, DocSubID</Segments>
+			<% } else { -%>
+				<Segments></Segments>
+			<% } -%>
 			</PrimaryKey>
 			<Indexes/>
 		</Table>

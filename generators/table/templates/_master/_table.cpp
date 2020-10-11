@@ -26,8 +26,10 @@ IMPLEMENT_DYNCREATE(<%= tableClassName %>, SqlRecord)
 void <%= tableClassName %>::BindRecord()
 {
 	BEGIN_BIND_DATA	();
+	<%if (defaultFields) { -%>
 		BIND_DATA	(_NS_FLD("Code"),			f_Code);
 		BIND_DATA	(_NS_FLD("Description"),	f_Description);
+	<% } -%>
 		BIND_TB_GUID();
 	END_BIND_DATA();    
 }

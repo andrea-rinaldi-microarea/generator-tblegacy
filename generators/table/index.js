@@ -152,6 +152,11 @@ module.exports = class extends Generator {
             message: 'Which kind of table you want:',
             choices: [MASTER, MASTER_DETAIL],
             default: MASTER
+        },{
+            type: 'confirm',
+            name: 'defaultFields',
+            message: 'Scaffold some default fields (Y) or start with no fields (n)?',
+            default: true
         }];
 
         return this.optionOrPrompt(prompts).then(properties => {

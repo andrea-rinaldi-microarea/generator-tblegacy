@@ -43,6 +43,13 @@ module.exports = class extends Generator {
                     after: '<Table namespace="' + this.properties.tableNamespace + '"',
                     justBefore: '</Columns>'
                 }];
+                if (this.properties.isPK) {
+                    actions.push({
+                        textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'efSchemaObjects_PK.xml'), this.properties), 
+                        after: '<Table namespace="' + this.properties.tableNamespace + '"',
+                        justBefore: '</Segments>'
+                    });              
+                }
             } catch(err) {
                 console.log(err);
             }
@@ -73,6 +80,17 @@ module.exports = class extends Generator {
                 textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript.sql'), this.properties), 
                 justBefore: 'CONSTRAINT [PK_'
             }];
+            if (this.properties.isPK) {
+                actions.push({
+                    textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript_PK.sql'), this.properties), 
+                    after: `CONSTRAINT [PK_${this.properties.tableBaseName}]`,
+                    justBefore: ') ON [PRIMARY]'
+                },{
+                    textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript_PK.sql'), this.properties), 
+                    after: `CONSTRAINT [PK_${this.properties.tableBaseName}Details]`,
+                    justBefore: ') ON [PRIMARY]'
+                });
+            }
             return utils.insertInSource(
                 contents.toString(), 
                 actions
@@ -124,7 +142,7 @@ module.exports = class extends Generator {
         }
 
         if  (
-                this.options.tablePhisicalName != '' &&
+                this.options.tablePhisicalName &&
                 check.validExistingFSName("Table", this.contextRoot + "\\DatabaseScript\\Create\\All" , this.options.tablePhisicalName, ".sql") != true
             ) {
             this.env.error(`The table ${this.options.tablePhisicalName} does not exist.`);
@@ -157,7 +175,7 @@ module.exports = class extends Generator {
             type: 'list',
             name: 'fieldType',
             message: 'Choose the field type:',
-            choices: ['string', 'Long', 'date', 'enum', 'bool'],
+            choices: ['string', 'long', 'date', 'enum', 'bool'],
             default: 'string'
         },{
             type: 'number',
@@ -177,6 +195,12 @@ module.exports = class extends Generator {
                 answers.defaultValue = attributes.value << 16 + attributes.defaultValue;
                 return true;
             }
+        },{
+            type: 'confirm',
+            name: 'isPK',
+            message: 'Is it part of the primary key?',
+            default: false,
+            when: (answers) => { return answers.fieldType === 'string' || answers.fieldType === 'long'; },
         },{
             type: 'confirm',
             name: 'doUpgradeStep',
@@ -242,11 +266,16 @@ module.exports = class extends Generator {
                 { process: (contents) => { return this.addToUpgradeInfo(contents); } }
             );
         } else {
-            this.fs.copy(
-                this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql'),
-                this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql'),
-                { process: (contents) => { return this.addToUpgradeSQLScript(contents); } }
-            );
+            var upgradeSqlScript = this.modulePath('DatabaseScript\\Upgrade\\All\\Release_' + this.properties.dbRel + '\\Alter_' + this.properties.tablePhisicalName + '.sql');
+            if (check.validExistingFSName(upgradeSqlScript) == true) {
+                this.fs.copy(
+                    upgradeSqlScript,
+                    upgradeSqlScript,
+                    { process: (contents) => { return this.addToUpgradeSQLScript(contents); } }
+                );
+            } else {
+                this.log(chalk.yellow('    No upgrade SQL script found, consider as it is a new table'));                
+            }
         }
     }
 

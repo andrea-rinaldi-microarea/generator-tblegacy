@@ -26,10 +26,12 @@ IMPLEMENT_DYNCREATE(<%= tableClassName %>, SqlRecord)
 void <%= tableClassName %>::BindRecord()
 {
 	BEGIN_BIND_DATA();
+	<%if (defaultFields) { -%>
 		BIND_DATA	(_NS_FLD("DocID"),			f_DocID);
 		BIND_DATA	(_NS_FLD("DocNo"),			f_DocNo);
 		BIND_DATA	(_NS_FLD("DocDate"),		f_DocDate);
 		BIND_DATA	(_NS_FLD("LastSubId"),		f_LastSubId);
+	<% } -%>
 	END_BIND_DATA();
 }
 
@@ -59,10 +61,12 @@ IMPLEMENT_DYNCREATE(<%= tableClassName %>Details, SqlRecord)
 void <%= tableClassName %>Details::BindRecord()
  {
  	BEGIN_BIND_DATA();
+	<%if (defaultFields) { -%>
  		BIND_DATA	(_NS_FLD("DocID"),			f_DocID);
  		BIND_DATA	(_NS_FLD("DocSubID"),		f_DocSubID);
  		BIND_DATA	(_NS_FLD("Code"),			f_Code);
  		BIND_DATA	(_NS_FLD("Description"),	f_Description);
+	<% } -%>
 	END_BIND_DATA();
 }
 

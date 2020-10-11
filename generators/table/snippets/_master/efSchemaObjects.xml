@@ -2,6 +2,7 @@
 			<DocumentationInfo localizable_1="true"><%= tableBaseName %> master table</DocumentationInfo>
 			<Create release="1" createstep="<%= numStep %>" />
 			<Columns>
+			<%if (defaultFields) { -%>
 				<Column>
 					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="10">Code</SchemaInfo>
 					<DocumentationInfo localizable_1="true" mandatory="true"><%= tableBaseName %> code</DocumentationInfo>
@@ -10,9 +11,14 @@
 					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="128">Description</SchemaInfo>
 					<DocumentationInfo localizable_1="true"><%= tableBaseName %> description</DocumentationInfo>
 				</Column>
+			<% } -%>
 			</Columns>
 			<PrimaryKey name="PK_<%= tableBaseName %>" type="NONCLUSTERED">
+			<%if (defaultFields) { -%>
 				<Segments>Code</Segments>
-			</PrimaryKey>
+			<% } else { -%>
+				<Segments></Segments>
+			<% } -%>
+ 			</PrimaryKey>
 			<Indexes/>
 		</Table>
