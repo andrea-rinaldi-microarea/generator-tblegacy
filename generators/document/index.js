@@ -277,40 +277,50 @@ module.exports = class extends Generator {
         );
 
         this.fs.move(
-            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD.hjson'),
-            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '.hjson')
-        );
-        this.fs.move(
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD.tbjson'),
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '.tbjson')
-        );
-
-        this.fs.move(
-            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_MAIN.hjson'),
-            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_MAIN.hjson')
         );
         this.fs.move(
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_MAIN.tbjson'),
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_MAIN.tbjson')
         );
-        
-        this.fs.move(
-            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.hjson'),
-            this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_VIEW.hjson')
-        );
         this.fs.move(
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.tbjson'),
             this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_VIEW.tbjson')
         );
-        if (this.properties.documentType === MASTER_DETAIL) {
+
+        if (!this.properties.codeless) {
             this.fs.move(
-                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_DETAIL.hjson'),
-                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_DETAIL.hjson')
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD.hjson'),
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '.hjson')
             );
+            this.fs.move(
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_MAIN.hjson'),
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_MAIN.hjson')
+            );
+            this.fs.move(
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.hjson'),
+                this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_' + _.toUpper(this.properties.documentName) + '_VIEW.hjson')
+            );
+        } else {
+            this.fs.delete(this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD.hjson'));
+            this.fs.delete(this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_MAIN.hjson'));
+            this.fs.delete(this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_VIEW.hjson'));
+        }
+
+        if (this.properties.documentType === MASTER_DETAIL) {
             this.fs.move(
                 this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_DETAIL.tbjson'),
                 this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_DETAIL.tbjson')
             );
+            if (!this.properties.codeless) {
+                this.fs.move(
+                    this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_DETAIL.hjson'),
+                    this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\IDD_TD_' + _.toUpper(this.properties.documentName) + '_DETAIL.hjson')
+                );
+            } else {
+                this.fs.delete(this.modulePath('ModuleObjects\\' + this.properties.documentName + '\\JsonForms\\_IDD_DETAIL.hjson'));
+            }
         }
 
         this.fs.copy(
