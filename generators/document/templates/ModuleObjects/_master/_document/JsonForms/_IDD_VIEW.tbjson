@@ -1,13 +1,13 @@
 ﻿{
   "id": "IDD_<%= documentName.toUpperCase() %>_VIEW",
   "name": "<%= documentName %>",
-  "type": 1/*View*/,
+  "type": "View",
   "child": true,
   "items": [
     {
       "id": "IDC_TG_<%= documentName.toUpperCase() %>",
       "name": "<%= documentName %>",
-      "type": 72/*TileGroup*/,
+      "type": "TileGroup",
       "layoutType": 4/*VBOX*/,
       "items": [
         {

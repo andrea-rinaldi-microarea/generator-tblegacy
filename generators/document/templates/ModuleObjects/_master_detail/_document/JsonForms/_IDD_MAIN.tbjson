@@ -1,46 +1,44 @@
 ﻿{
   "id": "IDD_TD_<%= documentName.toUpperCase() %>_MAIN",
-  "type": 71,
-  "text": "<%= documentTitle %>",
+  "type": "Tile",
   "name": "MainData",
-  "size": 2,
-  "x": 0,
-  "y": 0,
-  "width": 654,
-  "height": 73,
-  "child": true,
+  "text": "<%= documentTitle %>",
   "items": [
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_DOCNO",
-      "controlClass": "StringEdit",
-      "binding": {
-        "datasource": "<%= documentName %>.DocNo"
-      },
       "type": "Edit",
-      "width": 57,
-      "height": 12,
-      "autoHScroll": true,
+      "controlClass": "StringEdit",
       "controlCaption": "Document No.",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 4
-    },
-    {
-      "id": "IDC_<%= documentName.toUpperCase() %>_DOCDATE",
-      "controlClass": "DateEdit",
+      "controlSize": 4,
       "binding": {
-        "datasource": "<%= documentName %>.DocDate"
+        "datasource": "<%= documentName %>.DocNo"
       },
-      "type": "Edit",
+      "tabStop": true,
       "width": 57,
       "height": 12,
       "autoHScroll": true,
+      "rows": 1,
+      "multiline": false
+    },
+    {
+      "id": "IDC_<%= documentName.toUpperCase() %>_DOCDATE",
+      "type": "Edit",
+      "controlClass": "DateEdit",
       "controlCaption": "Document Date",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 3
+      "controlSize": 3,
+      "binding": {
+        "datasource": "<%= documentName %>.DocDate"
+      },
+      "width": 57,
+      "height": 12,
+      "autoHScroll": true
     }
   ],
   "hasStaticArea": true,
-  "grid": "col col-md-6"
+  "height": 73,
+  "width": 654
 }

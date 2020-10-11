@@ -1,48 +1,49 @@
 ﻿{
   "id": "IDD_TD_<%= documentName.toUpperCase() %>_MAIN",
-  "type": 71,
-  "text": "<%= documentTitle %>",
+  "type": "Tile",
   "name": "MainData",
-  "size": 2,
-  "x": 0,
-  "y": 0,
-  "width": 654,
-  "height": 73,
+  "text": "<%= documentTitle %>",
   "child": true,
   "items": [
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_CODE",
-      "controlClass": "StringEdit",
-      "binding": {
-        "datasource": "<%= documentName %>.Code"
-      },
       "type": "Edit",
-      "width": 48,
-      "height": 12,
-      "autoHScroll": true,
+      "controlClass": "StringEdit",
       "controlCaption": "Code",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 2
+      "controlSize": 2,
+      "binding": {
+        "datasource": "<%= documentName %>.Code"
+      },
+      "tabStop": true,
+      "width": 48,
+      "height": 12,
+      "autoHScroll": true,
+      "rows": 1,
+      "multiline": false
     },
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_DESCRI",
-      "controlClass": "StringEdit",
-      "binding": {
-        "datasource": "<%= documentName %>.Description"
-      },
       "type": "Edit",
-      "width": 154,
-      "height": 36,
-      "autoVScroll": true,
-      "wantReturn": true,
-      "multiline": true,
+      "controlClass": "StringEdit",
       "controlCaption": "Description",
       "anchor": "COL1",
       "captionSize": 3,
-      "controlSize": 6
+      "controlSize": 6,
+      "binding": {
+        "datasource": "<%= documentName %>.Description"
+      },
+      "tabStop": true,
+      "width": 154,
+      "height": 36,
+      "autoVScroll": true,
+      "rows": 3,
+      "multiline": true,
+      "wantReturn": true
     }
   ],
   "hasStaticArea": true,
-  "grid": "col col-md-6"
+  "width": 654,
+  "height": 73
 }
