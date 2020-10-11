@@ -5,6 +5,7 @@
   "text": "<%= documentTitle %>",
   "child": true,
   "items": [
+  <% if (defaultUI) { -%>
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_CODE",
       "type": "Edit",
@@ -42,6 +43,7 @@
       "multiline": true,
       "wantReturn": true
     }
+  <% } -%>
   ],
   "hasStaticArea": true,
   "width": 654,

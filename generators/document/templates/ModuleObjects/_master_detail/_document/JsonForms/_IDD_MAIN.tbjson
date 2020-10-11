@@ -4,6 +4,7 @@
   "name": "MainData",
   "text": "<%= documentTitle %>",
   "items": [
+  <% if (defaultUI) { -%>
     {
       "id": "IDC_<%= documentName.toUpperCase() %>_DOCNO",
       "type": "Edit",
@@ -37,6 +38,7 @@
       "height": 12,
       "autoHScroll": true
     }
+  <% } -%>
   ],
   "hasStaticArea": true,
   "height": 73,

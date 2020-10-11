@@ -14,6 +14,7 @@
         "datasource": "<%= documentName %>Details"
       },
       "items": [
+      <% if (defaultUI) { -%>
         {
           "id": "IDC_<%= documentName.toUpperCase() %>_DETAIL_CODE",
           "type": "ColTitle",
@@ -34,6 +35,7 @@
             "datasource": "Description"
           }
         }
+      <% } -%>
       ],
       "width": 654,
       "height": 171,

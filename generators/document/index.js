@@ -189,6 +189,11 @@ module.exports = class extends Generator {
             when: (answers) => { return !answers.codeless; }
         },{
             type: 'confirm',
+            name: 'defaultUI',
+            message: 'Scaffold some default UI (Y) or start with empty UI (n)?',
+            default: true
+        },{
+            type: 'confirm',
             name: 'HKLGeneration',
             message: 'Do you want to generate the Hotlink for it?',
             default: true,
