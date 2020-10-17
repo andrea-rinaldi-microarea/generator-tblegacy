@@ -13,7 +13,17 @@ CREATE TABLE [dbo].[<%= tableName %>Details] (
      [DocID],
      [DocSubID]
 <% } -%>
-    ) ON [PRIMARY]
+    ) ON [PRIMARY],
+   CONSTRAINT [FK_<%= tableName %>Det_<%= tableName %>_00] FOREIGN KEY
+	(
+<%if (defaultFields) { -%>
+		[DocID]
+<% } -%>
+	) REFERENCES [dbo].[<%= tableName %>] (
+<%if (defaultFields) { -%>
+		[DocID]
+<% } -%>
+	)
 ) ON [PRIMARY]
 
 END

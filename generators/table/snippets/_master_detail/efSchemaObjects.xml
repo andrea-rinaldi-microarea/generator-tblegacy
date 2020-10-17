@@ -60,5 +60,13 @@
 				<Segments></Segments>
 			<% } -%>
 			</PrimaryKey>
+			<ForeignKeys>
+				<ForeignKey name="FK_<%= tableBaseName %>Det_<%= tableBaseName %>_00" on="<%= tableBaseName %>" onns="<%= tableNamespace %>">
+				<%if (defaultFields) { -%>
+					<FKSegments>DocID</FKSegments>
+					<PKSegments>DocID</PKSegments>
+				<% } -%>
+				</ForeignKey>
+			</ForeignKeys>
 			<Indexes/>
 		</Table>
