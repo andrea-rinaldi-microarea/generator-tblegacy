@@ -145,7 +145,10 @@ The generator asks for a number of parameters; those worth to mention are:
 
 **Hosting Library**: the library in which host the code for the table's `SQLRecord`. It must be an already existing library inside the current module (not asked for "codeless" tables).
 
-**Table type**: it allows to choose among *master* and *master/detail*. In the latter, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
+**Table type**: it allows to choose among *master*, *master/detail* or *slave* ("codeless" only).  
+In the *master/detail* case, actually a pair of tables are generated, one intended to be a header, the other to contain lines; it has  the same name, with a `Detail` suffix attached 
+
+**Master table namespace**: (*slave* table only). The namespace of the master table; it must be the valid namespace of an already existing table.
 
 **Scaffold default fields**: if the answer is `yes`, some fields will be generated inside the table, with predefined names, types and lenghts. To have a better control over the table fields, answer `no`, and then immediately add them with the [field](#Fields) generator.
 
