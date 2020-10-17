@@ -32,7 +32,6 @@ module.exports = {
                     continue;
                 }
                 start += actions[a].after.length;
-                console.log(result.substring(start, start + 30))
             }
             if (!actions[a].justBefore) { // if justBefore is null, append
                 result += actions[a].textToInsert;
