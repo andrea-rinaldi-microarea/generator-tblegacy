@@ -38,8 +38,16 @@ module.exports = {
             } else {
                 var ip = result.indexOf(actions[a].justBefore, start);
                 while (ip != -1) {
+                    var text = actions[a].textToInsert;
+                    if (actions[a].separator) {
+                        var lastChar = ip - 1; 
+                        if (actions[a].separator.skipTrailingBlanks) while (result[lastChar] == ' ') lastChar--;
+                        if (actions[a].separator.ifMatch.test(result.substring(lastChar, lastChar + 1))) {
+                            text = actions[a].separator.separateWith + text;
+                        }
+                    }
                     result = result.substring(0, ip) + 
-                    actions[a].textToInsert +
+                    text +
                     result.substring(ip);
     
                     ip = result.indexOf(actions[a].justBefore, ip + actions[a].textToInsert.length + actions[a].justBefore.length);

@@ -47,7 +47,12 @@ module.exports = class extends Generator {
                     actions.push({
                         textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'efSchemaObjects_PK.xml'), this.properties), 
                         after: '<Table namespace="' + this.properties.tableNamespace + '"',
-                        justBefore: '</Segments>'
+                        justBefore: '</Segments>',
+                        separator: {
+                            ifMatch: /[a-z0-9_]/i,
+                            skipTrailingBlanks: true,
+                            separateWith: ","
+                        }
                     });              
                 }
                 if (this.properties.isFK) {
