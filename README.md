@@ -36,7 +36,7 @@ Available commands:
 * `tbl m(od) [modName]` scaffold a [module](#Modules)
 * `tbl l(ib) [libName]` scaffold a [library](#Libraries)
 * `tbl t(able) [tableName]` scaffold a [table](#Tables)
-* `tbl f(ield) [fieldName]` scaffold a new table [field](#Fields)
+* `tbl f(ield) [tableName] [fieldName]` scaffold a new table [field](#Fields)
 * `tbl d(oc) [docName]` scaffold a [document](#Document)
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
 * `tbl e(num) [enumName]` scaffold an [enum definition](#Enums)
