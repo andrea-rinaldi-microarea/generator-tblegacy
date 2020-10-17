@@ -21,6 +21,7 @@ const snippet = require('../snippet-utils');
 
 const MASTER = 'master';
 const MASTER_DETAIL = 'master/detail'
+const SLAVE = 'slave'
 
 module.exports = class extends Generator {
 
@@ -129,6 +130,7 @@ module.exports = class extends Generator {
         if (!_.toLower(appRoot).endsWith('\\standard\\applications')) {
             this.env.error("Current folder must be a module of a TaskBuilder Application  (<your instance>\\Standard\\Applications\\<your app>\\<your module>).");
         }
+        this.options.appRoot = appRoot;
         this.options.moduleName = path.basename(this.contextRoot);
         this.options.appName = path.basename(path.dirname(this.contextRoot));
     }
@@ -156,8 +158,12 @@ module.exports = class extends Generator {
             type: 'list',
             name: 'tableType',
             message: 'Which kind of table you want:',
-            choices: [MASTER, MASTER_DETAIL],
+            choices: (answers) => { return answers.codeless ? [MASTER, MASTER_DETAIL, SLAVE] : [MASTER, MASTER_DETAIL]; },
             default: MASTER
+        },{
+            name: 'masterTableNamespace',
+            message: 'What is the master table namespace?',
+            validate: (input, answers) => { return check.validExistingTableNamespace(this.options.appRoot, input); }
         },{
             type: 'confirm',
             name: 'defaultFields',
@@ -174,6 +180,11 @@ module.exports = class extends Generator {
                                             this.properties.tableName.substring(3) : 
                                             this.properties.tableName;
 
+            this.properties.masterTableName     =   this.properties.masterTableNamespace.split(".")[3];
+            this.properties.masterTableBaseName =   (this.properties.masterTableName[2] == '_') ? 
+                                                    this.properties.masterTableName.substring(3) : 
+                                                    this.properties.masterTableName;
+
             this.properties.tableClassName = 'T' + this.properties.tableBaseName;
 
             if (this.properties.codeless) {
@@ -189,8 +200,10 @@ module.exports = class extends Generator {
     writing() {
         if (this.properties.tableType === MASTER) {
             var template = '_master';
-        } else {
+        } else if (this.properties.tableType === MASTER_DETAIL) {
             var template = '_master_detail';
+        } else {
+            var template = '_slave';
         }
         // SQL scripts
         this.fs.copyTpl(

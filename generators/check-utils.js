@@ -117,6 +117,33 @@ module.exports = {
         return true;
     },
 
+    validExistingTableNamespace(root, namespace) {
+        if (!namespace) {
+            return "Empty namespace not allowed";
+        }
+        var segments = namespace.split(".");
+        if (segments.length != 4) {
+            return "Table namespace must have the form: <application>.<module>.<library>.<table>";
+        }
+
+        var check = this.validExistingFSName("Application", root, segments[0], "\\Application.config");
+        if (check !== true)
+            return check;
+        check = this.validExistingFSName("Module", root + "\\" + segments[0], segments[1], "\\Module.config");
+        if (check !== true)
+            return check;
+        if (segments[2] !== "codeless") {
+            check = this.validExistingFSName("Library", root + "\\" + segments[0] + "\\" + segments[1], segments[2]);
+            if (check !== true)
+                return check;
+        }
+        check = this.validExistingFSName("Table", root + "\\" + segments[0] + "\\" + segments[1] + "\\DatabaseScript\\Create\\All" , segments[3], ".sql");
+        if (check !== true)
+            return check;
+
+        return true;
+    },
+
     allModules(root, appName) {
         var appPath = path.join(root, appName);
         var modules = [];

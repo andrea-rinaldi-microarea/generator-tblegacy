@@ -1,0 +1,40 @@
+        <Table namespace="<%= tableNamespace %>">
+			<DocumentationInfo localizable_1="true"><%= tableBaseName %> slave</DocumentationInfo>
+			<Create release="1" createstep="<%= numStep %>" />
+			<Columns>
+			<%if (defaultFields) { -%>
+				<Column>
+					<SchemaInfo localizable_1="true" type="Long" defaultvalue="0" length="0">DocID</SchemaInfo>
+					<DocumentationInfo localizable_1="true" mandatory="true">Document ID</DocumentationInfo>
+				</Column>
+				<Column>
+					<SchemaInfo localizable_1="true" type="Long" defaultvalue="0" length="0">DocSubID</SchemaInfo>
+					<DocumentationInfo localizable_1="true">Line Sub-ID</DocumentationInfo>
+				</Column>
+				<Column>
+					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="10">Code</SchemaInfo>
+					<DocumentationInfo localizable_1="true" mandatory="true"></DocumentationInfo>
+				</Column>
+				<Column>
+					<SchemaInfo localizable_1="true" type="String" defaultvalue="" length="128">Description</SchemaInfo>
+					<DocumentationInfo localizable_1="true"></DocumentationInfo>
+				</Column>
+			<% } -%>
+			</Columns>
+			<PrimaryKey name="PK_<%= tableBaseName %>" type="NONCLUSTERED">
+			<%if (defaultFields) { -%>
+				<Segments>DocID, DocSubID</Segments>
+			<% } else { -%>
+				<Segments></Segments>
+			<% } -%>
+			</PrimaryKey>
+			<ForeignKeys>
+				<ForeignKey name="FK_<%= tableBaseName %>_<%= masterTableBaseName %>_00" on="<%= masterTableBaseName %>" onns="<%= masterTableNamespace %>">
+				<%if (defaultFields) { -%>
+					<FKSegments>DocID</FKSegments>
+					<PKSegments>DocID</PKSegments>
+				<% } -%>
+				</ForeignKey>
+			</ForeignKeys>
+			<Indexes/>
+		</Table>

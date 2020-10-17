@@ -1,0 +1,11 @@
+	<Table namespace="<%= tableNamespace %>" <%- dynamicTable %>>
+		<Create release="1" createstep="<%= numStep + 1 %>" />
+		<Columns>
+		<%if (defaultFields) { -%>
+			<Column name="DocID" localize="Doc ID" lenght="0" type="Long" defaultvalue="0" release="1" />
+			<Column name="DocSubId" localize="Doc SubId" lenght="0" type="Long" defaultvalue="0" release="1" />
+			<Column name="Code" localize="Code" lenght="10" type="string" defaultvalue="" release="1" />
+			<Column name="Description" localize="Description" lenght="128" type="string" defaultvalue="" release="1" />
+		<% } -%>
+		</Columns>
+	</Table>
