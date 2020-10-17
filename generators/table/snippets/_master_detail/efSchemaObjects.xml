@@ -61,7 +61,7 @@
 			<% } -%>
 			</PrimaryKey>
 			<ForeignKeys>
-				<ForeignKey name="FK_<%= tableBaseName %>Det_<%= tableBaseName %>_00" on="<%= tableBaseName %>" onns="<%= tableNamespace %>">
+				<ForeignKey name="FK_<%= tableBaseName %>Details_<%= tableBaseName %>_00" on="<%= tableBaseName %>" onns="<%= tableNamespace %>">
 				<%if (defaultFields) { -%>
 					<FKSegments>DocID</FKSegments>
 					<PKSegments>DocID</PKSegments>

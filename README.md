@@ -184,6 +184,10 @@ The generator asks for a number of parameters; those worth to mention are:
 **Is part of primary key**: if the answer is `yes` the field will be defined as `NOT NULL` and added to the primary key definition.  
 *Note*: only `string` and `long` fields can be added to the primary key.
 
+**Is part of foreign key**: if the table is a slave, the PK (Primary Key) field can be set also as foreign key (FK) for the master table.  
+*Note*: it is assumed that the fields forming the pair PK/FK have the same name both in the master and the slave table. 
+*Note*: only fields that are part of the PK can be defined as foreign key, that is the FK is managed only for master/detail reference integrity.
+
 **Require an upgrade step**: if the answer is `yes`, the field will be added causing an upgrade step for the DB. Otherwise, the field will be added in the last DB upgrade step found. This ease adding more than one field in a session, by setting the DB step for the first field added, and then attaching the others to the same step.  
 *Note*: if the table has not upgrade steps yet (that is, it was freshly created), the field will be just added to the table definition and creation.
 

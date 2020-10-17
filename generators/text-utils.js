@@ -21,17 +21,18 @@ module.exports = {
         for (a = 0; a < actions.length; a++) {
 
             if (actions[a].skipIfAlreadyPresent) {
-                if (source.indexOf(actions[a].textToInsert) != -1) {
+                if (result.indexOf(actions[a].textToInsert) != -1) {
                     continue;
                 }
             }
             var start = 0;
             if (actions[a].after) {
-                start = source.toLowerCase().indexOf(actions[a].after.toLowerCase());
+                start = result.toLowerCase().indexOf(actions[a].after.toLowerCase());
                 if (start == -1) {
                     continue;
                 }
                 start += actions[a].after.length;
+                console.log(result.substring(start, start + 30))
             }
             if (!actions[a].justBefore) { // if justBefore is null, append
                 result += actions[a].textToInsert;

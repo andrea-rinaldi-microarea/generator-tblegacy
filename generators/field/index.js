@@ -50,6 +50,13 @@ module.exports = class extends Generator {
                         justBefore: '</Segments>'
                     });              
                 }
+                if (this.properties.isFK) {
+                    actions.push({
+                        textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'efSchemaObjects_FK.xml'), this.properties), 
+                        after: '<Table namespace="' + this.properties.tableNamespace + '"',
+                        justBefore: '</ForeignKey>'
+                    });              
+                }
             } catch(err) {
                 console.log(err);
             }
@@ -85,10 +92,17 @@ module.exports = class extends Generator {
                     textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript_PK.sql'), this.properties), 
                     after: `CONSTRAINT [PK_${this.properties.tableBaseName}]`,
                     justBefore: ') ON [PRIMARY]'
+                });
+            }
+            if (this.properties.isFK) {
+                actions.push({
+                    textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript_FK.sql'), this.properties), 
+                    after: `CONSTRAINT [FK_${this.properties.tableBaseName}`,
+                    justBefore: ') REFERENCES'
                 },{
-                    textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript_PK.sql'), this.properties), 
-                    after: `CONSTRAINT [PK_${this.properties.tableBaseName}Details]`,
-                    justBefore: ') ON [PRIMARY]'
+                    textToInsert: snippet.render(path.join(this.snippetPath(), this.properties.fieldType, 'createSQLScript_FK.sql'), this.properties), 
+                    after: 'REFERENCES [dbo]',
+                    justBefore: ')'
                 });
             }
             return utils.insertInSource(
@@ -201,6 +215,12 @@ module.exports = class extends Generator {
             message: 'Is it part of the primary key?',
             default: false,
             when: (answers) => { return answers.fieldType === 'string' || answers.fieldType === 'long'; },
+        },{
+            type: 'confirm',
+            name: 'isFK',
+            message: 'Is it part of the foreign key?',
+            default: false,
+            when: (answers) => { return answers.isPK; },
         },{
             type: 'confirm',
             name: 'doUpgradeStep',

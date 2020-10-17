@@ -1,0 +1,2 @@
+            <FKSegments><%= fieldName %></FKSegments>
+            <PKSegments><%= fieldName %></PKSegments>

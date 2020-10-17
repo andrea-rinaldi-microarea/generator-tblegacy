@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[<%= tableName %>Details] (
      [DocSubID]
 <% } -%>
     ) ON [PRIMARY],
-   CONSTRAINT [FK_<%= tableName %>Det_<%= tableName %>_00] FOREIGN KEY
+   CONSTRAINT [FK_<%= tableName %>Details_<%= tableName %>_00] FOREIGN KEY
 	(
 <%if (defaultFields) { -%>
 		[DocID]

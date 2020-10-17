@@ -84,7 +84,7 @@
             "cwd": "C:\\Users\\${env:USERNAME}\\Documents\\Working\\Standard\\Applications\\SampleApp\\core",
             "args": [
                 "tblegacy:field",
-                "Countries",
+                "BusinessUnitDetails",
                 "--force"
             ],
             "console": "integratedTerminal"
