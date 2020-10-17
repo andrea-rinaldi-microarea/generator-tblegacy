@@ -32,7 +32,7 @@
 		</Table>
         <Table namespace="<%= tableNamespace %>Details">
 			<DocumentationInfo localizable_1="true"><%= tableBaseName %> lines</DocumentationInfo>
-			<Create release="1" createstep="<%= numStep %>" />
+			<Create release="1" createstep="<%= numStep + 1 %>" />
 			<Columns>
 			<%if (defaultFields) { -%>
 				<Column>

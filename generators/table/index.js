@@ -36,12 +36,18 @@ module.exports = class extends Generator {
             var numStep = (lastStep != -1) ? contents.toString().split('</Level1>')[0].substring(lastStep).split('"')[1] : "0";
             this.properties['numStep'] = _.parseInt(numStep) + 1;
 
-            return utils.insertInSource(
-                contents.toString(), [{
-                    textToInsert: '<Step numstep="'+ this.properties.numStep +'" script="' + this.properties.tableName + '.sql" />\n',
+            var actions = [{
+                textToInsert: `<Step numstep="${this.properties.numStep}" script="${this.properties.tableName}.sql" />\n`,
+                justBefore: '</Level1>'
+            }];
+            if (this.properties.tableType === MASTER_DETAIL) {
+                actions.push({
+                    textToInsert: `<Step numstep="${this.properties.numStep + 1}" script="${this.properties.tableName}Details.sql" />\n`,
                     justBefore: '</Level1>'
-                }]
-            );
+                });
+            }
+
+            return utils.insertInSource(contents.toString(), actions);
         }
     
         this.addToInterface = function(contents) {
@@ -192,6 +198,13 @@ module.exports = class extends Generator {
             this.modulePath('DatabaseScript\\Create\\All\\' + this.properties.tableName + '.sql'),
             this.properties
         );
+        if (this.properties.tableType === MASTER_DETAIL) {
+            this.fs.copyTpl(
+                this.templatePath(template + '\\_tableDetails.sql'),
+                this.modulePath('DatabaseScript\\Create\\All\\' + this.properties.tableName + 'Details.sql'),
+                this.properties
+            );
+        }
         this.fs.copy(
             this.modulePath('DatabaseScript\\Create\\CreateInfo.xml'),
             this.modulePath('DatabaseScript\\Create\\CreateInfo.xml'),
