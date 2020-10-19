@@ -163,7 +163,8 @@ module.exports = class extends Generator {
         },{
             name: 'masterTableNamespace',
             message: 'What is the master table namespace?',
-            validate: (input, answers) => { return check.validExistingTableNamespace(this.options.appRoot, input); }
+            validate: (input, answers) => { return check.validExistingTableNamespace(this.options.appRoot, input); },
+            when: (answers) => { return answers.tableType == SLAVE; }
         },{
             type: 'confirm',
             name: 'defaultFields',
