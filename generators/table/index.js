@@ -181,10 +181,12 @@ module.exports = class extends Generator {
                                             this.properties.tableName.substring(3) : 
                                             this.properties.tableName;
 
-            this.properties.masterTableName     =   this.properties.masterTableNamespace.split(".")[3];
-            this.properties.masterTableBaseName =   (this.properties.masterTableName[2] == '_') ? 
-                                                    this.properties.masterTableName.substring(3) : 
-                                                    this.properties.masterTableName;
+            if (this.properties.tableType === SLAVE) {
+                this.properties.masterTableName     =   this.properties.masterTableNamespace.split(".")[3];
+                this.properties.masterTableBaseName =   (this.properties.masterTableName[2] == '_') ? 
+                                                        this.properties.masterTableName.substring(3) : 
+                                                        this.properties.masterTableName;
+            }
 
             this.properties.tableClassName = 'T' + this.properties.tableBaseName;
 
