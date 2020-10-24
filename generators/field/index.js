@@ -114,7 +114,8 @@ module.exports = class extends Generator {
             }
             return utils.insertInSource(
                 contents.toString(), 
-                actions
+                actions,
+                utils.SQL_CONTENT
             );
         }
 
@@ -125,7 +126,8 @@ module.exports = class extends Generator {
             }];
             return utils.insertInSource(
                 contents.toString(), 
-                actions
+                actions,
+                utils.SQL_CONTENT
             );
         }
 

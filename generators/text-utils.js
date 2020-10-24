@@ -14,10 +14,12 @@ const nodeFs = require('fs');
 const path = require('path');
 const _ = require('lodash');
 const xmlPretty = require('prettify-xml');
+const sqlPretty = require('sql-formatter');
 
 module.exports = {
 
     XML_CONTENT: "XML",
+    SQL_CONTENT: "SQL",
 
     insertInSource(source, actions, content) {
         var result = source;
@@ -62,6 +64,8 @@ module.exports = {
         }
         if (content == this.XML_CONTENT) {
             return xmlPretty(result, {indent: 4});
+        } else if (content == this.SQL_CONTENT) {
+            return sqlPretty.format(result);
         } else {
             return result;
         }
@@ -87,6 +91,8 @@ module.exports = {
         
         if (content == this.XML_CONTENT) {
             return xmlPretty(result, {indent: 4});
+        } else if (content == this.SQL_CONTENT) {
+            return sqlPretty.format(result);
         } else {
             return result;
         }

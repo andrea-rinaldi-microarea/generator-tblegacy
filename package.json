@@ -19,6 +19,7 @@
     "lodash": "^4.17.4",
     "parse-key-value": "^1.0.0",
     "prettify-xml": "^1.2.0",
+    "sql-formatter": "^2.3.3",
     "uuid": "^3.1.0",
     "yeoman-environment": "^2.3.4",
     "yeoman-generator": "^1.1.1",
