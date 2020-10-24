@@ -81,7 +81,8 @@ module.exports = class extends Generator {
                                   '\t\t<ClientDocument namespace="' + this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.clientDocName + '" localize="' + this.properties.clientDocDescription + '" >\n' +
                                   '\t</ServerDocument>\n',
                     justBefore: '</ClientDocuments>'
-                }]
+                }],
+                utils.XML_CONTENT
             );
         }
     }

@@ -100,7 +100,8 @@ module.exports = class extends Generator {
                 contents.toString(), [{
                     textToInsert: snippet.render(path.join(this.snippetPath(), documentObjects), this.properties),
                     justBefore: '</Documents>'
-                }]
+                }],
+                utils.XML_CONTENT
             );
         }
 
@@ -109,7 +110,8 @@ module.exports = class extends Generator {
                 contents.toString(), [{
                     textToInsert: snippet.render(path.join(this.snippetPath(),'_module.menu'), this.properties), 
                     justBefore: '</Menu>'
-                }]
+                }],
+                utils.XML_CONTENT
             );
         }
 

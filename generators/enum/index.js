@@ -59,7 +59,8 @@ module.exports = class extends Generator {
             }
             return utils.insertInSource(
                 contents.toString(), 
-                actions
+                actions,
+                utils.XML_CONTENT
             );
         }
 

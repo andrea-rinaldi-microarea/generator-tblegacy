@@ -13,10 +13,13 @@ See the GNU General Public License for more details.
 const nodeFs = require('fs');
 const path = require('path');
 const _ = require('lodash');
+const xmlPretty = require('prettify-xml');
 
 module.exports = {
 
-    insertInSource(source, actions) {
+    XML_CONTENT: "XML",
+
+    insertInSource(source, actions, content) {
         var result = source;
         for (a = 0; a < actions.length; a++) {
 
@@ -57,10 +60,14 @@ module.exports = {
                 }
             }
         }
-        return result;
+        if (content == this.XML_CONTENT) {
+            return xmlPretty(result, {indent: 4});
+        } else {
+            return result;
+        }
     },
 
-    replaceInSource(source, actions) {
+    replaceInSource(source, actions, content) {
         var result = source;
         for (a = 0; a < actions.length; a++) {
 
@@ -77,7 +84,12 @@ module.exports = {
                         actions[a].newContent +
                         result.substring(stop);
         }
-        return result;
+        
+        if (content == this.XML_CONTENT) {
+            return xmlPretty(result, {indent: 4});
+        } else {
+            return result;
+        }
     },
 
     extractInfo(file, matchStart, matchEnd) {

@@ -44,7 +44,8 @@ module.exports = class extends Generator {
                 contents.toString(), [{
                     textToInsert: '<Library name="' + this.properties.libraryName + '" sourcefolder="' + this.properties.libraryName + '" deploymentpolicy="full" />\n',
                     justBefore: '</Components>'
-                }]
+                }],
+                utils.XML_CONTENT
             );
         }
 

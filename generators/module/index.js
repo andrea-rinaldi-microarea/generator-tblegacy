@@ -40,7 +40,8 @@ module.exports = class extends Generator {
                 contents.toString(), [{
                     textToInsert: '<SalesModule name="' + this.properties.moduleName + '" />\n',
                     justBefore: '</Product>'
-                }]
+                }],
+                utils.XML_CONTENT
             );
         }
 

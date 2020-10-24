@@ -17,6 +17,7 @@ const path = require('path');
 const utils = require('../text-utils');
 const snippet = require('../snippet-utils');
 const check = require('../check-utils');
+const xmlPretty = require('prettify-xml');
 
 const SLAVE = 'Slave'
 const SLAVE_BUFFERED = 'SlaveBuffered'
@@ -51,7 +52,8 @@ module.exports = class extends Generator {
             }];
             return utils.insertInSource(
                 contents.toString(), 
-                actions
+                actions,
+                utils.XML_CONTENT
             );
         }
     }

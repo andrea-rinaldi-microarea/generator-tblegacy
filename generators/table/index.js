@@ -48,7 +48,11 @@ module.exports = class extends Generator {
                 });
             }
 
-            return utils.insertInSource(contents.toString(), actions);
+            return utils.insertInSource(
+                contents.toString(), 
+                actions,
+                utils.XML_CONTENT
+            );
         }
     
         this.addToInterface = function(contents) {
@@ -96,7 +100,8 @@ module.exports = class extends Generator {
             }];
             return utils.insertInSource(
                 contents.toString(), 
-                actions
+                actions,
+                utils.XML_CONTENT
             );
         }
 
@@ -108,7 +113,8 @@ module.exports = class extends Generator {
 
             return utils.insertInSource(
                 contents.toString(), 
-                actions
+                actions,
+                utils.XML_CONTENT
             );
         }
 
