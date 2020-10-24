@@ -21,6 +21,7 @@ var GeneratorTbl = require('./generators/table/index.js');
 var GeneratorCD = require('./generators/clientdoc/index.js');
 var GeneratorFld = require('./generators/field/index.js');
 var GeneratorEnum = require('./generators/enum/index.js');
+var GeneratorDBT = require('./generators/dbt/index.js');
 var banner = require('./banner');
 
 var usage = function(args) {
@@ -29,9 +30,10 @@ var usage = function(args) {
     console.log('\ttbl n(ew) [appName]');
     console.log('\ttbl m(od) [modName]');
     console.log('\ttbl l(ib) [libName]');
-    console.log('\ttbl d(oc) [docName]');
     console.log('\ttbl t(able) [tableName]');
     console.log('\ttbl f(ield) [fieldName]');
+    console.log('\ttbl d(oc) [docName]');
+    console.log('\ttbl b|dbt [dbtName]');
     console.log('\ttbl cd|clientdoc [clientDocName]');
     console.log('\ttbl e(num) [enumName]');
 }
@@ -45,6 +47,7 @@ env.registerStub(GeneratorTbl, 'tbl:table');
 env.registerStub(GeneratorFld, 'tbl:field');
 env.registerStub(GeneratorCD, 'tbl:clientdoc');
 env.registerStub(GeneratorEnum, 'tbl:enum');
+env.registerStub(GeneratorDBT, 'tbl:dbt');
 
 var args = process.argv.slice(2);
 if (args.length < 1) return usage(args);
@@ -74,6 +77,9 @@ if (args[0] === 'new' || args[0] === 'n') {
     tpl = tpl + '\\clientdoc\\templates';
 } else if (args[0] === 'enum' || args[0] === 'e') {
     gen = 'tbl:enum';
+    tpl = tpl + '\\enum\\templates';
+} else if (args[0] === 'dbt' || args[0] === 'b') {
+    gen = 'tbl:dbt';
     tpl = tpl + '\\enum\\templates';
 } else {
     return usage(args);

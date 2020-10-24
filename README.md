@@ -38,6 +38,7 @@ Available commands:
 * `tbl t(able) [tableName]` scaffold a [table](#Tables)
 * `tbl f(ield) [tableName] [fieldName]` scaffold a new table [field](#Fields)
 * `tbl d(oc) [docName]` scaffold a [document](#Document)
+* `tbl b|dbt [dbtName]` scaffold a document part, a.k.a. [DBT](#DBT)
 * `tbl cd|clientdoc [clientdocName]` scaffold a client document
 * `tbl e(num) [enumName]` scaffold an [enum definition](#Enums)
 ## Application
@@ -233,6 +234,35 @@ The generated and modified elements are:
 * the `.h` and `.cpp` source file defining the `AbstractFormDocument`, `DBT`s and the `ADM` classes for the document are generated
 * the `Interface.cpp` file is updated with the document class registration in the catalog
 * the VS project `.vcxproj` is updated to compile the document source code
+
+## DBT
+The DBT generator lets you add a part of the data model to an existing document. This is called `DBT` ("DataBase Table") in the TaskBuilder jargon.
+
+***WARNING**: the DBT generator works only for "codeless" documents.*
+
+To scaffold a new DBT, your current folder must be inside an existing module, that is:
+```
+[instance folder]\Standard\Applications\[application]\[module]
+```
+i.e: `C:\Development\Standard\Applications\MyApp\MainModule`.
+
+The generator asks for a number of parameters; those worth to mention are:
+
+**Containing document name**: the document to attach the DBT to. It must be an already existing document defined in the current module.
+
+**DBT name**: valid identifier for the last part of the DBT namespace. The DBT namespace is composed appending this name to the document namespace.
+
+**DBT table namespace**: namespace of the table containing the data mapped by the DBT.
+
+**DBT kind**: it allows to choose among *Slave* and *SlaveBuffered*. The first is in a 1-1 relationship with the *Master* DBT, the other in a 1-n relationship.
+
+**Define FK**: the link between *Master* and *Slave* / *SlaveBuffered* DBTs is normally inducted by the Foreign Key definition in the table of the DBT. If such FK is not defined, it is possible to define it here.
+
+**FK Field**: the name of the field linking slave DBT with the master.  
+*Note*: it is assumed that the fields forming the pair PK/FK have the same name both in the master and the slave table. 
+
+### Scaffolded contents
+The generator updates the `Dbts.xml` file of the document definition to include the new DBT definition.
 
 ## Enums
 The enum generator lets you generate the definition of an enum data type, that is a list of possible values for a property. Such type is mapped in the DB as a column of `int` type.

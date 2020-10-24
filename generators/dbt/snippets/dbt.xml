@@ -1,0 +1,12 @@
+        <<%= dbtType %> namespace="<%= dbtNamespace %>">
+            <Title localizable="true"><%= description %></Title>
+            <Table namespace="<%= dbtTableNamespace %>"><%= dbtTableName %></Table>
+            <%if (defineFK) { -%>
+            <ForeignKeys>
+                <ForeignKey name="FK_<%= dbtTableName %>_<%= masterTableName %>_00" on="<%= masterTableName %>" onns="<%= masterTableNamespace %>">
+                    <FKSegments><%= fkName %></FKSegments>
+                    <PKSegments><%= fkName %></PKSegments>
+                </ForeignKey>
+            </ForeignKeys>
+            <% } -%>
+        </<%= dbtType %>>
