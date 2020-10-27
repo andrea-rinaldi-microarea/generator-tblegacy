@@ -70,16 +70,8 @@
     
     <Mode name="WebCombo" type="query">
       <![CDATA[
-        SELECT { Columns <%= tablePhisicalName %>} 
-        FROM <%= tablePhisicalName %> 
-        WHERE Code  LIKE { IN  hkl_Value }  
-        ORDER BY Code
-    ]]>
-    </Mode>
-
-    <Mode name="WebCombo" type="query">
-      <![CDATA[
-		    <%= tablePhisicalName %>.Code        {COL <%= tablePhisicalName %>.Code KEY },
+		    SELECT 
+        <%= tablePhisicalName %>.Code        {COL <%= tablePhisicalName %>.Code KEY },
 		    <%= tablePhisicalName %>.Description      {COL <%= tablePhisicalName %>.Description }
         FROM <%= tablePhisicalName %> 
         WHERE 
