@@ -16,7 +16,7 @@
     "ejs": "^2.6.1",
     "eslint": "^4.11.0",
     "jshint": "^2.9.5",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "parse-key-value": "^1.0.0",
     "prettify-xml": "^1.2.0",
     "sql-formatter": "^2.3.3",
