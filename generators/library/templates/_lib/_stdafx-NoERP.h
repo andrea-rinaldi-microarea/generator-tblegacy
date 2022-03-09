@@ -14,7 +14,6 @@
 
 #include <TbGenlib\messages.h>
 #include <TbGenlib\TbCommandInterface.h>
-#include <TbGenlib\TBRibbonBar.h>
 #include <TbGenlib\TBCaptionBar.h>
 #include <TbGenlib\TBDockPane.h>
 #include <TbGenlib\TBSplitterWnd.h>
