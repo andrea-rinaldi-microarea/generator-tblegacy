@@ -78,7 +78,7 @@ module.exports = class extends Generator {
             return utils.insertInSource(
                 contents.toString(), [{
                     textToInsert: '\t<ServerDocument namespace="'+ this.properties.serverDocNSpace  + '" >\n' +
-                                  '\t\t<ClientDocument namespace="' + this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.clientDocName + '" localize="' + this.properties.clientDocDescription + '" >\n' +
+                                  '\t\t<ClientDocument namespace="' + this.properties.appName + '.' + this.properties.moduleName + '.' + this.properties.libraryName + '.' + this.properties.clientDocName + '" localize="' + this.properties.clientDocDescription + '" />\n' +
                                   '\t</ServerDocument>\n',
                     justBefore: '</ClientDocuments>'
                 }],
